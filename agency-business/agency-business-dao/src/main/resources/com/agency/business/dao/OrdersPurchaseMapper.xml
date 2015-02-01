@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.agency.business.dao.OrdersPurchaseMapper">
+    <resultMap id="OrdersPurchaseMapper" type="com.agency.business.domain.bean.InitOrderApplyInfo">
+        <result column="purchaseNo" property="purchaseNo" jdbcType="VARCHAR"/>
+        <result column="purchaseDate" property="purchaseDate" jdbcType="TIMESTAMP"/>
+        <result column="purchaseProduct" property="purchaseProduct" jdbcType="VARCHAR"/>
+        <result column="purchaseType" property="purchaseType" jdbcType="VARCHAR"/>
+        <result column="orderType" property="orderType" jdbcType="VARCHAR"/>
+        <result column="purchaseNumber" property="purchaseNumber" jdbcType="SMALLINT"/>
+        <result column="amount" property="amount" jdbcType="DECIMAL"/>
+        <result column="purchaseStatus" property="purchaseStatus" jdbcType="VARCHAR"/>
+        <result column="deliveryStatus" property="deliveryStatus" jdbcType="VARCHAR"/>
+        <result column="deliveryDate" property="deliveryDate" jdbcType="TIMESTAMP"/>
+        <result column="operator" property="operator" jdbcType="VARCHAR"/>
+        <result column="extParam" property="extParam" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="saveInitOrderApplyInfo" parameterType="com.agency.business.domain.bean.InitOrderApplyInfo">
+		INSERT INTO orders_purchase (purchaseNo,purchaseDate,purchaseProduct,purchaseType,orderType,purchaseNumber,amount,purchaseStatus,deliveryStatus,deliveryDate,operator,extParam,remark,updateDate,createDate)
+		   values (#{purchaseNo,jdbcType=VARCHAR},#{purchaseDate,jdbcType=TIMESTAMP}, #{purchaseProduct,jdbcType=VARCHAR},#{purchaseType,jdbcType=VARCHAR},#{orderType,jdbcType=VARCHAR},#{purchaseNumber,jdbcType=VARCHAR},
+      #{amount,jdbcType=DECIMAL}, #{purchaseStatus,jdbcType=VARCHAR}, #{deliveryStatus,jdbcType=VARCHAR}, #{deliveryDate,jdbcType=TIMESTAMP}, #{operator,jdbcType=VARCHAR}, #{extParam,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR},now(),now())
+	</insert>
+
+    <update id="updateInitOrderApplyInfo" parameterType="com.agency.business.domain.bean.InitOrderApplyInfo">
+        update orders_purchase
+        set
+        <if test="purchaseDate != null and purchaseDate != ''">
+            purchaseDate = #{purchaseDate,jdbcType=TIMESTAMP},
+        </if>
+        <if test="purchaseProduct != null and purchaseProduct != ''">
+            purchaseProduct = #{purchaseProduct,jdbcType=VARCHAR},
+        </if>
+        <if test="purchaseType != null and purchaseType != ''">
+            purchaseType = #{purchaseType,jdbcType=VARCHAR},
+        </if>
+        <if test="amount != null and amount != 0">
+            amount = #{amount,jdbcType=DECIMAL},
+        </if>
+        <if test="purchaseNumber != null and purchaseNumber != 0">
+            purchaseNumber = #{purchaseNumber,jdbcType=VARCHAR},
+        </if>
+        <if test="purchaseStatus != null and purchaseStatus != ''">
+            purchaseStatus = #{purchaseStatus,jdbcType=VARCHAR},
+        </if>
+        <if test="deliveryStatus != null and deliveryStatus != ''">
+            deliveryStatus = #{deliveryStatus,jdbcType=VARCHAR},
+        </if>
+        <if test="deliveryDate != null and deliveryDate != ''">
+            deliveryDate = #{deliveryDate,jdbcType=TIMESTAMP},
+        </if>
+        updateDate = NOW()
+        where purchaseNo = #{purchaseNo,jdbcType=VARCHAR}
+    </update>
+
+    <!---->
+    <select id="queryInitOrderApplyInfo" parameterType="com.agency.business.domain.bean.InitOrderApplyInfo" resultType="com.agency.business.domain.bean.InitOrderApplyInfo">
+        select purchaseNo,DATE_FORMAT(purchaseDate,'%Y-%m-%d'),purchaseProduct,purchaseType,orderType,purchaseNumber,amount,purchaseStatus,deliveryStatus,DATE_FORMAT(deliveryDate,'%Y-%m-%d'),operator,extParam,remark,updateDate,createDate from orders_purchase where orderType = #{orderType,jdbcType=VARCHAR}
+        <if test="purchaseNo != null and purchaseNo != ''">
+            and purchaseNo = #{purchaseNo,jdbcType=VARCHAR}
+        </if>
+        <if test="purchaseStatus != null and purchaseStatus != ''">
+           and purchaseStatus = #{purchaseStatus,jdbcType=VARCHAR},
+        </if>
+        <if test="deliveryStatus != null and deliveryStatus != ''">
+           and deliveryStatus = #{deliveryStatus,jdbcType=VARCHAR},
+        </if>
+        <if test="purchaseProduct != null and purchaseProduct != ''">
+            and purchaseProduct = #{purchaseProduct,jdbcType=VARCHAR},
+        </if>
+        <if test="startRow != null and startRow >= 0 and endRow != null and endRow > 0">
+            limit #{startRow,jdbcType=BIGINT}, #{endRow,jdbcType=BIGINT}
+        </if>
+    </select>
+
+    <select id="countInitOrderApplyInfo" resultType="java.lang.Long" parameterType="com.agency.business.domain.bean.InitOrderApplyInfo">
+        select count(1) from orders_purchase where orderType = #{orderType,jdbcType=VARCHAR}
+        <if test="purchaseNo != null and purchaseNo != ''">
+            and purchaseNo = #{purchaseNo,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <delete id="deleteInitOrderApplyInfo" parameterType="com.agency.business.domain.bean.InitOrderApplyInfo" >
+        delete from orders_purchase
+        where purchaseNo = #{purchaseNo,jdbcType=VARCHAR}
+    </delete>
+
+</mapper>
