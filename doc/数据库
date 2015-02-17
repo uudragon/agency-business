@@ -68,10 +68,11 @@ CREATE TABLE `orderType` (
 ) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8;
 
 
---采购表
+--采购表:添加代理商编号
 drop table orders_purchase
 CREATE TABLE `orders_purchase` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT,
+  `agentNo` varchar(32) NOT NULL COMMENT '代理商编码',
   `purchaseNo` varchar(32) NOT NULL COMMENT '采购单编号',
   `purchaseDate` datetime DEFAULT NULL COMMENT '采购单日期',
   `purchaseProduct` varchar(32) NOT NULL COMMENT '采购产品',
@@ -92,8 +93,8 @@ CREATE TABLE `orders_purchase` (
 
 
 --代理商信息
-drop table agency;
-CREATE TABLE `agency` (
+drop table agencyInfo;
+CREATE TABLE `agencyInfo` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT,
   `agentNo` varchar(32) NOT NULL COMMENT '代理商编码',
   `companyName` varchar(32) NULL COMMENT '公司名称',
@@ -102,7 +103,6 @@ CREATE TABLE `agency` (
   `fixMobile` varchar(32) DEFAULT NULL COMMENT '固定电话',
   `email` varchar(64) DEFAULT NULL COMMENT '邮箱',
   `fax` varchar(16) DEFAULT NULL COMMENT '传真',
-  `zipCode` varchar(16) DEFAULT NULL COMMENT '邮编',
   `province` varchar(100) DEFAULT NULL COMMENT '省',
   `city` varchar(100) DEFAULT NULL COMMENT '市',
   `district` varchar(100) DEFAULT NULL COMMENT '区',
@@ -119,12 +119,59 @@ CREATE TABLE `agency` (
 ) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE `orderType` (
+---商品返利表明细（订单和发货单是一对多的关系。。）
+drop table goodsrebate;
+CREATE TABLE goodsrebate (
   `id` bigint(32) NOT NULL AUTO_INCREMENT,
+  `agentNo` varchar(64) NOT NULL COMMENT '代理商编码',
+  `goodsreBateNo` varchar(64) NOT NULL COMMENT '返货单编号(自动生成)',
+  `orderNo` varchar(64) NULL COMMENT '订单编号',
+  `deliveryNo` varchar(64) NULL COMMENT '发货单编号',
+  `customerName` varchar(32) NULL COMMENT '客户姓名',
+  `contact` varchar(32) DEFAULT NULL COMMENT '联系方式',
+  `customerAddress` varchar(128) DEFAULT NULL COMMENT '客户地址',
+  `cartid` varchar(128) DEFAULT NULL COMMENT '返还账号',
+  `rebateAmount` decimal(15,4) DEFAULT NULL COMMENT '返款金额',
+  `goodsAmount` decimal(15,4) DEFAULT NULL COMMENT '产品金额',
+  `rebateType` varchar(32) DEFAULT NULL COMMENT '返款状态',
+  `deliveryType` varchar(32) DEFAULT NULL COMMENT '发货状态',
+  `goodsNum` varchar(16) DEFAULT NULL COMMENT '发货数量',
+  `goodsType` varchar(16) DEFAULT NULL COMMENT '订单类型',
+  `applytime` datetime DEFAULT NULL COMMENT '申请返款时间',
+  `createDate` datetime DEFAULT NULL,
+  `updateDate` datetime DEFAULT NULL,
+  `operator` varchar(64) DEFAULT NULL COMMENT '申请返利操作者',
+  `extParam` varchar(1024) DEFAULT NULL,
+  `remark` varchar(128) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8;
+
+---管理返利金额
+CREATE TABLE `rebateType` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT,
-  `orderType` varchar(32) NOT NULL COMMENT '订单类型(1.Ａ套餐全部,2.Ｂ套餐全部3.Ａ套餐部分4.Ｂ套餐部分5.网站套餐)',
-  `price` decimal(15,2) NOT NULL COMMENT '产品单价',
-  `orderremark` varchar(64) NOT NULL COMMENT '订单描述',
+  `rebateType` varchar(32) NOT NULL COMMENT '返利类型(A:一阶产品)',
+  `rebateNo` decimal(15,2) NOT NULL COMMENT '返利编号',
+  `rebatelv` decimal(15,2) NOT NULL COMMENT '返利利率',
+  `amount` decimal(15,4) DEFAULT NULL COMMENT '金额',
+  `updateDate` datetime DEFAULT NULL,
+  `createDate` datetime DEFAULT NULL,
+  `operator` varchar(64) DEFAULT NULL COMMENT '操作者',
+  `extParam` varchar(1024) DEFAULT NULL,
+  `remark` varchar(128) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8;
+
+
+-----发票管理（需要从订单那边拿到代客户下单的数据）
+CREATE TABLE `invoiceApply` (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT,
+  `applyNo` varchar(32) NOT NULL COMMENT '申请编号',
+  `beginTime` datetime NOT NULL COMMENT '开始时间',
+  `endTime` datetime NOT NULL COMMENT '结束时间',
+  `amount` decimal(15,4) NOT NULL COMMENT '发票金额',
+  `invoicehead` varchar(128) NOT NULL COMMENT '发票抬头',
+  `applyMan` varchar(128) NOT NULL COMMENT '申请人',
+  `applydate` varchar(64) NOT NULL COMMENT '申请日期',
+  `applystatus` varchar(64) NOT NULL COMMENT '申请状态',
   `updateDate` datetime DEFAULT NULL,
   `createDate` datetime DEFAULT NULL,
   `operator` varchar(64) DEFAULT NULL COMMENT '操作者',
