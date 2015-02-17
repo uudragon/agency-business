@@ -29,7 +29,6 @@ public class OrderApplyServiceImpl implements OrderApplyService {
 
     @Autowired
     private OrdersPurchaseMapper ordersPurchaseMapper;
-
     @Autowired
     @Qualifier("orderTransactionManager")
     private PlatformTransactionManager orderTransactionManager;
@@ -38,6 +37,7 @@ public class OrderApplyServiceImpl implements OrderApplyService {
     public InitOrderApplyInfoResVo saveInitOrderApplyInfo(InitOrderApplyInfoReqVo userActiveApplyReqVo) {
         InitOrderApplyInfoResVo initOrderApplyInfoResVo = new InitOrderApplyInfoResVo();
         logger.info("订购产品请求参数:" + GsonUtils.toJson(userActiveApplyReqVo));
+
         DefaultTransactionDefinition defaultTransactionDefinition = new DefaultTransactionDefinition();
         defaultTransactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
         defaultTransactionDefinition.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
