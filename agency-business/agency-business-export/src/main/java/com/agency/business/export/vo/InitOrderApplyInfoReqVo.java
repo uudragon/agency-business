@@ -1,6 +1,6 @@
 package com.agency.business.export.vo;
 
-/**
+/**首期
  */
 public class InitOrderApplyInfoReqVo {
     /**
