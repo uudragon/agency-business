@@ -1,37 +1,35 @@
-package com.agency.business.export.vo;
+package com.agency.business.domain.bean;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**发票管理
  */
-public class InitInvoiceApplyInfoReqVo implements Serializable {
+public class InitInvoiceApplyInfo implements Serializable {
     /**
      * 代理商编码
      */
     private String agentNo;
-//    申请编号
+    //    申请编号
     private String applyNo;
-//    开始时间
-    private String beginTime;
-//    结束时间
-    private String  endTime;
-//    发票金额
-    private String amount;
-//    发票抬头
+    //    开始时间
+    private Date beginTime;
+    //    结束时间
+    private Date  endTime;
+    //    发票金额
+    private BigDecimal amount;
+    //    发票抬头
     private String invoicehead;
-//    申请人
+    //    申请人
     private String applyMan;
-//    申请日期
+    //    申请日期
     private String applydate;
-//    申请状态
+    //    申请状态
     private String applystatus;
     private String operator;
     private String extParam;
     private String remark;
-//    每页显示条数
-    private int pageSize;
-//    当前页数
-    private int pageNo;
 
     public String getAgentNo() {
         return agentNo;
@@ -49,27 +47,27 @@ public class InitInvoiceApplyInfoReqVo implements Serializable {
         this.applyNo = applyNo;
     }
 
-    public String getBeginTime() {
+    public Date getBeginTime() {
         return beginTime;
     }
 
-    public void setBeginTime(String beginTime) {
+    public void setBeginTime(Date beginTime) {
         this.beginTime = beginTime;
     }
 
-    public String getEndTime() {
+    public Date getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
 
-    public String getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
@@ -127,21 +125,5 @@ public class InitInvoiceApplyInfoReqVo implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    public int getPageNo() {
-        return pageNo;
-    }
-
-    public void setPageNo(int pageNo) {
-        this.pageNo = pageNo;
     }
 }

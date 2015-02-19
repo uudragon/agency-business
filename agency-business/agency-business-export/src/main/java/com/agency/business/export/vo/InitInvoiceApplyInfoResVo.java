@@ -1,5 +1,6 @@
 package com.agency.business.export.vo;
 
+import com.agency.business.domain.bean.InitInvoiceApplyInfo;
 import com.agency.business.domain.bean.InitOrderApplyInfo;
 
 import java.util.List;
@@ -7,8 +8,7 @@ import java.util.List;
 /**发票管理
  */
 public class InitInvoiceApplyInfoResVo extends BaseResVo {
-
-    List <InitOrderApplyInfo> infoarrys;
+    List <InitInvoiceApplyInfo> infoarrys;
     private int pageSize;
     private int pageNo;
     private long recordsCount;
@@ -37,11 +37,11 @@ public class InitInvoiceApplyInfoResVo extends BaseResVo {
         this.recordsCount = recordsCount;
     }
 
-    public List<InitOrderApplyInfo> getInfoarrys() {
+    public List<InitInvoiceApplyInfo> getInfoarrys() {
         return infoarrys;
     }
 
-    public void setInfoarrys(List<InitOrderApplyInfo> infoarrys) {
+    public void setInfoarrys(List<InitInvoiceApplyInfo> infoarrys) {
         this.infoarrys = infoarrys;
     }
 }

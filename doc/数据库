@@ -171,7 +171,7 @@ CREATE TABLE `invoiceApply` (
   `amount` decimal(15,4) NOT NULL COMMENT '发票金额',
   `invoicehead` varchar(128) NOT NULL COMMENT '发票抬头',
   `applyMan` varchar(128) NOT NULL COMMENT '申请人',
-  `applydate` varchar(64) NOT NULL COMMENT '申请日期',
+  `applydate` datetime NOT NULL COMMENT '申请日期',
   `applystatus` varchar(64) NOT NULL COMMENT '申请状态(已申请,审核中,已送达)',
   `updateDate` datetime DEFAULT NULL,
   `createDate` datetime DEFAULT NULL,

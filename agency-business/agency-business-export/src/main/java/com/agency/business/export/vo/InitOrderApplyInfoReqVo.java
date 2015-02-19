@@ -1,8 +1,10 @@
 package com.agency.business.export.vo;
 
+import java.io.Serializable;
+
 /**首期
  */
-public class InitOrderApplyInfoReqVo {
+public class InitOrderApplyInfoReqVo implements Serializable {
     /**
      * 采购单编号
      */
