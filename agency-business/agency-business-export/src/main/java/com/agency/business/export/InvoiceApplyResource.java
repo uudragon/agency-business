@@ -9,7 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 /**
- *订购首期产品和接口
+ * 订购首期产品和接口
  */
 @Path("/service/invoiceApply")
 @Consumes({"application/json"})
@@ -17,17 +17,15 @@ import javax.ws.rs.Produces;
 public interface InvoiceApplyResource {
 
     /**
-     * 保存首期产品
-     * @param
+     * 保存发票信息
      * @return
      */
     @POST
     @Path("/saveInvoiceApplyInfo")
     public InitOrderApplyInfoResVo saveInvoiceApplyInfo(InitOrderApplyInfoReqVo userActiveApplyReqVo);
-
-    
     /**
-     * 更新首期产品
+     * 更新发票信息
+     *
      * @param
      * @return
      */
@@ -36,20 +34,13 @@ public interface InvoiceApplyResource {
     public InitOrderApplyInfoResVo updateInvoiceApplyInfo(InitOrderApplyInfoReqVo userActiveApplyReqVo);
 
     /**
-     * 查询首期产品
+     * 查询发票信息
+     *
      * @param
      * @return
      */
     @POST
-    @Path("queryInitOrderApplyInfo")
-    public InitOrderApplyInfoResVo queryInitOrderApplyInfo(InitOrderApplyInfoReqVo userActiveApplyReqVo);
+    @Path("queryInitInvoiceApplyInfo")
+    public InitOrderApplyInfoResVo queryInitInvoiceApplyInfo(InitOrderApplyInfoReqVo userActiveApplyReqVo);
 
-    /**
-     * 删除查询首期产品
-     * @param
-     * @return
-     */
-    @POST
-    @Path("deleteInvoiceApplyInfo")
-    public InitOrderApplyInfoResVo deleteInvoiceApplyInfo(InitOrderApplyInfoReqVo userActiveApplyReqVo);
 }
