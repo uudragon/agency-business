@@ -24,7 +24,7 @@ public class InitInvoiceApplyInfo implements Serializable {
     //    申请人
     private String applyMan;
     //    申请日期
-    private String applydate;
+    private Date applydate;
     //    申请状态
     private String applystatus;
     private String operator;
@@ -87,14 +87,6 @@ public class InitInvoiceApplyInfo implements Serializable {
         this.applyMan = applyMan;
     }
 
-    public String getApplydate() {
-        return applydate;
-    }
-
-    public void setApplydate(String applydate) {
-        this.applydate = applydate;
-    }
-
     public String getApplystatus() {
         return applystatus;
     }
@@ -125,5 +117,13 @@ public class InitInvoiceApplyInfo implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Date getApplydate() {
+        return applydate;
+    }
+
+    public void setApplydate(Date applydate) {
+        this.applydate = applydate;
     }
 }

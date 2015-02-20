@@ -5,7 +5,7 @@ import com.agency.business.domain.bean.InitOrderApplyInfo;
 
 import java.util.List;
 
-/**发票管理
+/**查询订单
  */
 public class InitInvoiceApplyInfoResVo extends BaseResVo {
     List <InitInvoiceApplyInfo> infoarrys;

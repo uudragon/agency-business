@@ -1,6 +1,8 @@
 package com.agency.business.web;
 
 import com.agency.business.export.OrderApplyResource;
+import com.agency.business.export.vo.AgencyOrderApplyInfoReqVo;
+import com.agency.business.export.vo.AgencyOrderApplyInfoResVo;
 import com.agency.business.export.vo.InitOrderApplyInfoReqVo;
 import com.agency.business.export.vo.InitOrderApplyInfoResVo;
 import com.agency.business.service.OrderApplyService;
@@ -58,5 +60,9 @@ public class OrderApplyResourceImpl implements OrderApplyResource {
 
     public InitOrderApplyInfoResVo deleteInitOrderApplyInfo(InitOrderApplyInfoReqVo userActiveApplyReqVo){
         return orderApplyService.deleteInitOrderApplyInfo(userActiveApplyReqVo);
+    }
+
+    public AgencyOrderApplyInfoResVo queryAgencyOrderInfo(AgencyOrderApplyInfoReqVo agencyOrderApplyInfoReqVo){
+        return orderApplyService.queryAgencyOrderInfo(agencyOrderApplyInfoReqVo);
     }
 }

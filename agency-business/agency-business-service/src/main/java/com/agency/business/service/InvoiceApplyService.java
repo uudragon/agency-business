@@ -1,15 +1,14 @@
 package com.agency.business.service;
-
-import com.agency.business.export.vo.InitOrderApplyInfoReqVo;
-import com.agency.business.export.vo.InitOrderApplyInfoResVo;
+import com.agency.business.export.vo.InitInvoiceApplyInfoReqVo;
+import com.agency.business.export.vo.InitInvoiceApplyInfoResVo;
 
 /**
  */
 public interface InvoiceApplyService {
 
-    public InitOrderApplyInfoResVo saveInvoiceApplyInfo(InitOrderApplyInfoReqVo userActiveApplyReqVo);
+    public InitInvoiceApplyInfoResVo saveInvoiceApplyInfo(InitInvoiceApplyInfoReqVo initInvoiceApplyInfoReqVo);
 
-    public InitOrderApplyInfoResVo updateInvoiceApplyInfo(InitOrderApplyInfoReqVo userActiveApplyReqVo);
+    public InitInvoiceApplyInfoResVo updateInvoiceApplyInfo(InitInvoiceApplyInfoReqVo initInvoiceApplyInfoReqVo);
 
-    public InitOrderApplyInfoResVo queryInitInvoiceApplyInfo(InitOrderApplyInfoReqVo userActiveApplyReqVo);
+    public InitInvoiceApplyInfoResVo queryInitInvoiceApplyInfo(InitInvoiceApplyInfoReqVo initInvoiceApplyInfoReqVo);
 }

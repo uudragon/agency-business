@@ -4,6 +4,8 @@ package com.agency.business.service.impl;
 import com.agency.business.common.utils.FormatUtil;
 import com.agency.business.dao.OrdersPurchaseMapper;
 import com.agency.business.domain.bean.InitOrderApplyInfo;
+import com.agency.business.export.vo.AgencyOrderApplyInfoReqVo;
+import com.agency.business.export.vo.AgencyOrderApplyInfoResVo;
 import com.agency.business.export.vo.InitOrderApplyInfoReqVo;
 import com.agency.business.export.vo.InitOrderApplyInfoResVo;
 import com.agency.business.service.OrderApplyService;
@@ -107,6 +109,19 @@ public class OrderApplyServiceImpl implements OrderApplyService {
             initOrderApplyInfoResVo.setSuccess(false);
         }
         return initOrderApplyInfoResVo;
+    }
+
+    public AgencyOrderApplyInfoResVo queryAgencyOrderInfo(AgencyOrderApplyInfoReqVo agencyOrderApplyInfoReqVo){
+        AgencyOrderApplyInfoResVo agencyOrderApplyInfoResVo = new AgencyOrderApplyInfoResVo();
+        InitOrderApplyInfo initOrderApplyInfo = new InitOrderApplyInfo();
+        initOrderApplyInfo.setLoginId(agencyOrderApplyInfoReqVo.getLoginId());
+        initOrderApplyInfo.setStartDate(FormatUtil.parseDate(agencyOrderApplyInfoReqVo.getBeginTime(),Constants.DATE_FORMAT_1));
+        initOrderApplyInfo.setEndDate(FormatUtil.parseDate(agencyOrderApplyInfoReqVo.getEndTime(),Constants.DATE_FORMAT_1));
+        InitOrderApplyInfo initOrderApplyInfo1 = ordersPurchaseMapper.queryOrderApplyInfo(initOrderApplyInfo);
+        agencyOrderApplyInfoResVo.setSumAmount(initOrderApplyInfo1.getAmount().toString());
+        //        调用订单系统的代理商下单接口（已经支付）
+
+        return agencyOrderApplyInfoResVo;
     }
 
     private InitOrderApplyInfo buildInitOrderApplyInfo(InitOrderApplyInfoReqVo initOrderApplyInfoReqVo){

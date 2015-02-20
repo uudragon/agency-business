@@ -1,4 +1,6 @@
 package com.agency.business.export;
+import com.agency.business.export.vo.AgencyOrderApplyInfoReqVo;
+import com.agency.business.export.vo.AgencyOrderApplyInfoResVo;
 import com.agency.business.export.vo.InitOrderApplyInfoReqVo;
 import com.agency.business.export.vo.InitOrderApplyInfoResVo;
 import javax.ws.rs.Consumes;
@@ -51,4 +53,14 @@ public interface OrderApplyResource {
     @POST
     @Path("deleteInitOrderApplyInfo")
     public InitOrderApplyInfoResVo deleteInitOrderApplyInfo(InitOrderApplyInfoReqVo userActiveApplyReqVo);
+
+    /**
+     * 查询一段时间的代理商订单金额
+     * @param
+     * @return
+     */
+    @POST
+    @Path("queryAgencyOrderInfo")
+    public AgencyOrderApplyInfoResVo queryAgencyOrderInfo(AgencyOrderApplyInfoReqVo agencyOrderApplyInfoReqVo);
+
 }

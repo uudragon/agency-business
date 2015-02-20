@@ -4,16 +4,11 @@ import com.agency.business.domain.bean.InitOrderApplyInfo;
 
 import java.util.List;
 
-/**
+/**返利管理
  */
-public interface OrdersPurchaseMapper {
+public interface GoodsRebateMapper {
     /**
      *
-     *
-     * 采购首期
-     *
-     * @param initOrderApplyInfo
-     * @return
      */
     int saveInitOrderApplyInfo(InitOrderApplyInfo initOrderApplyInfo);
 

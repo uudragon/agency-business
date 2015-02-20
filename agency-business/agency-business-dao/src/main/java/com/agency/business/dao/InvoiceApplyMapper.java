@@ -1,7 +1,6 @@
 package com.agency.business.dao;
 
 import com.agency.business.domain.bean.InitInvoiceApplyInfo;
-import com.agency.business.domain.bean.InitInvoiceApplyInfo;
 
 import java.util.List;
 

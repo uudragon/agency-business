@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.agency.business.dao.OrdersPurchaseMapper">
+    <resultMap id="InvoiceApplyMapper" type="com.agency.business.domain.bean.InitInvoiceApplyInfo">
+        <result column="agentNo" property="agentNo" jdbcType="VARCHAR"/>
+        <result column="applyNo" property="applyNo" jdbcType="VARCHAR"/>
+        <result column="beginTime" property="beginTime" jdbcType="TIMESTAMP"/>
+        <result column="endTime" property="endTime" jdbcType="TIMESTAMP"/>
+        <result column="amount" property="amount" jdbcType="VARCHAR"/>
+        <result column="invoicehead" property="invoicehead" jdbcType="VARCHAR"/>
+        <result column="applyMan" property="applyMan" jdbcType="VARCHAR"/>
+        <result column="applydate" property="applydate" jdbcType="VARCHAR"/>
+        <result column="applystatus" property="applystatus" jdbcType="VARCHAR"/>
+        <result column="updateDate" property="updateDate" jdbcType="TIMESTAMP"/>
+        <result column="createDate" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="operator" property="operator" jdbcType="VARCHAR"/>
+        <result column="extParam" property="extParam" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="saveInvoiceApplyInfo" parameterType="com.agency.business.domain.bean.InitInvoiceApplyInfo">
+		INSERT INTO invoiceApply (applyNo,beginTime,endTime,amount,invoicehead,applyMan,applydate,applystatus,operator,extParam,remark,updateDate,createDate)
+		   values (#{applyNo,jdbcType=TIMESTAMP}, #{beginTime,jdbcType=TIMESTAMP},#{endTime,jdbcType=TIMESTAMP},#{amount,jdbcType=DECIMAL},#{invoicehead,jdbcType=VARCHAR},
+      #{applyMan,jdbcType=VARCHAR}, #{applydate,jdbcType=TIMESTAMP}, #{applystatus,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, #{extParam,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR},now(),now())
+	</insert>
+
+    <update id="updateInitInvoiceApplyInfo" parameterType="com.agency.business.domain.bean.InitInvoiceApplyInfo">
+        update invoiceApply
+        set
+        <if test="applystatus != null and applystatus != ''">
+            applystatus = #{applystatus,jdbcType=VARCHAR},
+        </if>
+        <if test="invoicehead != null and invoicehead != ''">
+            invoicehead = #{invoicehead,jdbcType=VARCHAR},
+        </if>
+        <if test="amount != null and amount != 0">
+            amount = #{amount,jdbcType=DECIMAL},
+        </if>
+        updateDate = NOW()
+        where applyMan = #{applyMan,jdbcType=VARCHAR}
+    </update>
+
+
+    <!---->
+    <select id="queryInitInvoiceApplyInfo" parameterType="com.agency.business.domain.bean.InitInvoiceApplyInfo"
+            resultType="com.agency.business.domain.bean.InitInvoiceApplyInfo">
+        select
+        ,applyNo,beginTime,endTime,amount,invoicehead,applyMan,DATE_FORMAT(applydate,'%Y-%m-%d'),applystatus,operator,extParam,remark,updateDate,createDate
+        from invoiceApply where 1=1
+        <if test="applyMan != null and applyMan != ''">
+            and applyMan = #{applyMan,jdbcType=VARCHAR}
+        </if>
+        <if test="applystatus != null and applystatus != ''">
+            and applystatus = #{applystatus,jdbcType=VARCHAR}
+        </if>
+        <if test="startRow != null and startRow >= 0 and endRow != null and endRow > 0">
+            limit #{startRow,jdbcType=BIGINT}, #{endRow,jdbcType=BIGINT}
+        </if>
+    </select>
+
+    <select id="countInitInvoiceApplyInfo" resultType="java.lang.Long"
+            parameterType="com.agency.business.domain.bean.InitInvoiceApplyInfo">
+        select count(1) from invoiceApply where 1=1
+        <if test="agentNo != null and agentNo != ''">
+            agentNo = #{agentNo,jdbcType=VARCHAR}
+        </if>
+        <if test="applyMan != null and applyMan != ''">
+            and applyMan = #{applyMan,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+</mapper>

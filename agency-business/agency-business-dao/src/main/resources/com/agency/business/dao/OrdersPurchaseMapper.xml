@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.agency.business.dao.OrdersPurchaseMapper">
     <resultMap id="OrdersPurchaseMapper" type="com.agency.business.domain.bean.InitOrderApplyInfo">
+        <result column="loginId" property="loginId" jdbcType="VARCHAR"/>
         <result column="purchaseNo" property="purchaseNo" jdbcType="VARCHAR"/>
         <result column="purchaseDate" property="purchaseDate" jdbcType="TIMESTAMP"/>
         <result column="purchaseProduct" property="purchaseProduct" jdbcType="VARCHAR"/>
@@ -18,8 +19,8 @@
     </resultMap>
 
     <insert id="saveInitOrderApplyInfo" parameterType="com.agency.business.domain.bean.InitOrderApplyInfo">
-		INSERT INTO orders_purchase (purchaseNo,purchaseDate,purchaseProduct,purchaseType,orderType,purchaseNumber,amount,purchaseStatus,deliveryStatus,deliveryDate,operator,extParam,remark,updateDate,createDate)
-		   values (#{purchaseNo,jdbcType=VARCHAR},#{purchaseDate,jdbcType=TIMESTAMP}, #{purchaseProduct,jdbcType=VARCHAR},#{purchaseType,jdbcType=VARCHAR},#{orderType,jdbcType=VARCHAR},#{purchaseNumber,jdbcType=VARCHAR},
+		INSERT INTO orders_purchase (loginId,purchaseNo,purchaseDate,purchaseProduct,purchaseType,orderType,purchaseNumber,amount,purchaseStatus,deliveryStatus,deliveryDate,operator,extParam,remark,updateDate,createDate)
+		   values (#{loginId,jdbcType=VARCHAR},#{purchaseNo,jdbcType=VARCHAR},#{purchaseDate,jdbcType=TIMESTAMP}, #{purchaseProduct,jdbcType=VARCHAR},#{purchaseType,jdbcType=VARCHAR},#{orderType,jdbcType=VARCHAR},#{purchaseNumber,jdbcType=VARCHAR},
       #{amount,jdbcType=DECIMAL}, #{purchaseStatus,jdbcType=VARCHAR}, #{deliveryStatus,jdbcType=VARCHAR}, #{deliveryDate,jdbcType=TIMESTAMP}, #{operator,jdbcType=VARCHAR}, #{extParam,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR},now(),now())
 	</insert>
 
@@ -52,6 +53,9 @@
         </if>
         updateDate = NOW()
         where purchaseNo = #{purchaseNo,jdbcType=VARCHAR}
+        <if test="loginId != null and loginId != ''">
+            and loginId = #{loginId,jdbcType=VARCHAR}
+        </if>
     </update>
 
     <!---->
@@ -69,8 +73,22 @@
         <if test="purchaseProduct != null and purchaseProduct != ''">
             and purchaseProduct = #{purchaseProduct,jdbcType=VARCHAR},
         </if>
+        <if test="loginId != null and loginId != ''">
+            and loginId = #{loginId,jdbcType=VARCHAR},
+        </if>
         <if test="startRow != null and startRow >= 0 and endRow != null and endRow > 0">
             limit #{startRow,jdbcType=BIGINT}, #{endRow,jdbcType=BIGINT}
+        </if>
+    </select>
+
+    <!---->
+    <select id="queryOrderApplyInfo" parameterType="com.agency.business.domain.bean.InitOrderApplyInfo" resultType="com.agency.business.domain.bean.InitOrderApplyInfo">
+        select sum(amount) as amount where purchaseStatus = '已支付'
+        <if test="loginId != null and loginId != ''">
+            and loginId = #{loginId,jdbcType=VARCHAR}
+        </if>
+        <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+            and purchaseDate between startDate and endDate
         </if>
     </select>
 
