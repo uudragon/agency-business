@@ -13,6 +13,7 @@ import java.util.Map;
 /**
  * 数据格式化通用类
 
+ 
  */
 public class Format {
     private static Logger logger =LoggerFactory.getLogger(Format.class);
