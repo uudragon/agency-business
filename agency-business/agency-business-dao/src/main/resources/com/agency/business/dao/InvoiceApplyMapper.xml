@@ -6,7 +6,7 @@
         <result column="applyNo" property="applyNo" jdbcType="VARCHAR"/>
         <result column="beginTime" property="beginTime" jdbcType="TIMESTAMP"/>
         <result column="endTime" property="endTime" jdbcType="TIMESTAMP"/>
-        <result column="amount" property="amount" jdbcType="VARCHAR"/>
+        <result column="amount" property="amount" jdbcType="DECIMAL"/>
         <result column="invoicehead" property="invoicehead" jdbcType="VARCHAR"/>
         <result column="applyMan" property="applyMan" jdbcType="VARCHAR"/>
         <result column="applydate" property="applydate" jdbcType="VARCHAR"/>

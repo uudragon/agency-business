@@ -30,6 +30,10 @@ public class InitInvoiceApplyInfo implements Serializable {
     private String operator;
     private String extParam;
     private String remark;
+    //   起始条数
+    private int startRow;
+    //   结束条数
+    private int endRow;
 
     public String getAgentNo() {
         return agentNo;
@@ -125,5 +129,21 @@ public class InitInvoiceApplyInfo implements Serializable {
 
     public void setApplydate(Date applydate) {
         this.applydate = applydate;
+    }
+
+    public int getStartRow() {
+        return startRow;
+    }
+
+    public void setStartRow(int startRow) {
+        this.startRow = startRow;
+    }
+
+    public int getEndRow() {
+        return endRow;
+    }
+
+    public void setEndRow(int endRow) {
+        this.endRow = endRow;
     }
 }

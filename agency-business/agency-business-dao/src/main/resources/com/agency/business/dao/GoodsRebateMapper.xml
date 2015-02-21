@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.agency.business.dao.GoodsRebateMapper">
+    <resultMap id="GoodsRebateMapper" type="com.agency.business.domain.bean.GoodsRebateApplyInfo">
+        <result column="loginId" property="loginId" jdbcType="VARCHAR"/>
+        <result column="goodsreBateNo" property="goodsreBateNo" jdbcType="VARCHAR"/>
+        <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
+        <result column="deliveryNo" property="deliveryNo" jdbcType="VARCHAR"/>
+        <result column="customerName" property="customerName" jdbcType="VARCHAR"/>
+        <result column="contact" property="contact" jdbcType="VARCHAR"/>
+        <result column="customerAddress" property="customerAddress" jdbcType="VARCHAR"/>
+        <result column="cartid" property="cartid" jdbcType="VARCHAR"/>
+        <result column="rebateAmount" property="rebateAmount" jdbcType="DECIMAL"/>
+        <result column="goodsAmount" property="goodsAmount" jdbcType="DECIMAL"/>
+        <result column="rebateType" property="rebateType" jdbcType="VARCHAR"/>
+        <result column="deliveryStatus" property="deliveryStatus" jdbcType="VARCHAR"/>
+        <result column="goodsNum" property="goodsNum" jdbcType="VARCHAR"/>
+        <result column="goodsType" property="goodsType" jdbcType="VARCHAR"/>
+        <result column="applytime" property="applytime" jdbcType="TIMESTAMP"/>
+        <result column="updateDate" property="updateDate" jdbcType="TIMESTAMP"/>
+        <result column="createDate" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="operator" property="operator" jdbcType="VARCHAR"/>
+        <result column="extParam" property="extParam" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="saveGoodsRebateApplyInfo" parameterType="com.agency.business.domain.bean.GoodsRebateApplyInfo">
+		INSERT INTO goodsrebate (loginId,goodsreBateNo,orderNo,deliveryNo,customerName,contact,customerAddress,cartid,rebateAmount,goodsAmount,rebateStatus,
+		deliveryStatus,goodsNum,goodsType,applytime,operator,extParam,remark,updateDate,createDate)
+		   values (#{loginId,jdbcType=VARCHAR}, #{goodsreBateNo,jdbcType=VARCHAR},#{orderNo,jdbcType=VARCHAR},#{deliveryNo,jdbcType=VARCHAR},#{customerName,jdbcType=VARCHAR},
+      #{contact,jdbcType=VARCHAR}, #{customerAddress,jdbcType=VARCHAR}, #{cartid,jdbcType=VARCHAR}, #{rebateAmount,jdbcType=DECIMAL}, #{goodsAmount,jdbcType=DECIMAL},#{rebateStatus,jdbcType=VARCHAR},
+      #{deliveryStatus,jdbcType=VARCHAR}, #{goodsNum,jdbcType=VARCHAR},#{goodsType,jdbcType=VARCHAR}, #{applytime,jdbcType=TIMESTAMP},#{operator,jdbcType=VARCHAR},#{extParam,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR},now(),now())
+	</insert>
+
+    <update id="updateGoodsRebateApplyInfo" parameterType="com.agency.business.domain.bean.GoodsRebateApplyInfo">
+        update goodsrebate
+        set
+        <if test="rebateStatus != null and rebateStatus != ''">
+            rebateStatus = #{rebateStatus,jdbcType=VARCHAR},
+        </if>
+        <if test="deliveryStatus != null and deliveryStatus != ''">
+            deliveryStatus = #{deliveryStatus,jdbcType=VARCHAR},
+        </if>
+        updateDate = NOW()
+        where loginId = #{loginId,jdbcType=VARCHAR}
+    </update>
+
+    <!---->
+    <select id="queryGoodsRebateApplyInfo" parameterType="com.agency.business.domain.bean.GoodsRebateApplyInfo"
+            resultType="com.agency.business.domain.bean.GoodsRebateApplyInfo">
+        select *
+        from goodsrebate where 1=1
+        <if test="loginId != null and loginId != ''">
+            and loginId = #{loginId,jdbcType=VARCHAR}
+        </if>
+        <if test="rebateStatus != null and rebateStatus != ''">
+            and rebateStatus = #{rebateStatus,jdbcType=VARCHAR}
+        </if>
+        <if test="startRow != null and startRow >= 0 and endRow != null and endRow > 0">
+            limit #{startRow,jdbcType=BIGINT}, #{endRow,jdbcType=BIGINT}
+        </if>
+    </select>
+
+    <select id="countGoodsRebateApplyInfo" resultType="java.lang.Long"
+            parameterType="com.agency.business.domain.bean.GoodsRebateApplyInfo">
+        select count(1) from goodsrebate where 1=1
+        <if test="loginId != null and loginId != ''">
+            loginId = #{loginId,jdbcType=VARCHAR}
+        </if>
+        <if test="rebateStatus != null and rebateStatus != ''">
+            and rebateStatus = #{rebateStatus,jdbcType=VARCHAR}
+        </if>
+    </select>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      </mapper>
