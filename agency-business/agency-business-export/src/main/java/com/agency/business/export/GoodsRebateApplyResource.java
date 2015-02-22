@@ -1,13 +1,12 @@
 package com.agency.business.export;
 
-import com.agency.business.export.vo.InitOrderApplyInfoReqVo;
-import com.agency.business.export.vo.InitOrderApplyInfoResVo;
+import com.agency.business.export.vo.GoodsRebateApplyInfoReqVo;
+import com.agency.business.export.vo.GoodsRebateApplyInfoResVo;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-
 /**
  *返利接口
  */
@@ -22,7 +21,7 @@ public interface GoodsRebateApplyResource {
      */
     @POST
     @Path("/saveGoodsRebateApplyInfo")
-    public InitOrderApplyInfoResVo saveInvoiceApplyInfo(InitOrderApplyInfoReqVo userActiveApplyReqVo);
+    public GoodsRebateApplyInfoResVo saveGoodsRebateApplyInfo(GoodsRebateApplyInfoReqVo goodsRebateApplyInfoReqVo);
     /**
      * 更新返利管理
      *
@@ -31,16 +30,14 @@ public interface GoodsRebateApplyResource {
      */
     @POST
     @Path("updateGoodsRebateApplyInfo")
-    public InitOrderApplyInfoResVo updateInvoiceApplyInfo(InitOrderApplyInfoReqVo userActiveApplyReqVo);
+    public GoodsRebateApplyInfoResVo updateGoodsRebateApplyInfo(GoodsRebateApplyInfoReqVo goodsRebateApplyInfoReqVo);
 
     /**
      * 查询返利管理
-     *
      * @param
      * @return
      */
     @POST
     @Path("queryGoodsRebateApplyInfo")
-    public InitOrderApplyInfoResVo queryInitInvoiceApplyInfo(InitOrderApplyInfoReqVo userActiveApplyReqVo);
-
+    public GoodsRebateApplyInfoResVo queryGoodsRebateApplyInfo(GoodsRebateApplyInfoReqVo goodsRebateApplyInfoReqVo);
 }
