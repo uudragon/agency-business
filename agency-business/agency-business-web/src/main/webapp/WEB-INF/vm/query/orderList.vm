@@ -1,0 +1,297 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+<meta http-equiv="pragma" content="no-cache"> 
+<meta http-equiv="cache-control" content="no-cache"> 
+<meta http-equiv="expires" content="0">   
+<title>收单查询</title>
+<link href="${request.contextPath}/new/css/pay.css" rel="stylesheet" type="text/css"/>
+
+#parse("/macro.vm")
+
+<style type="text/css" >
+.a{
+float:left;
+clear:left;
+height:347}
+
+.d1{
+float:right;
+clear:right;
+color:#FF0000;
+width:200;
+height:100}
+</style>
+
+<script type="text/javascript" src="${request.contextPath}/new/js/jquery-1.2.6.pack.js"></script>
+<script type="text/javascript" src="${request.contextPath}/new/js/json2.js"></script>
+<script type="text/javascript" src="${request.contextPath}/new/js/map.js"></script>
+<script type="text/javascript" src="${request.contextPath}/new/js/My97DatePicker/WdatePicker.js"></script>
+
+<script type="text/javascript">  
+
+	$(function() {
+		$('#merchantOrderDateStart').datetimepicker({showSecond: true,timeFormat: 'HH:mm:ss', dateFormat: 'yy-mm-dd'});
+		$('#merchantOrderDateEnd').datetimepicker({showSecond: true,timeFormat: 'HH:mm:ss', dateFormat: 'yy-mm-dd'});
+	});
+	
+	function getPageData(page, type) {
+		if (type == 1) {
+			page--;
+		} else if (type == 2) {
+			page++;
+		}
+		
+		//总页数
+		var pageCount = $("#showPageCount").attr("value");
+		
+		//如果将要跳转的页号大于总页数，则页号为总页数；
+		//如果小于0，则为首页
+		if (page > pageCount)
+			page = pageCount;
+		if (page < 1)
+			page = 1;
+			
+		$("#page").val(page);
+		
+		jQuery("#searchForm").attr("method", "post");
+        jQuery("#searchForm").attr("action", "/erp/order/newOrderList");
+		$("#searchForm").submit();
+	}
+
+	$(document).ready(function(){  
+//        $("tr:even").addClass("info");//奇数行
+      //  $("tr:odd").addClass("success");//偶数行
+    });
+    
+    function sendquery() {
+    	$("#currentPage").val(1);
+		jQuery("#searchForm").attr("method", "post");
+        jQuery("#searchForm").attr("action", "/erp/order/newOrderList");
+        jQuery("#searchForm").submit();
+    }
+	
+	function sendExport() {
+		var orderId = jQuery("#orderId").val();
+		var merchantOrderId = jQuery("#merchantOrderId").val();
+		var merchantCode = jQuery("#merchantCode").val();
+		var merchantUserCardNo = jQuery("#merchantUserCardNo").val();
+		
+		var merchantOrderDateStart = jQuery("#merchantOrderDateStart").val();
+		var merchantOrderDateEnd = jQuery("#merchantOrderDateEnd").val();
+		var status = jQuery("#status").val();
+		
+		var rows = jQuery("#rows").val();
+		var page = jQuery("#page").val();
+		
+		jQuery.ajax({
+                url: '${request.contextPath}/erp/order/exportCSV',
+                data: {
+						"orderId" : orderId,
+						"merchantOrderId" : merchantOrderId,
+						"merchantCode" : merchantCode,
+						"merchantUserCardNo" : merchantUserCardNo,
+						"merchantOrderDateStart" : merchantOrderDateStart,
+						"merchantOrderDateEnd" : merchantOrderDateEnd,
+						"status" : status,
+						"rows" : rows,
+						"page" : page
+				},
+                type: 'post',
+                success: function(result) {
+                	result = jQuery.parseJSON(result);
+                	
+                    if (result && (result.code == 'success')) {
+                        window.location.href="${request.contextPath}/erp/order/downCsv?filePath=" + result.msg;
+                    } else {
+                        jQuery.messager.alert('提示信息', result.msg, 'error');
+                    }
+                }
+        });
+    }
+	
+	
+	
+    $(document).keyup(function(event){
+    
+	  var queryFrom = document.getElementById("searchForm");
+		queryFrom.action = "/erp/order/newOrderList";
+    
+	  if(event.keyCode ==13){
+        $("#rows").val($("#rowsShow").val());
+	    $("#querybutton").trigger("click");
+	  }
+	});
+</script>
+<div class="row-fluid">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">收单查询</h3>
+        </div>
+    	<div class="panel-body">
+			<form class="form-horizontal" role="form" action="/erp/order/newOrderList" method="post" id="searchForm">
+				<div class="form-group">
+	                <label class="col-xs-1 control-label">收单号：</label>
+		        	<div class="col-xs-2">
+			        	<input type="text" class="form-control" value="$!queryOrderVo.orderId" id="orderId" name="orderId" />
+		        	</div>
+					
+	                <label class="col-xs-1 control-label">订单号：</label>
+		        	<div class="col-xs-2">
+			        	<input type="text" class="form-control" value="$!queryOrderVo.merchantOrderId" id="merchantOrderId" name="merchantOrderId" />
+		        	</div>
+					
+	                <label class="col-xs-1 control-label">商家订单时间：</label>
+		        	<div class="col-xs-4">
+			        	<table>
+			        		<tr>
+			        			<td>
+									<input type="text" class="form-control" value="$!dateTool.format("yyyy-MM-dd HH:mm:ss",$!{queryOrderVo.merchantOrderDateStart})" id="merchantOrderDateStart" name="merchantOrderDateStart"  />
+				        	    </td>
+			        			<td>
+			        			<label class="control-label">至</label>
+				        	    </td>
+			        			<td>
+									<input type="text" class="form-control" value="$!dateTool.format("yyyy-MM-dd HH:mm:ss",$!{queryOrderVo.merchantOrderDateEnd})"  id="merchantOrderDateEnd" name="merchantOrderDateEnd" />
+				        	    </td>
+				        	</tr>
+			        	</table>
+		        	</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-1 control-label">商家用户身份证号：</label>
+		        	<div class="col-xs-2">
+		        		<input type="text" class="form-control" value="$!queryOrderVo.merchantUserCardNo" id="merchantUserCardNo" name="merchantUserCardNo" />
+		        	</div>
+					
+					<label class="col-xs-1 control-label">商家商户号：</label>
+		        	<div class="col-xs-2">
+						<input type="text" class="form-control" value="$!queryOrderVo.merchantCode" id="merchantCode" name="merchantCode" />
+		        	</div>
+					
+					<label class="col-xs-1 control-label">收单状态：</label>
+		        	<div class="col-xs-2">
+						<select id="status" name="status" class="form-control">
+							<option value="" #if($queryOrderVo.status == "")selected="selected" #end>全部</option>
+							<option value="1" #if($queryOrderVo.status == 1)selected="selected" #end>收单完成</option>
+							<option value="2" #if($queryOrderVo.status == 2)selected="selected" #end>申请贷款审核中</option>
+							<option value="3" #if($queryOrderVo.status == 3)selected="selected" #end>申请贷款审核完成</option>
+							<option value="4" #if($queryOrderVo.status == 4)selected="selected" #end>还款完毕</option>
+							<option value="5" #if($queryOrderVo.status == 5)selected="selected" #end>结算完毕</option>
+                        </select>
+					</div>
+				</div>
+				<div class="form-group">
+					<div align="center">
+						<button id="querybutton" class="btn btn-info" type="button" onclick="sendquery()">查询</button>
+						&nbsp;
+						<button id="exportbutton" class="btn btn-info" type="button" onclick="sendExport();">导出EXCEL</button>
+					</div>
+				</div>
+				
+				##当前页
+				<input type="hidden" id="page"  name="page" value="$!queryOrderVo.page"/>
+				##每页显示的大小
+				<input type="hidden" id="rows"  name="rows" value="$!queryOrderVo.rows"/>
+	        </form>
+
+			<table cellpadding="0" cellspacing="0" border="0" class="table table-hover table-striped table-bordered  table-condensed">
+				<thead>
+					<tr>
+						<th class="col-xs-fluid">序号</th>
+						<th class="col-xs-fluid">收单号</th>
+						<th class="col-xs-fluid">收单金额</th>
+						<th class="col-xs-fluid">商家名称</th>
+						<th class="col-xs-fluid">商家商户号</th>
+						<th class="col-xs-fluid">商家订单号</th>
+						
+						<th class="col-xs-fluid">商品名称</th>
+						
+						<th class="col-xs-fluid">商家订单时间</th>
+						<th class="col-xs-fluid">收单时间</th>
+						<th class="col-xs-fluid">订单有效期</th>
+						
+						<th class="col-xs-fluid">商家用户身份证号</th>
+						<th class="col-xs-fluid">收单状态</th>
+					</tr>
+				</thead>
+				<tbody>
+				#foreach($order in $orders)
+					<tr>
+						<td>
+							$!velocityCount
+						</td>
+						<td>
+							<a href="${request.contextPath}/erp/loan/loanDetail?orderId=$!order.orderId"  target="_blank">$!order.orderId</a>
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{order.amount})
+						</td>
+						<td>
+							$!order.merchantName
+						</td>
+						<td>
+							$!order.merchantCode
+						</td>
+						<td>
+							<a href="${request.contextPath}/erp/loan/loanDetail?merchantOrderId=$!order.merchantOrderId&merchantCode=$!order.merchantCode"  target="_blank">$!order.merchantOrderId</a>
+						</td>
+						
+						<td>
+							$!order.productName
+						</td>
+						
+						<td>
+							$!date.format("yyyy-MM-dd HH:mm:ss",$order.merchantOrderDate)
+						</td>
+						<td>
+							$!date.format("yyyy-MM-dd HH:mm:ss",$order.createDate)
+						</td>
+						<td>
+							$!date.format("yyyy-MM-dd HH:mm:ss",$order.limityDate)
+						</td>
+						
+						<td>
+							$!order.merchantUserCardNo
+						</td>
+						<td>
+							#if($!order.status == 1)   收单完成  #end
+                            #if($!order.status == 2)   申请贷款审核中  #end
+							#if($!order.status == 3)   申请贷款审核完成  #end
+							#if($!order.status == 4)   还款完毕  #end
+							#if($!order.status == 5)   结算完毕  #end
+						</td>
+					</tr>
+				#end
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+<div class="container" id="pageCountDiv" align="center">
+    <div class="pagination  pagination-right"  id="showPageNum">
+        <li  id="prePage">
+            <a href="#" onclick="getPageData('$!queryOrderVo.page' ,1 )">上一页</a>
+        </li>
+        <li  id="nextPage">
+            <a href="#" onclick="getPageData('$!queryOrderVo.page' ,2 )">下一页</a>
+        </li>
+        <li class="disabled">
+            <a >当前第$!queryOrderVo.page 页</a>
+        </li>
+        <li  class="disabled">
+            <a id="showPageCount" value="$!queryOrderVo.pageCount">共$!queryOrderVo.pageCount页</a>
+        </li>
+        <li  class="disabled">
+            <a id="showRecordNum" value="$!queryOrderVo.recordNum">共$!queryOrderVo.recordNum条</a>
+        </li>
+        <li>
+        <a><div style="padding: 0px; margin:0px; line-height:100%;">每页<input id="rowsShow" size="3" maxlength="3" type="text" name="rowsShow" autocomplete="off" value="$!queryOrderVo.rows"
+                style="width: 35px; height:20px;">条</div></a>
+        </li>
+    </div>
+</div>
+</body>
+</html>

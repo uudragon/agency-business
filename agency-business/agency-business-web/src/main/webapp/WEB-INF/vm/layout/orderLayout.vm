@@ -1,0 +1,235 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+##<link rel="shortcut icon" href="/favicon.ico">
+    <link href="${request.contextPath}/new/css/flyingsolo.base.css" rel="stylesheet"/>
+    <link href="${request.contextPath}/new/css/bootstrap-responsive.css" rel="stylesheet" />
+    <link href="${request.contextPath}/new/css/bootstrap.css" rel="stylesheet" />
+    <link href="${request.contextPath}/new/css/bootstrap-theme.css" rel="stylesheet" />
+    <link href="${request.contextPath}/new/css/jquery-ui.min.css" rel="stylesheet">
+    <link href="${request.contextPath}/new/css/jquery-ui-timepicker-addon.css" rel="stylesheet">
+    <link href="${request.contextPath}/new/css/jd/jd-widget.css" rel="stylesheet" "/>
+    <link href="${request.contextPath}/new/css/pay.css" rel="stylesheet" type="text/css"/>
+
+
+    <script src="${request.contextPath}/new/js/jquery.1.10.2.js"></script>
+    <script src="${request.contextPath}/new/js/bootstrap.js"></script>
+    <script src="${request.contextPath}/new/js/bootstrap.min.js"></script>
+    <script src="${request.contextPath}/new/js/My97DatePicker/WdatePicker.js"></script>
+    <script src="${request.contextPath}/new/js/highcharts.js"></script>
+    <script src="${request.contextPath}/new/js/bootstrap-bootbox.js"></script>
+    <script src="${request.contextPath}/new/js/exporting.js"></script>
+    <script src="${request.contextPath}/new/js/jquery-ui.min.js"></script>
+    <script src="${request.contextPath}/new/js/jquery-ui-timepicker-addon.js"></script>
+    <script src="${request.contextPath}/new/js/jd/jdcore.js"></script>
+
+    #parse("/macro.vm")
+    <link href="${request.contextPath}/new/css/pay.css" rel="stylesheet" type="text/css"/>
+    <!-- Bootstrap Core CSS -->
+    <link href="${request.contextPath}/startbootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- MetisMenu CSS -->
+    <link href="${request.contextPath}/startbootstrap/css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="${request.contextPath}/startbootstrap/css/sb-admin-2.css" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="${request.contextPath}/startbootstrap/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <script type="text/javascript" src="${request.contextPath}/new/js/My97DatePicker/WdatePicker.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="${request.contextPath}/startbootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="${request.contextPath}/startbootstrap/js/plugins/metisMenu/metisMenu.min.js"></script>
+    <!-- DataTables JavaScript -->
+    <script src="${request.contextPath}/startbootstrap/js/plugins/dataTables/jquery.dataTables.js"></script>
+    <script src="${request.contextPath}/startbootstrap/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+    <!-- Custom Theme JavaScript -->
+    <script src="${request.contextPath}/startbootstrap/js/sb-admin-2.js"></script>
+
+    <script type="text/javascript">
+        $(function() {
+            $('#merchantOrderDateStart').datetimepicker({showSecond: true,timeFormat: 'HH:mm:ss', dateFormat: 'yy-mm-dd'});
+            $('#merchantOrderDateEnd').datetimepicker({showSecond: true,timeFormat: 'HH:mm:ss', dateFormat: 'yy-mm-dd'});
+
+            //若jQuery('#reqSource', window.parent.document)存在,则认为是该页面内容已iframe的方式嵌套在主页面index.vm中；
+            //否则，认为是单独访问该页面
+            //alert(jQuery('#reqSource', window.parent.document).val());
+            try {
+                if(jQuery('#reqSource', window.parent.document).val() == 'erpIndex'){
+                    //左侧导航处于"打开"状态
+                    if(jQuery('#leftNavOpened', window.parent.document).val() == 'yes') {
+                        jQuery("#page-wrapper").css('margin-left','250px');
+                        //左侧导航处于"关闭"状态
+                    }else{
+                        jQuery("#page-wrapper").css('margin-left','0px');
+                    }
+                } else {
+                    jQuery("#page-wrapper").css('margin-left','0px');
+                }
+            } catch(error) {
+                jQuery("#page-wrapper").css('margin-left','0px');
+            }
+        });
+
+        function getPageData(page, type) {
+            if (type == 1) {
+                page--;
+            } else if (type == 2) {
+                page++;
+            }
+
+            //总页数
+            var pageCount = $("#showPageCount").attr("value");
+
+            //如果将要跳转的页号大于总页数，则页号为总页数；
+            //如果小于0，则为首页
+            if (page > pageCount)
+                page = pageCount;
+            if (page < 1)
+                page = 1;
+
+            $("#page").val(page);
+
+            jQuery("#searchForm").attr("method", "post");
+            jQuery("#searchForm").attr("action", "/erp/order/newOrderList");
+            $("#searchForm").submit();
+        }
+
+        function sendquery() {
+            $("#currentPage").val(1);
+            jQuery("#searchForm").attr("method", "post");
+            jQuery("#searchForm").attr("action", "/erp/order/newOrderList");
+            jQuery("#searchForm").submit();
+        }
+
+        function sendExport() {
+            var orderId = jQuery("#orderId").val();
+            var merchantOrderId = jQuery("#merchantOrderId").val();
+            var merchantCode = jQuery("#merchantCode").val();
+            var merchantUserCardNo = jQuery("#merchantUserCardNo").val();
+
+            var merchantOrderDateStart = jQuery("#merchantOrderDateStart").val();
+            var merchantOrderDateEnd = jQuery("#merchantOrderDateEnd").val();
+            var status = jQuery("#status").val();
+
+            var rows = jQuery("#rows").val();
+            var page = jQuery("#page").val();
+
+            //打开遮罩层
+            $('#overlay', window.parent.document).css("display","block");
+
+            jQuery.ajax({
+                url: '${request.contextPath}/erp/order/exportCSV',
+                data: {
+                    "orderId" : orderId,
+                    "merchantOrderId" : merchantOrderId,
+                    "merchantCode" : merchantCode,
+                    "merchantUserCardNo" : merchantUserCardNo,
+                    "merchantOrderDateStart" : merchantOrderDateStart,
+                    "merchantOrderDateEnd" : merchantOrderDateEnd,
+                    "status" : status,
+                    "rows" : rows,
+                    "page" : page
+                },
+                type: 'post',
+                success: function(result) {
+                    //关闭遮罩层
+                    $('#overlay', window.parent.document).css("display","none");
+
+                    result = jQuery.parseJSON(result);
+
+                    if (result && (result.code == 'success')) {
+                        window.location.href="${request.contextPath}/erp/order/downCsv?filePath=" + result.msg;
+                    } else {
+                        jQuery.messager.alert('提示信息', result.msg, 'error');
+                    }
+                }
+            });
+        }
+
+        $(document).keyup(function(event){
+
+            var queryFrom = document.getElementById("searchForm");
+            queryFrom.action = "/erp/order/newOrderList";
+
+            if(event.keyCode ==13){
+                $("#rows").val($("#rowsShow").val());
+                $("#querybutton").trigger("click");
+            }
+        });
+    </script>
+
+
+
+    <script type="text/javascript">
+        function goToPage(url){
+            var toPage = document.getElementsByName("toPage")[0].value;
+            var totalPage = document.getElementsByName("totalPage")[0].value;
+            if(toPage!=''){
+                var r = /^\+?[1-9][0-9]*$/;
+                if(!r.test(toPage)){
+                    alert("请输入大于0的整数！");
+                    document.getElementsByName("toPage")[0].value='';
+                    return;
+                }
+                else if(toPage*1>totalPage*1){
+                    alert("您输入的页数已超过范围！");
+                    document.getElementsByName("toPage")[0].value='';
+                    return;
+                }
+                var targetUrl = url.replace('-page-',toPage);
+                window.location=targetUrl;
+            }
+            else{
+                alert("请输入页数！");
+            }
+        }
+
+        function goToPageByForm(formId){
+            var toPage = document.getElementsByName("toPage")[0].value;
+            var totalPage = document.getElementsByName("totalPage")[0].value;
+            if(toPage!=''){
+                var r = /^\+?[1-9][0-9]*$/;
+                if(!r.test(toPage)){
+                    alert("请输入大于0的整数！");
+                    document.getElementsByName("toPage")[0].value='';
+                    return;
+                }
+                else if(toPage*1>totalPage*1){
+                    alert("您输入的页数已超过范围！");
+                    document.getElementsByName("toPage")[0].value='';
+                    return;
+                }
+                document.getElementById(formId).submit();
+            }
+            else{
+                alert("请输入页数！");
+            }
+        }
+    </script>
+
+
+
+
+
+</head>
+<body>
+##   #parse("/common/navbar.vm")
+    $screen_content
+##    #parse("/common/footer.vm")
+
+</body>
+</html>
+
+
+
+
+

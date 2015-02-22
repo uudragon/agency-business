@@ -1,0 +1,358 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+<meta http-equiv="pragma" content="no-cache"> 
+<meta http-equiv="cache-control" content="no-cache"> 
+<meta http-equiv="expires" content="0">   
+<title>贷款单查询</title>
+<link href="${request.contextPath}/new/css/pay.css" rel="stylesheet" type="text/css"/>
+
+#parse("/macro.vm")
+
+<style type="text/css" >
+.a{
+float:left;
+clear:left;
+height:347}
+
+.d1{
+float:right;
+clear:right;
+color:#FF0000;
+width:200;
+height:100}
+</style>
+
+<script type="text/javascript" src="${request.contextPath}/new/js/jquery-1.2.6.pack.js"></script>
+<script type="text/javascript" src="${request.contextPath}/new/js/json2.js"></script>
+<script type="text/javascript" src="${request.contextPath}/new/js/map.js"></script>
+<script type="text/javascript" src="${request.contextPath}/new/js/My97DatePicker/WdatePicker.js"></script>
+
+<script type="text/javascript">  
+
+	$(function() {
+		$('#startCreateDate').datetimepicker({showSecond: true,timeFormat: 'HH:mm:ss', dateFormat: 'yy-mm-dd'});
+		$('#endCreateDate').datetimepicker({showSecond: true,timeFormat: 'HH:mm:ss', dateFormat: 'yy-mm-dd'});
+	});
+	
+	function getPageData(page, type) {
+		if (type == 1) {
+			page--;
+		} else if (type == 2) {
+			page++;
+		}
+		
+		//总页数
+		var pageCount = $("#showPageCount").attr("value");
+		
+		//如果将要跳转的页号大于总页数，则页号为总页数；
+		//如果小于0，则为首页
+		if (page > pageCount)
+			page = pageCount;
+		if (page < 1)
+			page = 1;
+			
+		$("#page").val(page);
+		
+		jQuery("#searchForm").attr("method", "post");
+        jQuery("#searchForm").attr("action", "/erp/loan/newLoanList");
+		$("#searchForm").submit();
+	}
+
+	$(document).ready(function(){  
+//        $("tr:even").addClass("info");//奇数行
+      //  $("tr:odd").addClass("success");//偶数行
+    });
+    
+    function sendquery() {
+    	$("#currentPage").val(1);
+		jQuery("#searchForm").attr("method", "post");
+        jQuery("#searchForm").attr("action", "/erp/loan/newLoanList");
+        jQuery("#searchForm").submit();
+    }
+	
+	function sendExport() {
+		var loanId = jQuery("#loanId").val();
+		var merchantOrderId = jQuery("#merchantOrderId").val();
+		var merchantCode = jQuery("#merchantCode").val();
+		var jdPin = jQuery("#jdPin").val();
+		var startCreateDate = jQuery("#startCreateDate").val();
+		var endCreateDate = jQuery("#endCreateDate").val();
+		var status = jQuery("#status").val();
+		
+		var rows = jQuery("#rows").val();
+		var page = jQuery("#page").val();
+		
+		jQuery.ajax({
+                url: '${request.contextPath}/erp/loan/exportCSV',
+                data: {
+						"loanId" : loanId,
+						"merchantOrderId" : merchantOrderId,
+						"merchantCode" : merchantCode,
+						"jdPin" : jdPin,
+						"startCreateDate" : startCreateDate,
+						"endCreateDate" : endCreateDate,
+						"status" : status,
+						"rows" : rows,
+						"page" : page
+				},
+                type: 'post',
+                success: function(result) {
+                	result = jQuery.parseJSON(result);
+                	
+                    if (result && (result.code == 'success')) {
+                    	//jQuery.messager.alert("提示信息", "导出成功");
+                        window.location.href="${request.contextPath}/erp/loan/downCsv?filePath=" + result.msg;
+                    } else {
+                        jQuery.messager.alert('提示信息', result.msg, 'error');
+                    }
+                }
+        });
+    }
+	
+    $(document).keyup(function(event){
+    
+	  var queryFrom = document.getElementById("searchForm");
+		queryFrom.action = "/erp/loan/newLoanList";
+    
+	  if(event.keyCode ==13){
+        $("#rows").val($("#rowsShow").val());
+	    $("#querybutton").trigger("click");
+	  }
+	});
+</script>
+<div class="row-fluid">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">贷款单查询</h3>
+        </div>
+    	<div class="panel-body">
+			<form class="form-horizontal" role="form" action="${request.contextPath}/erp/loan/newLoanList" method="post" id="searchForm">
+				<div class="form-group">
+	                <label class="col-xs-1 control-label" style="width:116px">贷款单号：</label>
+		        	<div class="col-xs-2">
+			        	<input type="text" class="form-control" value="$!queryLoanVo.loanId" id="loanId" name="loanId" />
+		        	</div>
+					
+	                <label class="col-xs-1 control-label">商家订单号：</label>
+		        	<div class="col-xs-2">
+			        	<input type="text" class="form-control" value="$!queryLoanVo.merchantOrderId" id="merchantOrderId" name="merchantOrderId" />
+		        	</div>
+					
+	                <label class="col-xs-1 control-label">商家商户号：</label>
+		        	<div class="col-xs-2">
+						<input type="text" class="form-control" value="$!queryLoanVo.merchantCode" id="merchantCode" name="merchantCode" />
+		        	</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-1 control-label">京东pin：</label>
+		        	<div class="col-xs-2">
+		        		<input type="text" class="form-control" value="$!queryLoanVo.jdPin" id="jdPin" name="jdPin" />
+		        	</div>
+					
+					<label class="col-xs-1 control-label">创建时间：</label>
+		        	<div class="col-xs-4">
+			        	<table>
+			        		<tr>
+			        			<td>
+									<input type="text" class="form-control" value="$!dateTool.format("yyyy-MM-dd HH:mm:ss",$!{queryLoanVo.startCreateDate})" id="startCreateDate" name="startCreateDate"  />
+				        	    </td>
+			        			<td>
+			        			<label class="control-label">至</label>
+				        	    </td>
+			        			<td>
+									<input type="text" class="form-control" value="$!dateTool.format("yyyy-MM-dd HH:mm:ss",$!{queryLoanVo.endCreateDate})"  id="endCreateDate" name="endCreateDate" />
+				        	    </td>
+				        	</tr>
+			        	</table>
+		        	</div>
+					
+					<label class="col-xs-1 control-label">贷款单状态：</label>
+		        	<div class="col-xs-2">
+		        	
+						<select id="status" name="status" class="form-control">
+							<option value="" #if($queryLoanVo.status == "")selected="selected" #end>全部</option>
+							<option value="2" #if($queryLoanVo.status == 2)selected="selected" #end>申请贷款审核中</option>
+							<option value="3" #if($queryLoanVo.status == 3)selected="selected" #end>申请贷款审核完成</option>
+							<option value="4" #if($queryLoanVo.status == 4)selected="selected" #end>还款完毕</option>
+							<option value="5" #if($queryLoanVo.status == 5)selected="selected" #end>结算完毕</option>
+                        </select>
+					</div>
+				</div>
+				<div class="form-group">
+					<div align="center">
+		                <label class="col-xs-1 control-label"></label>
+						<button id="querybutton" class="btn btn-info" type="button" onclick="sendquery()">查询</button>
+						&nbsp;
+						<button id="exportbutton" class="btn btn-info" type="button" onclick="sendExport();">导出EXCEL</button>
+					</div>
+				</div>
+				
+				##当前页
+				<input type="hidden" id="page"  name="page" value="$!queryLoanVo.page"/>
+				##每页显示的大小
+				<input type="hidden" id="rows"  name="rows" value="$!queryLoanVo.rows"/>
+
+	        </form>
+
+			<table cellpadding="0" cellspacing="0" border="0" class="table table-hover table-striped table-bordered  table-condensed">
+				<thead>
+					<tr>
+						<th class="col-xs-fluid">贷款单号</th>
+						<th class="col-xs-fluid">收单号</th>
+						<th class="col-xs-fluid">商家订单号</th>
+						<th class="col-xs-fluid">订单总金额</th>
+						<th class="col-xs-fluid">贷款金额</th>
+						<th class="col-xs-fluid">预付款金额</th>
+						<th class="col-xs-fluid">cds返回金额</th>
+						<th class="col-xs-fluid">订单补款金额</th>
+						<th class="col-xs-fluid">分期数</th>
+						<th class="col-xs-fluid">商家商户号</th>
+						<th class="col-xs-fluid">平台商户号</th>
+						<th class="col-xs-fluid">出资方商户号</th>
+						<th class="col-xs-fluid">平台pin</th>
+						<th class="col-xs-fluid">贷款用户pin</th>
+						
+						<th class="col-xs-fluid">退款总金额</th>
+						<th class="col-xs-fluid">逾期费率</th>
+						<th class="col-xs-fluid">分期手续费费率</th>
+						<th class="col-xs-fluid">分期手续费商家分成</th>
+						<th class="col-xs-fluid">分期手续费平台分成</th>
+						<th class="col-xs-fluid">分期手续费出资方分成</th>
+						
+						<th class="col-xs-fluid">服务费费率</th>
+						<th class="col-xs-fluid">服务费平台分成</th>
+						<th class="col-xs-fluid">服务费出资方分成</th>
+						
+						<th class="col-xs-fluid">服务费</th>
+						
+						<th class="col-xs-fluid">状态</th>
+						
+						<th class="col-xs-fluid">创建时间</th>
+						
+						<th class="col-xs-fluid">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+				#foreach($loan in $investmentLoans)
+					<tr>
+						<td>
+							$!loan.loanId
+						</td>
+						<td>
+							$!loan.orderId
+						</td>
+						<td>
+							$!loan.merchantOrderId
+						</td>
+						<td>
+							$!loan.amount
+						</td>
+						<td>
+							$!loan.loanAmount
+						</td>
+						<td>
+							$!loan.preAmount
+						</td>
+						<td>
+							$!loan.cdsResAmount
+						</td>
+						<td>
+							$!loan.bcAmount
+						</td>
+						<td>
+							$!loan.plan
+						</td>
+						<td>
+							$!loan.merchantCode
+						</td>
+						<td>
+							$!loan.platFormCode
+						</td>
+						<td>
+							$!loan.investmentCode
+						</td>
+						<td>
+							$!loan.platPin
+						</td>
+						<td>
+							$!loan.jdPin
+						</td>
+						<td>
+							$!loan.refundAmount
+						</td>
+						<td>
+							$!loan.overRate
+						</td>
+						<td>
+							$!loan.planRate
+						</td>
+						<td>
+							$!loan.planForMerchantProportion
+						</td>
+						<td>
+							$!loan.planForPlatProportion
+						</td>
+						<td>
+							$!loan.planForInvestmentProportion
+						</td>
+						<td>
+							$!loan.serviceRate
+						</td>
+						<td>
+							$!loan.serviceForPlatProportion
+						</td>
+						<td>
+							$!loan.serviceForInvestmentProportion
+						</td>
+						<td>
+							$!loan.serviceAmount
+						</td>
+						<td>
+							#if($!loan.status == 2)   申请贷款审核中  #end
+                            #if($!loan.status == 3)   申请贷款审核完成  #end
+							#if($!loan.status == 4)   还款完毕  #end
+							#if($!loan.status == 5)   结算完毕  #end
+						</td>
+						<td>
+							$!date.format("yyyy-MM-dd HH:mm:ss",$loan.createDate)
+						</td>
+						<td>
+							<a href="/erp/plan/newPlanList?loanNo=$!loan.loanId"  target="_blank">查询分期单</a>
+							&nbsp;&nbsp;
+							<a href="/erp/order/newOrderList?orderId=$!loan.orderId"  target="_blank">查询收单</a>
+						</td>
+					</tr>
+				#end
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+<div class="container" id="pageCountDiv" align="center">
+    <div class="pagination  pagination-right"  id="showPageNum">
+        <li  id="prePage">
+            <a href="#" onclick="getPageData('$!queryLoanVo.page' ,1 )">上一页</a>
+        </li>
+        <li  id="nextPage">
+            <a href="#" onclick="getPageData('$!queryLoanVo.page' ,2 )">下一页</a>
+        </li>
+        <li class="disabled">
+            <a >当前第$!queryLoanVo.page 页</a>
+        </li>
+        <li  class="disabled">
+            <a id="showPageCount" value="$!queryLoanVo.pageCount">共$!queryLoanVo.pageCount页</a>
+        </li>
+        <li  class="disabled">
+            <a id="showRecordNum" value="$!queryLoanVo.recordNum">共$!queryLoanVo.recordNum条</a>
+        </li>
+        <li>
+        <a><div style="padding: 0px; margin:0px; line-height:100%;">每页<input id="rowsShow" size="3" maxlength="3" type="text" name="rowsShow" autocomplete="off" value="$!queryLoanVo.rows"
+                style="width: 35px; height:20px;">条</div></a>
+        </li>
+    </div>
+</div>
+</body>
+</html>

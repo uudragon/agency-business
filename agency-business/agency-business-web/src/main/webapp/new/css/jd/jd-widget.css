@@ -1,0 +1,238 @@
+/* 元数据表单对话框组件样式  */
+html {
+    color: #666666;
+    font-family: SimSun;
+    font-size: 12px;
+}
+
+.metadata-form-dialog {width: 719px; display:none;border:1px solid #7f7f7f;background-color:#f8f8f8;}
+
+.metadata-form-dialog .metadata-form-dialog-header {background-color:#e6e6e6;height:23px;line-height:23px;padding:0px;margin:0px;padding-left:10px;}
+.metadata-form-dialog .metadata-form-dialog-header .metadata-form-dialog-header-title {float:left;font-size:12px; margin: 0;padding: 0;}
+.metadata-form-dialog .metadata-form-dialog-header .metadata-form-dialog-header-close {background:url(../../images/widget/shopadm_odicons.png) no-repeat; float:right;display:block;cursor:pointer;background-position:-105px -163px;width:23px;height:23px;display:block;text-indent:-1000em;overflow:hidden;}
+
+.metadata-form-dialog .metadata-form-dialog-form-container {width:100%; height: 600px; overflow: auto;}
+
+.metadata-form-dialog  .metadata-form-dialog-group { margin:10px auto;clear:both;}
+.metadata-form-dialog  .metadata-form-dialog-subgroup {clear:both;}
+
+.metadata-form-dialog  .dotted{clear:both;border-bottom:1px dotted #bfbdbd;height:1px;line-height:0;overflow:hidden;font-size:0;width:455px;margin-left:154px;padding-top:12px;padding-top:14px\9;}
+
+/*	表单项样式	*/
+.metadata-form-dialog .form-element-label {float:left;width:154px;text-align:right;height:20px;padding-top:14px;padding-top:16px\9;height:18px\9;clear: left}
+.metadata-form-dialog .form-element-container {float:left;padding:10px 0 0 0;clear:right}
+
+.metadata-form-dialog .form-element-container .shuoming{float:left;width:480px; margin:5px 0 0 0px;background:#fffdde;border:1px solid #f0ecb3;color:#c30;padding:10px;line-height:18px;}
+.metadata-form-dialog .form-element-container .shuoming .nav{float:left;width:40px;}
+.metadata-form-dialog .form-element-container .shuoming p{float:right;width:430px;}
+
+/*.metadata-form-dialog .form-element-container span.form-element-desc{margin-left: 5px; border: 1px solid #fcefa1; background: #fbf9ee; color: green; max-width: 246px; min-height:24px; height: auto;padding:0px 10px 0px 30px;line-height:24px;float:left; background: url(../../images/widget/icon_cue.png) no-repeat; background-position:10px 5px; }*/
+.metadata-form-dialog .form-element-container span.form-element-desc{margin-left: 5px; float:left;background: url(../../images/widget/icon_capslock.png) 3px 0px no-repeat;padding: 3px 8px 5px 25px;display:block;margin-top:3px;max-width: 246px; min-height:24px;height: auto;}
+
+.metadata-form-dialog-incr{cursor:pointer;float:left;width:16px;height:16px;background-image:url(../../images/widget/add_delete.png);background-repeat:no-repeat;overflow:hidden;margin:6px 0 0 10px;margin-top:7px\9;background-position:0px 0px;}
+.metadata-form-dialog-decr{cursor:pointer;float:left;width:16px;height:16px;background-image:url(../../images/widget/add_delete.png);background-repeat:no-repeat;overflow:hidden;margin:6px 0 0 10px;margin-top:7px\9;background-position:0px -40px;}
+
+/*.metadata-form-dialog .form-element-container input[type=text],.metadata-form-dialog .form-element-container input[type=password]{float:left;width:245px;height:24px;padding-left:5px;line-height:24px;}*/
+.metadata-form-dialog .form-element-container input.text,.metadata-form-dialog .form-element-container input.password{float:left;width:245px;height:24px;padding-left:5px;line-height:24px;}
+
+.metadata-form-dialog .form-element-container select{float:left;height:24px;padding:3px;padding:0\9;width:142px;}
+.metadata-form-dialog .form-element-container textarea{float:left;border:1px solid #dfddda;width:270px;height:55px;padding:5px;font-size:12px;}
+/*.metadata-form-dialog .form-element-container input[type=radio]{ margin-top: 4px; float:left;}*/
+.metadata-form-dialog .form-element-container input.radio{ float:left; margin-top: 4px; margin-left:7px;/*vertical-align:middle; width: 30px; float:none; height:24px;line-height:24px; */}
+.metadata-form-dialog .form-element-container label.form-rc-label{ float:left; margin:4px 10px 4px 5px;*margin-top:7px}
+
+/*.metadata-form-dialog .form-element-container input[type=checkbox]{  margin-top: 4px; float:left;vertical-align:middle; width: 30px; float:none; height:24px;line-height:24px; }*/
+.metadata-form-dialog .form-element-container input.checkbox{  margin-top: 4px; margin-left:7px; float:left;/*vertical-align:middle; width: 30px; float:none; height:24px;line-height:24px;*/ }
+
+.metadata-form-dialog .form-element-container textarea.kind-editor {width: 500px; height: 200px; display: none;}
+
+.metadata-form-dialog .form-element-container ul.tree-root-node{width:330px;height:112px;border:1px solid #d2d2d2;background:#fff;padding:5px;overflow-y:scroll;overflow-x:hidden;}
+.metadata-form-dialog .form-element-container ul li{width:112px;padding:2px 0 2px 18px;*padding:1px 0 1px 18px;overflow:hidden;clear:both;}
+.metadata-form-dialog .form-element-container li ul{width:130px;padding:2px 0;}
+.metadata-form-dialog .form-element-container ul li input.treecheckbox{float:left;margin:0;*margin:-4px;height:auto;}
+.metadata-form-dialog .form-element-container ul li label{float:left;padding-left:4px;}
+
+
+/*	底部及按钮样式	*/
+.metadata-form-dialog .metadata-form-dialog-footer {padding:10px 0px;border-top:1px solid #d4d2d2; text-align:center; margin-top:10px;clear:both;}
+.metadata-form-dialog .metadata-form-dialog-footer input{margin-right:10px;width:42px;height:23px;display:inline-block;border:0;background:url(../../images/widget/paginating.png) no-repeat 0 -92px;color:#fff;cursor:pointer;line-height:24px;overflow:hidden;}
+.metadata-form-dialog .metadata-form-dialog-footer input:hover{background-position:0-116px;}
+
+
+
+/*	遮罩组件样式  	*/
+.jd-mask-layer {display:none; background-color: #000; -moz-opacity: 0.3; opacity:.30; filter: alpha(opacity=30);}
+
+
+
+/*	消息提示框组件样式  	*/
+.jd-message-tooltip { position: absolute; border: 1px dotted orange; z-index: 9999;padding:5px; padding-right:10px; text-align:center;}
+.jd-message-tooltip .jd-message-tooltip-message { float: left;background:url(../../images/widget/icon_sure.png) no-repeat; background-position:0px 1px;   padding-left: 25px; color : green; font-weight : bold; height: 20px; line-height:20px; }
+.jd-message-tooltip .errorTip { float: left;background:url(../../images/widget/login_bg.png) no-repeat; background-position: 3px -59px;  padding-left: 25px; color : red; font-weight : bold;height: 20px; line-height:20px; }
+.jd-message-tooltip .formWarnTip { float: left;background:url(../../images/widget/icon_capslock.png) no-repeat; background-position:0px 4px;  padding-left: 25px; color : red; font-weight : bold;height: 20px; line-height:20px; }
+
+
+/*	确认框组件框样式  	*/
+.jd-confirm-dialog { position: absolute; border: 1px solid #7f7f7f; background-color: #f8f8f8; z-index: 9999; }
+
+.jd-confirm-dialog .jd-confirm-dialog-header { background-color: #e6e6e6; height: 23px; line-height: 23px; padding-left: 10px; }
+.jd-confirm-dialog .jd-confirm-dialog-header h3 {float:left;font-size:12px; margin: 0;padding: 0;}
+.jd-confirm-dialog .jd-confirm-dialog-header span { float: right; display: block; cursor: pointer; }
+.jd-confirm-dialog .jd-confirm-dialog-header .jd-confirm-dialog-header-close{background:url(../../images/widget/shopadm_odicons.png) no-repeat; float:right;display:block;cursor:pointer;background-position:-105px -163px;width:23px;height:23px;display:block;text-indent:-1000em;overflow:hidden;}
+
+.jd-confirm-dialog .jd-confirm-dialog-body{ padding: 5px 10px 15px 10px; text-align: left;}
+.jd-confirm-dialog .jd-confirm-dialog-body .jd-confirm-dialog-message{ text-align: center; margin: 10px 0 15px; }
+
+.jd-confirm-dialog .jd-confirm-dialog-footer { text-align: center; margin: 10px auto 0 auto; width: 100%; }
+.jd-confirm-dialog .jd-confirm-dialog-footer .jd-confirm-dialog-button { background: url(../../images/widget/bg_btn.png) repeat-x 0 0; border-radius: 2px; box-shadow: 0 2px 2px #bdbdbd; color: #fff; margin-right:10px; cursor: pointer; display: inline-block; height: 24px; padding: 0 10px 0; vertical-align: middle; border: none; *padding: 3px 8px 2px; line-height: 24px; *line-height: 20px; font-size: 12px; }
+.jd-confirm-dialog .jd-confirm-dialog-footer .jd-confirm-dialog-button:hover { background: url(../../images/widget/bg_btn.png) repeat-x 0 -25px; text-decoration: none; }
+
+
+
+/*	浮层导航组件样式	*/
+.floating-nav-bar {
+	height: 30px;
+	background-color: #000000;
+	-moz-opacity: 0.3;
+	opacity:0.3; 
+	filter: alpha(opacity=30);
+}
+
+.floating-nav-title {
+	display:block;
+	float: left;
+	width: 40%;
+	height: 100%;
+	line-height: 30px;
+	margin-left: 20px;
+	font-weight: bold;
+}
+
+.floating-nav-btn-container {
+/*	width: 58%;
+	height: 100%;
+	line-height: 100%;
+	float: left;*/
+        color: #505050;
+        padding : 0px;
+} 
+
+.floating-nav-btn-container a{margin-top: 10px; margin-right: 10px;text-align: left;font-weight: normal; float:right;display:block;height:23px;line-height:23px;background-image:url(../../images/widget/shopfitting/btns_icon.png);background-repeat: no-repeat;_display:inline;margin-left:10px;color:#505050;text-decoration:none;}
+.floating-nav-btn-container a.edit{background-position:0px 0px; padding:0px 9px 0px 27px;}
+.floating-nav-btn-container a.edit:hover{background-position:0px -23px;text-decoration:none;}
+/*.floating-nav-btn-container a.edit {
+	background: url(../../images/widget/floating-nav-btns.gif) no-repeat 0 0;
+	background-position: -30px -18px;
+}*/
+
+.floating-nav-btn-container a.del{background-position:0px -46px; padding:0px 10px 0px 27px;}
+.floating-nav-btn-container a.del:hover{background-position:0px -69px;text-decoration:none;}
+/*.floating-nav-btn-container a.del {
+	background: url(../../images/widget/floating-nav-btns.gif) no-repeat 0 0;
+	background-position: -123px -19px;
+}*/
+
+/* 绝对定位新增模块按钮到右下角 */
+/*.floating-nav-btn-container a.add{position:absolute;background-position:0px -92px;padding:0px 8px 0px 27px; bottom:10px; right:10px; margin-right: 0px;}*/
+.floating-nav-btn-container a.add{background-position:0px -92px;padding:0px 8px 0px 27px; }
+.floating-nav-btn-container a.add:hover{background-position:0px -115px;text-decoration:none; }
+
+
+.floating-nav-btn-container a.moveup{background-position:-83px -22px;text-indent:-9999px;width:10px;}
+.floating-nav-btn-container a.movedown{background-position:-83px 0px;text-indent:-9999px;width:10px;}
+
+.floating-navbar-checkbox-conatiner {background:url(../../images/widget/shopfitting/btns_icon.png) 0px -230px no-repeat;float:right;height:22px;line-height:22px;padding:0px 6px 0px 6px;cursor:pointer;*width:90px;*padding-left:2px;margin-top:10px; margin-right:10px;}
+.floating-navbar-checkbox-conatiner input{margin-right:5px;position:relative;top:4px;float:left;*top:0px;}
+.floating-navbar-checkbox-conatiner span{float:left;}
+
+
+
+/* 文件上传组件样式 */
+.file-upload-button {
+    float: left;background:url(../../images/widget/bg_btn.png) repeat-x 0 0;
+    border-radius:20px;	
+    -webkit-border-radius: 20px;
+    cursor:pointer;
+    height:25px;
+    width: 60px;
+    vertical-align:middle;
+    color: #FFF;
+    font: bold 12px Arial, Helvetica, sans-serif;
+    text-align: center;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+    line-height:24px;
+    margin-left: 20px;
+}
+
+.file-upload-text {
+	float:left; 
+	width: 210px;
+	height:26px;
+	padding:0 5px;
+	line-height:26px;
+	border:1px solid #d7d7d7; 
+}
+.file-upload-button:hover {background:url(../../images/widget/bg_btn.png) repeat-x 0 -25px;text-decoration:none;z-index: 0;}
+
+
+.file-upload-preview {background-color: #e6e6e6;height: auto; max-width: 350px;margin-bottom: 10px;}
+.file-upload-preview .file-upload-item {font-size:12px; font-weight: bold; padding: 5px 20px;}
+
+
+/*加载进度条*/
+
+.loading-progress-bar .loading-progress-bar-image{width: 32px; height:32px;float:left}
+.loading-progress-bar .loading-progress-bar-text{float:left;margin-left: 10px; padding-top: 8px; font-weight: bold; font-size: 14px;}
+
+/* 弹出层组件 */
+.jd-popup {display:none;border:1px solid #7f7f7f;background-color:#f8f8f8;}
+
+/* .jd-popup .jd-popup-header {background-color:#e6e6e6;height:23px;line-height:23px;padding:0px;margin:0px;padding-left:10px;} */
+.jd-popup .jd-popup-header {
+	padding:0 10px;
+	height:40px;
+	border-bottom:1px solid #cfcfcf;
+	line-height:40px;
+	background:#ededed;
+	overflow:hidden;
+	font-weight:bold;
+}
+.jd-popup .jd-popup-header .jd-popup-header-title {float:left;font-size:12px; margin: 0;padding: 0;}
+/* .jd-popup .jd-popup-header .jd-popup-header-close {background:url(../../images/widget/shopadm_odicons.png) no-repeat; float:right;display:block;cursor:pointer;background-position:-105px -163px;width:23px;height:23px;display:block;text-indent:-1000em;overflow:hidden;} */
+.jd-popup .jd-popup-header a.jd-popup-header-close {
+	position:absolute; 
+	right:10px; 
+	top:10px;
+	width:22px; 
+	height:22px; 
+	background:url(../../images/widget/icons.png) -21px 0 no-repeat;
+}
+
+.jd-popup .jd-popup-header a.jd-popup-header-close:hover {
+	background:url(../../images/widget/icons.png) -21px -25px no-repeat;
+}
+
+.jd-popup .jd-popup-body {width:100%; overflow: auto;}
+
+.jd-popup .jd-popup-footer {padding:10px 0px;border-top:1px solid #d4d2d2; text-align:center; width: 100%; height:60px; margin-top:10px;clear:both;}
+/* .jd-popup .jd-popup-footer input{margin-right:10px;width:42px;height:23px;display:inline-block;border:0;background:url(../../images/widget/paginating.png) no-repeat 0 -92px;color:#fff;cursor:pointer;line-height:24px;overflow:hidden;}
+.jd-popup .jd-popup-footer input:hover{background-position:0-116px;} */
+
+.jd-popup .jd-popup-footer input{
+	background:url(../../images/widget/icons.png) no-repeat; 
+	width:53px; 
+	height:26px; 
+	line-height:26px;
+	font-size:12px;
+	background-position:-69px -274px;
+	margin-right:10px;
+	border:none; 
+	color:#fff;
+	cursor:pointer;
+	margin:0 10px;
+    font: bold 12px Arial, Helvetica, sans-serif;
+    text-align: center;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+}
+.jd-popup .jd-popup-footer input:hover{background-position:-69px -244px;}
+

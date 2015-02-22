@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/startbootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- MetisMenu CSS -->
+    <link href="/startbootstrap/css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="/startbootstrap/css/sb-admin-2.css" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="/startbootstrap/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<script type="text/javascript">
+		$(function() {
+			//若jQuery('#reqSource', window.parent.document)存在,则认为是该页面内容已iframe的方式嵌套在主页面index.vm中；
+			//否则，认为是单独访问该页面
+			//alert(jQuery('#reqSource', window.parent.document).val());
+			if(jQuery('#reqSource', window.parent.document).val() == 'erpIndex'){
+				//左侧导航处于"打开"状态
+				if(jQuery('#leftNavOpened', window.parent.document).val() == 'yes') {
+					jQuery("#page-wrapper").css('margin-left','250px');
+				//左侧导航处于"关闭"状态
+				}else{
+					jQuery("#page-wrapper").css('margin-left','0px');
+				}
+			} else {
+				jQuery("#page-wrapper").css('margin-left','0px');
+			}
+    	});
+    </script>
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+					<h1 class="page-header">欢迎页</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h3>欢迎使用商户运营后台</h3>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="/startbootstrap/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/startbootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="/startbootstrap/js/plugins/metisMenu/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="/startbootstrap/js/sb-admin-2.js"></script>
+
+</body>
+
+</html>
+

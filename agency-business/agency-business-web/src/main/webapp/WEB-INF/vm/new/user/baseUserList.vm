@@ -1,0 +1,298 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+<meta http-equiv="pragma" content="no-cache"> 
+<meta http-equiv="cache-control" content="no-cache"> 
+<meta http-equiv="expires" content="0">   
+<title>平台用户查询</title>
+<link href="${request.contextPath}/new/css/pay.css" rel="stylesheet" type="text/css"/>
+
+#parse("/macro.vm")
+
+<style type="text/css" >
+.a{
+float:left;
+clear:left;
+height:347}
+
+.d1{
+float:right;
+clear:right;
+color:#FF0000;
+width:200;
+height:100}
+</style>
+
+<script type="text/javascript" src="${request.contextPath}/new/js/jquery-1.2.6.pack.js"></script>
+<script type="text/javascript" src="${request.contextPath}/new/js/json2.js"></script>
+<script type="text/javascript" src="${request.contextPath}/new/js/map.js"></script>
+<script type="text/javascript" src="${request.contextPath}/new/js/My97DatePicker/WdatePicker.js"></script>
+
+<script type="text/javascript">  
+
+	$(function() {
+		//$('#startCreateDate').datetimepicker({showSecond: true,timeFormat: 'HH:mm:ss', dateFormat: 'yy-mm-dd'});
+		//$('#endCreateDate').datetimepicker({showSecond: true,timeFormat: 'HH:mm:ss', dateFormat: 'yy-mm-dd'});
+	});
+	
+	function getPageData(page, type) {
+		if (type == 1) {
+			page--;
+		} else if (type == 2) {
+			page++;
+		}
+		
+		//总页数
+		var pageCount = $("#showPageCount").attr("value");
+		
+		//如果将要跳转的页号大于总页数，则页号为总页数；
+		//如果小于0，则为首页
+		if (page > pageCount)
+			page = pageCount;
+		if (page < 1)
+			page = 1;
+			
+		$("#page").val(page);
+		
+		jQuery("#searchForm").attr("method", "post");
+        jQuery("#searchForm").attr("action", "/erp/user/newBaseUserList");
+		$("#searchForm").submit();
+	}
+
+	$(document).ready(function(){  
+//        $("tr:even").addClass("info");//奇数行
+      //  $("tr:odd").addClass("success");//偶数行
+    });
+    
+    function sendquery() {
+    	$("#currentPage").val(1);
+		jQuery("#searchForm").attr("method", "post");
+        jQuery("#searchForm").attr("action", "/erp/user/newBaseUserList");
+        jQuery("#searchForm").submit();
+    }
+	
+	function sendExport() {
+		var merchantOrderId = jQuery("#merchantOrderId").val();
+		var merchantCode = jQuery("#merchantCode").val();
+		var platRefunId = jQuery("#platRefunId").val();
+		var refundId = jQuery("#refundId").val();
+		
+		var startCreateDate = jQuery("#startCreateDate").val();
+		var endCreateDate = jQuery("#endCreateDate").val();
+		
+		var rows = jQuery("#rows").val();
+		var page = jQuery("#page").val();
+		
+		jQuery.ajax({
+                url: '${request.contextPath}/erp/refund/exportCSV',
+                data: {
+						"merchantOrderId" : merchantOrderId,
+						"merchantCode" : merchantCode,
+						"platRefunId" : platRefunId,
+						"refundId" : refundId,
+						"startCreateDate" : startCreateDate,
+						"endCreateDate" : endCreateDate,
+						"rows" : rows,
+						"page" : page
+				},
+                type: 'post',
+                success: function(result) {
+                	result = jQuery.parseJSON(result);
+                	
+                    if (result && (result.code == 'success')) {
+                        window.location.href="${request.contextPath}/erp/refund/downCsv?filePath=" + result.msg;
+                    } else {
+                        jQuery.messager.alert('提示信息', result.msg, 'error');
+                    }
+                }
+        });
+    }
+	
+	//更新baseUser的状态
+	function changeBaseUserStatus(platPin, status) {
+		jQuery.ajax({
+                url: '${request.contextPath}/erp/user/updateBaseUser',
+                data: {
+						"platPin" : platPin,
+						"status" : status
+				},
+                type: 'post',
+                success: function(result) {
+                	result = jQuery.parseJSON(result);
+                	
+                    if (result && (result.code == 'success')) {
+						//status=0:表示该操作将当前状态由正常变为止付
+						if(status == 0) {
+							//更新baseUser列表信息中的"状态和操作"两列的内容
+							jQuery("#nowStatus" + platPin).text('止付');
+							jQuery("#changeStatus" + platPin).html("<a href='#'  onclick=changeBaseUserStatus('" + platPin + "',1)>正常</a>");
+							
+						//status=1:表示该操作将当前状态由止付变为正常
+						} else {
+							//更新baseUser列表信息中的"状态和操作"两列的内容
+							jQuery("#nowStatus" + platPin).text('正常');
+							jQuery("#changeStatus" + platPin).html("<a href='#'  onclick=changeBaseUserStatus('" + platPin + "',0)>止付</a>");
+						
+						}
+                    } else {
+                        jQuery.messager.alert('提示信息', result.msg, 'error');
+                    }
+                }
+        });
+    }
+	
+    $(document).keyup(function(event){
+    
+	  var queryFrom = document.getElementById("searchForm");
+		queryFrom.action = "/erp/user/newBaseUserList";
+    
+	  if(event.keyCode ==13){
+        $("#rows").val($("#rowsShow").val());
+	    $("#querybutton").trigger("click");
+	  }
+	});
+</script>
+<div class="row-fluid">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">平台用户查询</h3>
+        </div>
+    	<div class="panel-body">
+			<form class="form-horizontal" role="form" action="/erp/user/newBaseUserList" method="post" id="searchForm">
+				<div class="form-group">
+	                <label class="col-xs-1 control-label">状态：</label>
+		        	<div class="col-xs-2">
+						<select id="status" name="status" class="form-control">
+							<option value="" #if($!status == "")selected="selected" #end>全部</option>
+							<option value="0" #if($!status == 0)selected="selected" #end>止付</option>
+							<option value="1" #if($!status == 1)selected="selected" #end>正常</option>
+							<option value="2" #if($!status == 2)selected="selected" #end>失效</option>
+                        </select>
+					</div>
+					
+	                <label class="col-xs-1 control-label">京东用户pin：</label>
+		        	<div class="col-xs-2">
+						<input type="text" class="form-control" value="$!jdPin" id="jdPin" name="jdPin" />
+		        	</div>
+					
+					<label class="col-xs-1 control-label">身份证号：</label>
+		        	<div class="col-xs-2">
+						<input type="text" class="form-control" value="$!idNo" id="idNo" name="idNo" />
+		        	</div>
+				</div>
+				
+				<div class="form-group">
+					<div align="center">
+						<button id="querybutton" class="btn btn-info" type="button" onclick="sendquery()">查询</button>
+						&nbsp;
+						<button id="exportbutton" class="btn btn-info" type="button" onclick="sendExport();">导出EXCEL</button>
+					</div>
+				</div>
+				##当前页
+				<input type="hidden" id="page"  name="page" value="$!page"/>
+				##每页显示的大小
+				<input type="hidden" id="rows"  name="rows" value="$!rows"/>
+
+	        </form>
+
+			<table cellpadding="0" cellspacing="0" border="0" class="table table-hover table-striped table-bordered  table-condensed">
+				<thead>
+					<tr>
+						<th class="col-xs-fluid">序号</th>
+						<th class="col-xs-fluid">平台用户Pin</th>
+						<th class="col-xs-fluid">京东用户Pin</th>
+						<th class="col-xs-fluid">姓名</th>
+						<th class="col-xs-fluid">身份证号</th>
+						<th class="col-xs-fluid">手机号</th>
+						<th class="col-xs-fluid">邮箱</th>
+						<th class="col-xs-fluid">逾期天数</th>
+						<th class="col-xs-fluid">逾期金额</th>
+						<th class="col-xs-fluid">状态</th>
+						<th class="col-xs-fluid">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+				#foreach($baseUser in $baseUserList)
+					<tr>
+						<td>
+							$!velocityCount
+						</td>
+						<td>
+							$!baseUser.platPin
+						</td>
+						<td>
+							<a href="${request.contextPath}/erp/loan/loanUserDetail?platPin=$!baseUser.platPin"  target="_blank">$!baseUser.jdPin</a>
+						</td>
+						<td>
+							$!baseUser.realName
+						</td>
+						<td>
+							$!baseUser.idNo
+						</td>
+						<td>
+							$!baseUser.mobile
+						</td>
+						<td>
+							$!baseUser.email
+						</td>
+						<td>
+							$!baseUser.ext1
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{baseUser.ext2})
+						</td>
+						<td>
+							<lable id="nowStatus$!baseUser.platPin">
+								#if($!baseUser.status == 0)   止付    #end
+								#if($!baseUser.status == 1)   正常  #end
+								#if($!baseUser.status == 2)   失效  #end
+							</lable>
+						</td>
+						
+						<td>
+							<lable id="changeStatus$!baseUser.platPin">
+    							#if($!baseUser.status == 0)
+    								<a href="#"  onclick="changeBaseUserStatus('$!baseUser.platPin',1)">正常</a>
+    							#end
+                                #if($!baseUser.status == 1)
+    								<a href="#"  onclick="changeBaseUserStatus('$!baseUser.platPin',0)">止付</a>
+    							#end
+    							#if($!baseUser.status == 2)
+    								-
+								#end
+                            </lable>
+						</td>
+					</tr>
+				#end
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+<div class="container" id="pageCountDiv" align="center">
+    <div class="pagination  pagination-right"  id="showPageNum">
+        <li  id="prePage">
+            <a href="#" onclick="getPageData('$!page' ,1 )">上一页</a>
+        </li>
+        <li  id="nextPage">
+            <a href="#" onclick="getPageData('$!page' ,2 )">下一页</a>
+        </li>
+        <li class="disabled">
+            <a >当前第$!page 页</a>
+        </li>
+        <li  class="disabled">
+            <a id="showPageCount" value="$!pageCount">共$!pageCount页</a>
+        </li>
+        <li  class="disabled">
+            <a id="showRecordNum" value="$!total">共$!total条</a>
+        </li>
+        <li>
+        <a><div style="padding: 0px; margin:0px; line-height:100%;">每页<input id="rowsShow" size="3" maxlength="3" type="text" name="rowsShow" autocomplete="off" value="$!rows"
+                style="width: 35px; height:20px;">条</div></a>
+        </li>
+    </div>
+</div>
+</body>
+</html>

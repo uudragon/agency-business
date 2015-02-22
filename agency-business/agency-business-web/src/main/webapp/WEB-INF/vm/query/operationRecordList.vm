@@ -1,0 +1,351 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+<meta http-equiv="pragma" content="no-cache"> 
+<meta http-equiv="cache-control" content="no-cache"> 
+<meta http-equiv="expires" content="0">   
+<title>资金流水查询</title>
+<link href="${request.contextPath}/new/css/pay.css" rel="stylesheet" type="text/css"/>
+
+#parse("/macro.vm")
+
+<style type="text/css" >
+.a{
+float:left;
+clear:left;
+height:347}
+
+.d1{
+float:right;
+clear:right;
+color:#FF0000;
+width:200;
+height:100}
+</style>
+
+<script type="text/javascript" src="${request.contextPath}/new/js/jquery-1.2.6.pack.js"></script>
+<script type="text/javascript" src="${request.contextPath}/new/js/json2.js"></script>
+<script type="text/javascript" src="${request.contextPath}/new/js/map.js"></script>
+<script type="text/javascript" src="${request.contextPath}/new/js/My97DatePicker/WdatePicker.js"></script>
+
+<script type="text/javascript">  
+
+	$(function() {
+		$('#startCreateTime').datetimepicker({showSecond: true,timeFormat: 'HH:mm:ss', dateFormat: 'yy-mm-dd'});
+		$('#endCreateTime').datetimepicker({showSecond: true,timeFormat: 'HH:mm:ss', dateFormat: 'yy-mm-dd'});
+	});
+	
+	function getPageData(page, type) {
+		if (type == 1) {
+			page--;
+		} else if (type == 2) {
+			page++;
+		}
+		
+		//总页数
+		var pageCount = $("#showPageCount").attr("value");
+		
+		//如果将要跳转的页号大于总页数，则页号为总页数；
+		//如果小于0，则为首页
+		if (page > pageCount)
+			page = pageCount;
+		if (page < 1)
+			page = 1;
+			
+		$("#page").val(page);
+		
+		jQuery("#searchForm").attr("method", "post");
+        jQuery("#searchForm").attr("action", "/erp/operationRecord/newOperationRecordList");
+		$("#searchForm").submit();
+	}
+
+	$(document).ready(function(){  
+//        $("tr:even").addClass("info");//奇数行
+      //  $("tr:odd").addClass("success");//偶数行
+    });
+    
+    function sendquery() {
+    	$("#currentPage").val(1);
+		jQuery("#searchForm").attr("method", "post");
+        jQuery("#searchForm").attr("action", "/erp/operationRecord/newOperationRecordList");
+        jQuery("#searchForm").submit();
+    }
+	
+	function sendExport() {
+		var bizType = jQuery("#bizType").val();
+		var moneyType = jQuery("#moneyType").val();
+		var businessNo = jQuery("#businessNo").val();
+		var loanNo = jQuery("#loanNo").val();
+		
+		var planNo = jQuery("#planNo").val();
+		var startCreateTime = jQuery("#startCreateTime").val();
+		var endCreateTime = jQuery("#endCreateTime").val();
+		
+		var rows = jQuery("#rows").val();
+		var page = jQuery("#page").val();
+		
+		jQuery.ajax({
+                url: '${request.contextPath}/erp/operationRecord/exportCSV',
+                data: {
+						"bizType" : bizType,
+						"moneyType" : moneyType,
+						"businessNo" : businessNo,
+						"loanNo" : loanNo,
+						"planNo" : planNo,
+						"startCreateTime" : startCreateTime,
+						"endCreateTime" : endCreateTime,
+						"rows" : rows,
+						"page" : page
+				},
+                type: 'post',
+                success: function(result) {
+                	result = jQuery.parseJSON(result);
+                	
+                    if (result && (result.code == 'success')) {
+                        window.location.href="${request.contextPath}/erp/operationRecord/downCsv?filePath=" + result.msg;
+                    } else {
+                        jQuery.messager.alert('提示信息', result.msg, 'error');
+                    }
+                }
+        });
+    }
+	
+	
+	
+    $(document).keyup(function(event){
+    
+	  var queryFrom = document.getElementById("searchForm");
+		queryFrom.action = "/erp/operationRecord/newOperationRecordList";
+    
+	  if(event.keyCode ==13){
+        $("#rows").val($("#rowsShow").val());
+	    $("#querybutton").trigger("click");
+	  }
+	});
+</script>
+<div class="row-fluid">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">资金流水查询</h3>
+        </div>
+    	<div class="panel-body">
+			<form class="form-horizontal" role="form" action="/erp/operationRecord/newOperationRecordList" method="post" id="searchForm">
+				<div class="form-group">
+					<label class="col-xs-1 control-label">业务类型：</label>
+		        	<div class="col-xs-2">
+						<select id="bizType" name="bizType" class="form-control">
+							<option value="" #if($queryOperationRecordVo.bizType == "")selected="selected" #end>全部</option>
+							<option value="refund" #if($queryOperationRecordVo.bizType == 'refund')selected="selected" #end>退款</option>
+							<option value="over" #if($queryOperationRecordVo.bizType == 'over')selected="selected" #end>逾期</option>
+							<option value="pay" #if($queryOperationRecordVo.bizType == 'pay')selected="selected" #end>还款</option>
+							<option value="prepayment" #if($queryOperationRecordVo.bizType == 'prepayment')selected="selected" #end>预付款</option>
+							<option value="loan" #if($queryOperationRecordVo.bizType == 'loan')selected="selected" #end>贷款</option>
+                        </select>
+					</div>
+					
+	                <label class="col-xs-1 control-label">资金类型：</label>
+		        	<div class="col-xs-2">
+						<select id="moneyType" name="moneyType" class="form-control">
+							<option value="" #if($queryOperationRecordVo.moneyType == "")selected="selected" #end>全部</option>
+							##本金
+							<option value="payAmount" #if($queryOperationRecordVo.moneyType == 'payAmount')selected="selected" #end>本次还款本金</option>
+							<option value="sterilisedShouldPayAmount" #if($queryOperationRecordVo.moneyType == 'sterilisedShouldPayAmount')selected="selected" #end>本次冲销待还本金</option>
+							<option value="sterilisedAlreadyPayAmount" #if($queryOperationRecordVo.moneyType == 'sterilisedAlreadyPayAmount')selected="selected" #end>本次冲销已还本金</option>
+							##支付预付款
+							<option value="depositAmount" #if($queryOperationRecordVo.moneyType == 'depositAmount')selected="selected" #end>预付款金额</option>
+							##贷款取消冲销预付款
+							<option value="cancelDepositAmount" #if($queryOperationRecordVo.moneyType == 'cancelDepositAmount')selected="selected" #end>取消已付预付款本金</option>
+							##发生退款时冲销预付款
+							<option value="sterilisedDepositAmount" #if($queryOperationRecordVo.moneyType == 'sterilisedDepositAmount')selected="selected" #end>本次冲销预付款</option>
+							##总退款金额
+							<option value="refundedAmount" #if($queryOperationRecordVo.moneyType == 'refundedAmount')selected="selected" #end>总退款金额</option>
+							##用户分期手续费（总额）
+							<option value="sterilisedPlanFee" #if($queryOperationRecordVo.moneyType == 'sterilisedPlanFee')selected="selected" #end>冲销手续费</option>
+							##还分期手续费
+                            <option value="merPlanFee" #if($queryOperationRecordVo.moneyType == 'merPlanFee')selected="selected" #end>本次还手续费-商家</option>
+                            <option value="platPlanFee" #if($queryOperationRecordVo.moneyType == 'platPlanFee')selected="selected" #end>本次还手续费-平台</option>
+                            <option value="invPlanFee" #if($queryOperationRecordVo.moneyType == 'invPlanFee')selected="selected" #end>本次还手续费-出资方</option>
+							##冲销分期手续费
+							<option value="sterilisedMerPlanFee" #if($queryOperationRecordVo.moneyType == 'sterilisedMerPlanFee')selected="selected" #end>本次冲销待还手续费-商家</option>
+							<option value="sterilisedPlatPlanFee" #if($queryOperationRecordVo.moneyType == 'sterilisedPlatPlanFee')selected="selected" #end>本次冲销待还手续费-平台</option>
+							<option value="sterilisedInvPlanFee" #if($queryOperationRecordVo.moneyType == 'sterilisedInvPlanFee')selected="selected" #end>本次冲销待还手续费-出资方</option>
+							##用户逾期资金
+							<option value="overAmount" #if($queryOperationRecordVo.moneyType == 'overAmount')selected="selected" #end>分期产生逾期资金</option>
+							<option value="overPayAmount" #if($queryOperationRecordVo.moneyType == 'overPayAmount')selected="selected" #end>支付逾期还款</option>
+							<option value="sterilisedOverAmount" #if($queryOperationRecordVo.moneyType == 'sterilisedOverAmount')selected="selected" #end>退款冲销逾期</option>
+							##商家接入渠道服务费
+							<option value="platServiceFee" #if($queryOperationRecordVo.moneyType == 'platServiceFee')selected="selected" #end>生成贷款成功平台收入服务费</option>
+							<option value="invServiceFee" #if($queryOperationRecordVo.moneyType == 'invServiceFee')selected="selected" #end>生成贷款成功出次方服务费</option>
+							<option value="sterilisedInvServiceFee" #if($queryOperationRecordVo.moneyType == 'sterilisedInvServiceFee')selected="selected" #end>本次冲销商家接入渠道服务费</option>
+							<option value="sterilisedPlatServiceFee" #if($queryOperationRecordVo.moneyType == 'sterilisedPlatServiceFee')selected="selected" #end>本次冲销平台接入渠道服务费</option>
+							##贷款
+							<option value="serviceFee" #if($queryOperationRecordVo.moneyType == 'serviceFee')selected="selected" #end>贷款服务费</option>
+                        </select>
+		        	</div>
+					
+					<label class="col-xs-1 control-label">业务单号：</label>
+		        	<div class="col-xs-2">
+			        	<input type="text" class="form-control" value="$!queryOperationRecordVo.businessNo" id="businessNo" name="businessNo" />
+		        	</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-1 control-label">贷款单号：</label>
+		        	<div class="col-xs-2">
+		        		<input type="text" class="form-control" value="$!queryOperationRecordVo.loanNo" id="loanNo" name="loanNo" />
+		        	</div>
+					
+					<label class="col-xs-1 control-label">分期单号：</label>
+		        	<div class="col-xs-2">
+		        		<input type="text" class="form-control" value="$!queryOperationRecordVo.planNo" id="planNo" name="planNo" />
+		        	</div>
+					
+					<label class="col-xs-1 control-label">操作时间：</label>
+		        	<div class="col-xs-4">
+			        	<table>
+			        		<tr>
+			        			<td>
+									<input type="text" class="form-control" value="$!dateTool.format("yyyy-MM-dd HH:mm:ss",$!{queryOperationRecordVo.startCreateTime})" id="startCreateTime" name="startCreateTime"  />
+				        	    </td>
+			        			<td>
+			        			<label class="control-label">至</label>
+				        	    </td>
+			        			<td>
+									<input type="text" class="form-control" value="$!dateTool.format("yyyy-MM-dd HH:mm:ss",$!{queryOperationRecordVo.endCreateTime})"  id="endCreateTime" name="endCreateTime" />
+				        	    </td>
+				        	</tr>
+			        	</table>
+		        	</div>
+				</div>
+				<div class="form-group">
+					<div align="center">
+						<button id="querybutton" class="btn btn-info" type="button" onclick="sendquery()">查询</button>
+						&nbsp;
+						<button id="exportbutton" class="btn btn-info" type="button" onclick="sendExport();">导出EXCEL</button>
+					</div>
+				</div>
+				
+				##当前页
+				<input type="hidden" id="page"  name="page" value="$!queryOperationRecordVo.page"/>
+				##每页显示的大小
+				<input type="hidden" id="rows"  name="rows" value="$!queryOperationRecordVo.rows"/>
+
+	        </form>
+
+			<table cellpadding="0" cellspacing="0" border="0" class="table table-hover table-striped table-bordered  table-condensed">
+				<thead>
+					<tr>
+						<th class="col-xs-fluid">序号</th>
+						<th class="col-xs-fluid">业务类型</th>
+						<th class="col-xs-fluid">资金类型</th>
+						<th class="col-xs-fluid">业务单号</th>
+						<th class="col-xs-fluid">贷款单号</th>
+						<th class="col-xs-fluid">分期单号</th>
+						<th class="col-xs-fluid">变化前</th>
+						<th class="col-xs-fluid">操作金额</th>
+						<th class="col-xs-fluid">变化后</th>
+						<th class="col-xs-fluid">操作时间</th>
+					</tr>
+				</thead>
+				<tbody>
+				#foreach($operationRecord in $operationRecords)
+					<tr>
+						<td>
+							$!velocityCount
+						</td>
+						<td>
+							#if($!operationRecord.bizType == 'refund')   退款  #end
+                            #if($!operationRecord.bizType == 'over')   逾期   #end
+							#if($!operationRecord.bizType == 'pay')   还款   #end
+							#if($!operationRecord.bizType == 'prepayment')   预付款   #end
+							#if($!operationRecord.bizType == 'loan')   贷款   #end
+						</td>
+						<td>
+							##本金
+							#if($!operationRecord.moneyType == 'payAmount')   本次还款本金  #end
+                            #if($!operationRecord.moneyType == 'sterilisedShouldPayAmount')   本次冲销待还本金  #end
+							#if($!operationRecord.moneyType == 'sterilisedAlreadyPayAmount')   本次冲销已还本金   #end
+							##支付预付款
+                            #if($!operationRecord.moneyType == 'depositAmount')   预付款金额   #end
+							##贷款取消冲销预付款
+							#if($!operationRecord.moneyType == 'cancelDepositAmount')   取消已付预付款本金   #end
+							##发生退款时冲销预付款
+                            #if($!operationRecord.moneyType == 'sterilisedDepositAmount')   本次冲销预付款   #end
+							##总退款金额
+							#if($!operationRecord.moneyType == 'refundedAmount')   总退款金额   #end
+							##用户分期手续费（总额）
+                            #if($!operationRecord.moneyType == 'sterilisedPlanFee')   冲销手续费   #end
+							##还分期手续费
+							#if($!operationRecord.moneyType == 'merPlanFee')   本次还手续费-商家   #end
+							#if($!operationRecord.moneyType == 'platPlanFee')   本次还手续费-平台   #end
+							#if($!operationRecord.moneyType == 'invPlanFee')   本次还手续费-出资方   #end
+							##冲销分期手续费
+							#if($!operationRecord.moneyType == 'sterilisedMerPlanFee')   本次冲销待还手续费-商家   #end
+							#if($!operationRecord.moneyType == 'sterilisedPlatPlanFee')   本次冲销待还手续费-平台   #end
+							#if($!operationRecord.moneyType == 'sterilisedInvPlanFee')   本次冲销待还手续费-出资方   #end
+							##用户逾期资金
+							#if($!operationRecord.moneyType == 'overAmount')   分期产生逾期资金   #end
+							#if($!operationRecord.moneyType == 'overPayAmount')   支付逾期还款   #end
+							#if($!operationRecord.moneyType == 'sterilisedOverAmount')   退款冲销逾期   #end
+							##商家接入渠道服务费
+							#if($!operationRecord.moneyType == 'platServiceFee')   生成贷款成功平台收入服务费   #end
+							#if($!operationRecord.moneyType == 'invServiceFee')   生成贷款成功出次方服务费   #end
+							#if($!operationRecord.moneyType == 'sterilisedInvServiceFee')   本次冲销商家接入渠道服务费   #end
+							#if($!operationRecord.moneyType == 'sterilisedPlatServiceFee')   本次冲销平台接入渠道服务费   #end
+							##贷款
+							#if($!operationRecord.moneyType == 'serviceFee')   贷款服务费   #end
+						</td>
+						<td>
+							$!operationRecord.businessNo
+						</td>
+						<td>
+							$!operationRecord.loanNo
+						</td>
+						<td>
+							$!operationRecord.planNo
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{operationRecord.beforAmount})
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{operationRecord.modAmount})
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{operationRecord.afterAmount})
+						</td>
+						<td>
+							$!date.format("yyyy-MM-dd HH:mm:ss",$operationRecord.createTime)
+						</td>
+					</tr>
+				#end
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+<div class="container" id="pageCountDiv" align="center">
+    <div class="pagination  pagination-right"  id="showPageNum">
+        <li  id="prePage">
+            <a href="#" onclick="getPageData('$!queryOperationRecordVo.page' ,1 )">上一页</a>
+        </li>
+        <li  id="nextPage">
+            <a href="#" onclick="getPageData('$!queryOperationRecordVo.page' ,2 )">下一页</a>
+        </li>
+        <li class="disabled">
+            <a >当前第$!queryOperationRecordVo.page 页</a>
+        </li>
+        <li  class="disabled">
+            <a id="showPageCount" value="$!queryOperationRecordVo.pageCount">共$!queryOperationRecordVo.pageCount页</a>
+        </li>
+        <li  class="disabled">
+            <a id="showRecordNum" value="$!queryOperationRecordVo.recordNum">共$!queryOperationRecordVo.recordNum条</a>
+        </li>
+        <li>
+        <a><div style="padding: 0px; margin:0px; line-height:100%;">每页<input id="rowsShow" size="3" maxlength="3" type="text" name="rowsShow" autocomplete="off" value="$!queryOperationRecordVo.rows"
+                style="width: 35px; height:20px;">条</div></a>
+        </li>
+    </div>
+</div>
+</body>
+</html>

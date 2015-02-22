@@ -1,0 +1,143 @@
+<div id="wrapper">
+        <!-- Navigation -->
+        <nav class="" role="navigation" style="margin-bottom: 0;margin-top: 0;">
+			<ul class="nav navbar-top-links navbar-left">
+                <li class="dropdown">
+                    <img src="/images/logo-2015-f.png" style="height:50px;width: 150px" onclick="document.location.href='/erp/sys/index'"></img>
+                </li>
+            </ul>
+			
+            <ul class="nav navbar-top-links navbar-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li>
+							<a href="#" onclick="makeDataValid()"><i class="fa fa-user fa-fw"></i> 配置生效</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div id="navigation" class="navbar-default sidebar" role="navigation" style="z-index:0;">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        ##<li class="sidebar-search">
+                            ##<div class="input-group custom-search-form">
+                              ##<input type="text" class="form-control" placeholder="Search...">
+                              ##  <span class="input-group-btn">
+                              ##      <button class="btn btn-default" type="button">
+                              ##          <i class="fa fa-search"></i>
+                              ##      </button>
+                              ##  </span>
+                            ##</div>
+                            <!-- /input-group -->
+                        ##</li>
+                        
+
+						<li>
+                            <a href="#"><i class="fa fa-files-o fa-fw"></i>订购管理<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+								<li>
+									<a href="#" onclick="content('/orderManager/substituteOrder');">代客户下单</a>
+								</li>
+                                <li>
+                                    <a href="#" onclick="content('/orderManager/orderedFirst');">订购首期</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="content('/orderManager/orderedSales');">订购宣传品</a>
+                                </li>
+							</ul>
+						</li>
+                            <li>
+                                <a href="#"><i class="fa fa-files-o fa-fw"></i>售后服务<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="#" onclick="content('/salesManager/returnedManage');">退货管理</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" onclick="content('/salesManager/barterManage');">换货管理</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-files-o fa-fw"></i>返利管理<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="#" onclick="content('/rebatesManager/applyRebates');">申请返利</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" onclick="content('/rebatesManager/queryRebates');">查询返利</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-files-o fa-fw"></i>发票管理<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="#" onclick="content('/invoiceManager/invoiceManager');">发票管理</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-files-o fa-fw"></i>站内信<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="#" onclick="content('/sys/message');">站内信</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-files-o fa-fw"></i>个人信息<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="#" onclick="content('/sys/information');">个人信息</a>
+                                    </li>
+                                </ul>
+                            </li>
+                    </ul>
+
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+			</div>
+			<!-- div层：隐藏/显示左侧导航栏 -->
+			<div id="changeNavShowMode" class="navHSOper">
+				<a href="#"><img id="hsOper" src="/images/switch_left.gif" onclick="hide();"></img></a>
+            </div>
+        </nav>
+        <!-- /#page-wrapper -->
+    </div>
+    <!-- /#wrapper -->
+	 <!-- Page Content -->
+	
+	<div style="height:100%;">
+        <iframe id="contentFrame" name="contentFrameName" scrolling="yes" frameborder="0" src="/erp/sys/welcome" style="width:100%;height:100%;" ></iframe>
+	<div>
+
+	<form>
+		##常量：当单独访问iframe所代表的子页面时，用于检测请求是否通过index.vm页面触发，还是直接访问。
+		##     该值标识：请求通过index.vm页面触发
+		<input type="hidden" id="reqSource" value="erpIndex" />
+		##标识位：左侧导航是否被隐藏，默认为yes
+		<input type="hidden" id="leftNavOpened" value="yes" />
+    </form>
+	
+	<section id="overlay" style="display:none;">
+		<div class="window-contain">
+		<!-- ui-overlay -->
+			<div class="ui-overlay">
+				<div class="ui-widget-overlay"></div>
+				<div class="ui-widget ui-widget-content ui-corner-all" style="width: 280px; height: 20px; position:absolute;top: 0; left: 0; bottom: 0; right: 0;margin: auto;">
+					<div class="ui-dialog-content ui-widget-content" style="background: none; border: 0;">
+						<div class="progress progress-striped active">
+							<div class="progress-bar progress-bar-success" role="progressbar" style="width: 100%;height: auto;">
+								<span>导出中</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>

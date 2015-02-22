@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd"
+       default-lazy-init="false" default-autowire="byName">
+
+    <aop:aspectj-autoproxy/>
+	<!-- 自动扫描且只扫描@Controller -->
+    <context:component-scan base-package="com.agency.business"/>
+
+    <!-- 静态资源访问 -->
+    <!--
+    <mvc:resources mapping="/themes/**" location="/themes/"/>
+    <mvc:resources mapping="/js/**" location="/js/"/>
+    <mvc:resources mapping="/images/**" location="/images/"/>
+    <mvc:resources mapping="/html/**" location="/html/"/>
+    -->
+
+    <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <ref bean="jsonHttpMessageConverter"/>
+            </list>
+        </property>
+    </bean>
+    <mvc:default-servlet-handler />
+
+    <bean id="jsonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+        <property name="objectMapper">
+            <bean class="com.agency.business.web.support.CustomJacksonObjectMapper"/>
+        </property>
+    </bean>
+
+    <bean id="velocityConfigurer"
+          class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+        <property name="resourceLoaderPath" value="/WEB-INF/vm/" />
+        <!-- <property name="configLocation" value="classpath:velocity.properties" /> -->
+        <property name="velocityProperties">
+            <props>
+                <prop key="input.encoding">UTF-8</prop>
+                <prop key="output.encoding">UTF-8</prop>
+                <prop key="contentType">text/html;charset=UTF-8</prop>
+                <prop key="velocimacro.library">macro.vm</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver">
+        <property name="cache" value="false" />
+        <!--<property name="prefix" value="" />-->
+        <property name="suffix" value=".vm" />
+        <property name="layoutUrl" value="/layout/defaultLayout.vm" />
+        <property name="contentType" value="text/html;charset=UTF-8" />
+        <property name="exposeRequestAttributes" value="true" />
+        <property name="exposeSpringMacroHelpers" value="true" />
+        <property name="dateToolAttribute" value="dateTool" />
+        <property name="numberToolAttribute" value="numberTool" />
+        <property name="toolboxConfigLocation" value="/WEB-INF/velocity-toolbox.xml" />
+        <!-- <property name="viewClass" value="com.jd.financing.man.web.base.VelocityLayoutView"/>-->
+        <!--  <property name="velocityTools" ref="velocityTools"/>-->
+    </bean>
+
+
+
+
+
+    <!-- id="multipartResolver"必须是multipartResolver -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- maxUploadSize:文件上传的最大值以byte为单位
+		<property name="maxUploadSize" value="1024000"></property>
+		-->
+	</bean>
+
+    <!--<bean class="com.jd.jr.cf.erp.web.support.CustomSimpleMappingExceptionResolver">-->
+        <!--&lt;!&ndash; 定义默认的异常处理页面 &ndash;&gt;-->
+        <!--<property name="defaultErrorView" value="error/500"/>-->
+        <!--&lt;!&ndash; 定义异常处理页面用来获取异常信息的变量名，如果不添加exceptionAttribute属性，则默认为exception &ndash;&gt;-->
+        <!--<property name="exceptionAttribute" value="exception"/>-->
+        <!--<property name="defaultStatusCode" value="500"/>-->
+    <!--</bean>-->
+
+    <!-- velocity  支持start -->
+    <!-- velocity配置 -->
+
+    <bean name="velocityTools" class="java.util.HashMap">
+        <constructor-arg>
+            <map>
+                <entry key="stringUtils">
+                    <bean class="org.apache.commons.lang.StringUtils"/>
+                </entry>
+                <entry key="stringEscapeUtils">
+                    <bean class="com.jd.common.util.StringEscapeUtils"/>
+                </entry>
+                <entry key="dateFormatUtils">
+                    <bean class="com.jd.common.util.DateFormatUtils"/>
+                </entry>
+                <entry key="dateUtils">
+                    <bean class="org.apache.commons.lang.time.DateUtils"/>
+                </entry>
+                <entry key="decimalFormatUtils">
+                    <bean class="com.jd.common.util.DecimalFormatUtils"/>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
+
+	<!-- 配置导出excelview -->
+	<bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver" p:order="10" />
+	<!--<bean id="exportExcelView" class="com.jd.financing.man.web.view.ExcelView" /> -->
+	<!-- velocity  支持end -->
+
+    <!--&lt;!&ndash; 配置用户登录拦截器 &ndash;&gt;-->
+	<!--<mvc:interceptors>-->
+		<!--&lt;!&ndash; 认证拦截器 &ndash;&gt;-->
+		<!--&lt;!&ndash;<mvc:interceptor>&ndash;&gt;-->
+			<!--&lt;!&ndash;<mvc:mapping path="/**" />&ndash;&gt;-->
+			<!--&lt;!&ndash;&lt;!&ndash; 登录认证 &ndash;&gt;&ndash;&gt;-->
+			<!--&lt;!&ndash;&lt;!&ndash;<bean class="com.jd.jr.cf.erp.web.interceptor.AuthenticationInterceptor"> &ndash;&gt;&ndash;&gt;-->
+			 <!--&lt;!&ndash;<bean class="com.jd.passport.inteceptor.mvc.SpringMvcInterceptor">&ndash;&gt;-->
+				<!--&lt;!&ndash;<property name="cookieName" value="ceshi3.com" />&ndash;&gt;-->
+				<!--&lt;!&ndash;<property name="authenticationKey" value="8B6697227CBCA902B1A0925D40FAA00B353F2DF4359D2099" />&ndash;&gt;-->
+				<!--&lt;!&ndash;<property name="loginUrl" value="http://passport.jd.com/uc/login" />&ndash;&gt;-->
+				<!--&lt;!&ndash;<property name="charsetName" value="GBK" />&ndash;&gt;-->
+			<!--&lt;!&ndash;</bean>&ndash;&gt;-->
+		<!--&lt;!&ndash;</mvc:interceptor>&ndash;&gt;-->
+
+		<!--&lt;!&ndash; 授权拦截器 &ndash;&gt;-->
+		<!--<mvc:interceptor>-->
+			<!--<mvc:mapping path="/loan/loanUserDetail/**" />-->
+			<!--<mvc:mapping path="/user/newBaseUserList/**" />-->
+			<!--<mvc:mapping path="/pinRole/newList/**" />-->
+			<!--<mvc:mapping path="/role/newList/**" />-->
+			<!--<mvc:mapping path="/permission/newList/**" />-->
+		<!--</mvc:interceptor>-->
+	<!--</mvc:interceptors>-->
+</beans>

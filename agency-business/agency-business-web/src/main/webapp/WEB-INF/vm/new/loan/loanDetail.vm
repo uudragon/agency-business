@@ -1,0 +1,829 @@
+<script type="text/javascript" src="${request.contextPath}/new/js/jquery-1.2.6.pack.js"></script>
+<script type="text/javascript" src="${request.contextPath}/new/js/json2.js"></script>
+<script type="text/javascript" src="${request.contextPath}/new/js/map.js"></script>
+<script type="text/javascript" src="${request.contextPath}/new/js/My97DatePicker/WdatePicker.js"></script>
+
+<script type="text/javascript">  
+    function sendquery() {
+		jQuery("#searchForm").attr("method", "post");
+        jQuery("#searchForm").attr("action", "/erp/loan/loanDetail");
+        jQuery("#searchForm").submit();
+    }
+</script>
+<div class="row-fluid">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">贷款单-收单，首付款，分期单和退款单明细</h3>
+        </div>
+    	<div class="panel-body">
+			<form class="form-horizontal" role="form" action="${request.contextPath}/erp/loan/loanDetail" method="post" id="searchForm">
+				<div class="form-group">
+	                <label class="col-xs-1 control-label">贷款单号：</label>
+		        	<div class="col-xs-3">
+			        	<input type="text" class="form-control" value="$!queryLoanVo.loanId" id="loanId" name="loanId" />
+		        	</div>
+					
+	                <label class="col-xs-1 control-label">商家订单号：</label>
+		        	<div class="col-xs-3">
+			        	<input type="text" class="form-control" value="$!queryLoanVo.merchantOrderId" id="merchantOrderId" name="merchantOrderId" />
+		        	</div>
+					
+	                <label class="col-xs-1 control-label">收单号：</label>
+		        	<div class="col-xs-3">
+						<input type="text" class="form-control" value="$!queryLoanVo.orderId" id="orderId" name="orderId" />
+		        	</div>
+				</div>
+				<div class="form-group">
+					<div align="center">
+						<button id="querybutton" class="btn btn-info" type="button" onclick="sendquery()">查询</button>
+					</div>
+				</div>
+				
+				##商家商户号
+				##<input type="hidden" id="merchantCode"  name="merchantCode" value="$!queryLoanVo.merchantCode"/>
+	        </form>
+			
+			<div class="progress-bar" style="width:10%">订单</div>
+			<table cellpadding="0" cellspacing="0" border="0" class="table table-hover table-striped table-bordered  table-condensed">
+				<thead>
+					<tr>
+						<th class="col-xs-fluid">收单号</th>
+						<th class="col-xs-fluid">收单金额</th>
+						<th class="col-xs-fluid">商家名称</th>
+						<th class="col-xs-fluid">商家商户号</th>
+						<th class="col-xs-fluid">商家订单号</th>
+						<th class="col-xs-fluid">商品名称</th>
+						<th class="col-xs-fluid">商家订单时间</th>
+						<th class="col-xs-fluid">收单时间</th>
+						<th class="col-xs-fluid">订单有效期</th>
+						<th class="col-xs-fluid">商家用户身份证号</th>
+						<th class="col-xs-fluid">收单状态</th>
+					</tr>
+				</thead>
+				<tbody>
+					#if($order)
+					<tr>
+						<td>
+							$!order.orderId
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{order.amount})
+						</td>
+						<td>
+							$!order.merchantName
+						</td>
+						<td>
+							$!order.merchantCode
+						</td>
+						<td>
+							$!order.merchantOrderId
+						</td>
+						<td>
+							$!order.productName
+						</td>
+						<td>
+							$!date.format("yyyy-MM-dd HH:mm:ss",$order.merchantOrderDate)
+						</td>
+						<td>
+							$!date.format("yyyy-MM-dd HH:mm:ss",$order.createDate)
+						</td>
+						<td>
+							$!date.format("yyyy-MM-dd HH:mm:ss",$order.limityDate)
+						</td>
+						<td>
+							$!order.merchantUserCardNo
+						</td>
+						<td>
+							#if($!order.status == 1)   收单完成  #end
+                            #if($!order.status == 2)   申请贷款审核中  #end
+							#if($!order.status == 3)   申请贷款审核完成  #end
+							#if($!order.status == 4)   还款完毕  #end
+							#if($!order.status == 5)   结算完毕  #end
+						</td>
+					</tr>
+					#end
+				</tbody>
+			</table>
+			
+			<div class="progress-bar" style="width:10%">贷款单</div>
+			<table cellpadding="0" cellspacing="0" border="0" class="table table-hover table-striped table-bordered  table-condensed">
+				<thead>
+					<tr>
+						<th class="col-xs-fluid">贷款单号</th>
+						<th class="col-xs-fluid">贷款人PIN</th>
+						<th class="col-xs-fluid">贷款金额</th>
+						<th class="col-xs-fluid">预付款金额</th>
+						<th class="col-xs-fluid">cds返回金额</th>
+						<th class="col-xs-fluid">订单补款金额</th>
+						<th class="col-xs-fluid">分期数</th>
+						
+						<th class="col-xs-fluid">商家商户号</th>
+						<th class="col-xs-fluid">平台商户号</th>
+						<th class="col-xs-fluid">出资方商户号</th>
+						
+						<th class="col-xs-fluid">退款总金额</th>
+						
+						##<th class="col-xs-fluid">逾期金额</th>
+						<th class="col-xs-fluid">逾期费率</th>
+						
+						<th class="col-xs-fluid">服务费</th>
+						<th class="col-xs-fluid">服务费费率</th>
+						<th class="col-xs-fluid">服务费平台分成</th>
+						<th class="col-xs-fluid">服务费出资方分成</th>
+						
+						##<th class="col-xs-fluid">分期手续费总金额</th> ##分期费总金额 = 贷款金额 * 分期手续费费率
+						<th class="col-xs-fluid">分期手续费费率</th>
+						<th class="col-xs-fluid">分期手续费商家分成</th>
+						<th class="col-xs-fluid">分期手续费平台分成</th>
+						<th class="col-xs-fluid">分期手续费出资方分成</th>
+						
+						<th class="col-xs-fluid">状态</th>
+					</tr>
+				</thead>
+				<tbody>
+					#if($loan)
+					<tr>
+						<td>
+							$!loan.loanId
+						</td>
+						<td>
+							$!loan.jdPin
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{loan.loanAmount})
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{loan.preAmount})
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{loan.cdsResAmount})
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{loan.bcAmount})
+						</td>
+						<td>
+							$!loan.plan
+						</td>
+						
+						<td>
+							$!loan.merchantCode
+						</td>
+						<td>
+							$!loan.platFormCode
+						</td>
+						<td>
+							$!loan.investmentCode
+						</td>
+						
+						<td>
+							$!numberTool.format("0.00", $!{loan.refundAmount})
+						</td>
+						
+						<td>
+							$!loan.overRate
+						</td>
+						
+						<td>
+							$!numberTool.format("0.00", $!{loan.serviceAmount})
+						</td>
+						<td>
+							$!loan.serviceRate
+						</td>
+						<td>
+							$!loan.serviceForPlatProportion
+						</td>
+						<td>
+							$!loan.serviceForInvestmentProportion
+						</td>
+						
+						<td>
+							$!loan.planRate
+						</td>
+						<td>
+							$!loan.planForMerchantProportion
+						</td>
+						<td>
+							$!loan.planForPlatProportion
+						</td>
+						<td>
+							$!loan.planForInvestmentProportion
+						</td>
+						
+						<td>
+                            #if($!loan.status == 2)   申请贷款审核中  #end
+							#if($!loan.status == 3)   申请贷款审核完成  #end
+							#if($!loan.status == 4)   还款完毕  #end
+							#if($!loan.status == 5)   结算完毕  #end
+						</td>
+					</tr>
+					#end
+				</tbody>
+			</table>
+			
+			<div class="progress-bar" style="width:10%">首付款</div>
+			<table cellpadding="0" cellspacing="0" border="0" class="table table-hover table-striped table-bordered  table-condensed">
+				<thead>
+					<tr>
+						##<th class="col-xs-fluid">贷款单号</th>
+						##<th class="col-xs-fluid">商家订单号</th>
+						<th class="col-xs-fluid">首付款单号</th>
+						##<th class="col-xs-fluid">贷款人PIN</th>
+						##<th class="col-xs-fluid">商家名称</th>
+						##<th class="col-xs-fluid">商家商户号</th>
+						<th class="col-xs-fluid">首付款金额</th>
+						##<th class="col-xs-fluid">贷款金额</th>
+						<th class="col-xs-fluid">首付款应付金额</th>
+						<th class="col-xs-fluid">首付款实付金额</th>
+						<th class="col-xs-fluid">付款状态</th>
+					</tr>
+				</thead>
+				<tbody>
+					#if($prePlan)
+					<tr>
+						##<td>
+						##	$!prePlan.loanNo
+						##</td>
+						##<td>
+						##	$!prePlan.merchantOrderId
+						##</td>
+						<td>
+							$!prePlan.planNo
+						</td>
+						##<td>
+						##	$!prePlan.jdPin
+						##</td>
+						##<td>
+						##	$!loan.merchantName
+						##</td>
+						##<td>
+						##	$!prePlan.merchantCode
+						##</td>
+						<td>
+							$!numberTool.format("0.00", $!{prePlan.amount})
+						</td>
+						##<td>
+						##	$!numberTool.format("0.00", $!{prePlan.loanAmount})
+						##</td>
+						<td>
+							$!numberTool.format("0.00", $!{prePlan.amount})
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{prePlan.payAmount})
+						</td>
+						<td>
+							#if($!prePlan.shouldPayAmount == 0)   已支付  #end
+                            #if($!prePlan.shouldPayAmount != 0)   待支付  #end
+							##$!prePlan.pageStatus
+						</td>
+					</tr>
+					#end
+				</tbody>
+			</table>
+			
+			<div class="progress-bar" style="width:10%">分期单</div>
+			<table cellpadding="0" cellspacing="0" border="0" class="table table-hover table-striped table-bordered  table-condensed">
+				<thead>
+					<tr>
+						<th class="col-xs-fluid">序号</th>
+						##<th class="col-xs-fluid">贷款单号</th>
+						<th class="col-xs-fluid">分期单号</th>
+						<th class="col-xs-fluid">期数</th>
+						<th class="col-xs-fluid">已还款总金额</th>##已还本金+已还逾期（罚息）+ 已还手续费
+						<th class="col-xs-fluid">未还款总金额</th>##未还本金+未还逾期（罚息）+ 未还手续费
+						##<th class="col-xs-fluid">贷款人PIN</th>
+						##<th class="col-xs-fluid">商家名称</th>
+						##<th class="col-xs-fluid">商家商户号</th>
+						##<th class="col-xs-fluid">贷款总金额</th>
+						
+						<th class="col-xs-fluid">本金总金额</th>
+						<th class="col-xs-fluid">已还本金</th>
+						<th class="col-xs-fluid">待还本金</th>
+						<th class="col-xs-fluid">分期手续费总金额</th>##已还分期手续费+待还分期手续费+ 退款冲销分期手续费
+						<th class="col-xs-fluid">已还分期手续费</th>
+						<th class="col-xs-fluid">待还分期手续费</th>
+						<th class="col-xs-fluid">罚息总金额</th>##已还罚息+已还罚息+ 退款冲销已逾期
+						<th class="col-xs-fluid">已还罚息</th>
+						<th class="col-xs-fluid">未还罚息</th>
+						<th class="col-xs-fluid">退款总金额</th>
+						<th class="col-xs-fluid">退款冲销待还本金</th>
+						<th class="col-xs-fluid">退款冲销已还本金</th>
+						<th class="col-xs-fluid">退款冲销分期手续费</th>
+						<th class="col-xs-fluid">退款冲销已逾期</th>
+						<th class="col-xs-fluid">最后还款期限</th>
+						<th class="col-xs-fluid">逾期天数</th>
+						<th class="col-xs-fluid">还款状态</th>
+				</thead>
+				<tbody>
+				#foreach($plan in $planList)
+					<tr>
+						<td>
+							$!velocityCount
+						</td>
+						##<td>
+						##	$!plan.loanNo
+						##</td>
+						<td>
+							$!plan.planNo
+						</td>
+						<td>
+							$!plan.curPlanNum/$!loan.plan
+						</td>
+						<td>
+							#set($alreadyPayTotalAmount = $!plan.payAmount + $!plan.overPayAmount + $!plan.payedPlanFee)
+							$!numberTool.format("0.00", $alreadyPayTotalAmount)
+						</td>
+						<td>
+							#set($shouldPayTotalAmount = $!plan.shouldPayAmount + $!plan.overAmount + $!plan.planFee)
+							$!numberTool.format("0.00", $shouldPayTotalAmount)
+						</td>
+						##<td>
+						##	$!plan.jdPin
+						##</td>
+						##<td>
+						##	$!loan.merchantName
+						##</td>
+						##<td>
+						##	$!plan.merchantCode
+						##</td>
+						##<td>
+						##	$!numberTool.format("0.00", $!{loan.loanAmount})
+						##</td>
+						<td>
+							$!numberTool.format("0.00", $!{plan.amount})
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{plan.payAmount})
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{plan.shouldPayAmount})
+						</td>
+						<td>
+							#set($planFeeTotalAmount = $!plan.planFee + $!plan.payedPlanFee + $!plan.sterilisedPlanFee)
+							$!numberTool.format("0.00", $planFeeTotalAmount)
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{plan.payedPlanFee})
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{plan.planFee})
+						</td>
+						<td>
+							#set($overPayTotalAmount = $!plan.overAmount + $!plan.overPayAmount + $!plan.sterilisedOverAmount)
+							$!numberTool.format("0.00", $overPayTotalAmount)
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{plan.overPayAmount})
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{plan.overAmount})
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{plan.refundAmount})
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{plan.sterilisedShouldPayAmount})
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{plan.sterilisedAlreadyPayAmount})
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{plan.sterilisedPlanFee})
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{plan.sterilisedOverAmount})
+						</td>
+						<td>
+							$!date.format("yyyy-MM-dd",$plan.limitPayDate)
+						</td>
+						<td>
+							$!plan.overDays
+						</td>
+						<td>
+							###if($!plan.shouldPayAmount == 0)   还款成功  #end
+                            ###if($!plan.shouldPayAmount != 0 && $!plan.overAmount > 0)   已逾期  #end
+							###if($!plan.shouldPayAmount != 0 && $!plan.overAmount == 0)   待还款  #end
+							$!plan.pageStatus
+						</td>
+					</tr>
+				#end
+				</tbody>
+			</table>
+			
+			
+			##<div>贷款资金流水</div>
+			##<table cellpadding="0" cellspacing="0" border="0" class="table table-hover table-striped table-bordered  table-condensed">
+			##	<thead>
+			##		<tr>
+			##			<th class="col-xs-fluid">资金类型</th>
+			##			<th class="col-xs-fluid">业务单号</th>
+			##			<th class="col-xs-fluid">贷款单号</th>
+			##			<th class="col-xs-fluid">分期单号</th>
+						##<th class="col-xs-fluid">变化前</th>
+			##			<th class="col-xs-fluid">操作金额</th>
+						##<th class="col-xs-fluid">变化后</th>
+			##			<th class="col-xs-fluid">操作时间</th>
+			##		</tr>
+			##	</thead>
+			##	<tbody>
+			##	#foreach($loanOperationRecord in $loanOperationRecordList)
+			##		<tr>
+			##			<td>
+			##				##本金
+			##				#if($!loanOperationRecord.moneyType == 'payAmount')   本次还款本金  #end
+            ##                #if($!loanOperationRecord.moneyType == 'sterilisedShouldPayAmount')   本次冲销待还本金  #end
+			##				#if($!loanOperationRecord.moneyType == 'sterilisedAlreadyPayAmount')   本次冲销已还本金   #end
+			##				##支付预付款
+             ##               #if($!loanOperationRecord.moneyType == 'depositAmount')   预付款金额   #end
+			##				##贷款取消冲销预付款
+			##				#if($!loanOperationRecord.moneyType == 'cancelDepositAmount')   取消已付预付款本金   #end
+			##				##发生退款时冲销预付款
+            ##                #if($!loanOperationRecord.moneyType == 'sterilisedDepositAmount')   本次冲销预付款   #end
+			##				##总退款金额
+			##				#if($!loanOperationRecord.moneyType == 'refundedAmount')   总退款金额   #end
+			##				##用户分期手续费（总额）
+            ##                #if($!loanOperationRecord.moneyType == 'sterilisedPlanFee')   冲销手续费   #end
+			##				##还分期手续费
+			##				#if($!loanOperationRecord.moneyType == 'merPlanFee')   本次还手续费-商家   #end
+			##				#if($!loanOperationRecord.moneyType == 'platPlanFee')   本次还手续费-平台   #end
+			##				#if($!loanOperationRecord.moneyType == 'invPlanFee')   本次还手续费-出资方   #end
+			##				##冲销分期手续费
+			##				#if($!loanOperationRecord.moneyType == 'sterilisedMerPlanFee')   本次冲销待还手续费-商家   #end
+			##				#if($!loanOperationRecord.moneyType == 'sterilisedPlatPlanFee')   本次冲销待还手续费-平台   #end
+			##				#if($!loanOperationRecord.moneyType == 'sterilisedInvPlanFee')   本次冲销待还手续费-出资方   #end
+			##				##用户逾期资金
+			##				#if($!loanOperationRecord.moneyType == 'overAmount')   分期产生逾期资金   #end
+			##				#if($!loanOperationRecord.moneyType == 'overPayAmount')   支付逾期还款   #end
+			##				#if($!loanOperationRecord.moneyType == 'sterilisedOverAmount')   退款冲销逾期   #end
+			##				##商家接入渠道服务费
+			##				#if($!loanOperationRecord.moneyType == 'platServiceFee')   生成贷款成功平台收入服务费   #end
+			##				#if($!loanOperationRecord.moneyType == 'invServiceFee')   生成贷款成功出次方服务费   #end
+			##				#if($!loanOperationRecord.moneyType == 'sterilisedInvServiceFee')   本次冲销商家接入渠道服务费   #end
+			##				#if($!loanOperationRecord.moneyType == 'sterilisedPlatServiceFee')   本次冲销平台接入渠道服务费   #end
+			##				##贷款
+			##				#if($!loanOperationRecord.moneyType == 'serviceFee')   贷款服务费   #end
+			##			</td>
+			##			<td>
+			##				$!loanOperationRecord.businessNo
+			##			</td>
+			##			<td>
+			##				$!loanOperationRecord.loanNo
+			##			</td>
+			##			<td>
+			##				$!loanOperationRecord.planNo
+			##			</td>
+			##			<td>
+			##				$!loanOperationRecord.modAmount
+			##			</td>
+			##			<td>
+			##				$!date.format("yyyy-MM-dd HH:mm:ss",$loanOperationRecord.createTime)
+			##			</td>
+			##		</tr>
+			##	#end
+			##	</tbody>
+		##	</table>
+
+			<div class="progress-bar" style="width:10%">预付款详情</div>
+			<table cellpadding="0" cellspacing="0" border="0" class="table table-hover table-striped table-bordered  table-condensed">
+				<thead>
+					<tr>
+						<th class="col-xs-fluid">序号</th>
+						<th class="col-xs-fluid">资金类型</th>
+						<th class="col-xs-fluid">业务单号</th>
+						##<th class="col-xs-fluid">贷款单号</th>
+						<th class="col-xs-fluid">首付款单号</th>
+						##<th class="col-xs-fluid">变化前</th>
+						<th class="col-xs-fluid">操作金额</th>
+						##<th class="col-xs-fluid">变化后</th>
+						<th class="col-xs-fluid">操作时间</th>
+					</tr>
+				</thead>
+				<tbody>
+				#foreach($prepaymentOperationRecord in $prepaymentOperationRecordList)
+					<tr>
+						<td>
+							$!velocityCount
+						</td>
+						<td>
+							##本金
+							#if($!prepaymentOperationRecord.moneyType == 'payAmount')   本次还款本金  #end
+                            #if($!prepaymentOperationRecord.moneyType == 'sterilisedShouldPayAmount')   本次冲销待还本金  #end
+							#if($!prepaymentOperationRecord.moneyType == 'sterilisedAlreadyPayAmount')   本次冲销已还本金   #end
+							##支付预付款
+                            #if($!prepaymentOperationRecord.moneyType == 'depositAmount')   预付款金额   #end
+							##贷款取消冲销预付款
+							#if($!prepaymentOperationRecord.moneyType == 'cancelDepositAmount')   取消已付预付款本金   #end
+							##发生退款时冲销预付款
+                            #if($!prepaymentOperationRecord.moneyType == 'sterilisedDepositAmount')   本次冲销预付款   #end
+							##总退款金额
+							#if($!prepaymentOperationRecord.moneyType == 'refundedAmount')   总退款金额   #end
+							##用户分期手续费（总额）
+                            #if($!prepaymentOperationRecord.moneyType == 'sterilisedPlanFee')   冲销手续费   #end
+							##还分期手续费
+							#if($!prepaymentOperationRecord.moneyType == 'merPlanFee')   本次还手续费-商家   #end
+							#if($!prepaymentOperationRecord.moneyType == 'platPlanFee')   本次还手续费-平台   #end
+							#if($!prepaymentOperationRecord.moneyType == 'invPlanFee')   本次还手续费-出资方   #end
+							##冲销分期手续费
+							#if($!prepaymentOperationRecord.moneyType == 'sterilisedMerPlanFee')   本次冲销待还手续费-商家   #end
+							#if($!prepaymentOperationRecord.moneyType == 'sterilisedPlatPlanFee')   本次冲销待还手续费-平台   #end
+							#if($!prepaymentOperationRecord.moneyType == 'sterilisedInvPlanFee')   本次冲销待还手续费-出资方   #end
+							##用户逾期资金
+							#if($!prepaymentOperationRecord.moneyType == 'overAmount')   分期产生逾期资金   #end
+							#if($!prepaymentOperationRecord.moneyType == 'overPayAmount')   支付逾期还款   #end
+							#if($!prepaymentOperationRecord.moneyType == 'sterilisedOverAmount')   退款冲销逾期   #end
+							##商家接入渠道服务费
+							#if($!prepaymentOperationRecord.moneyType == 'platServiceFee')   生成贷款成功平台收入服务费   #end
+							#if($!prepaymentOperationRecord.moneyType == 'invServiceFee')   生成贷款成功出次方服务费   #end
+							#if($!prepaymentOperationRecord.moneyType == 'sterilisedInvServiceFee')   本次冲销商家接入渠道服务费   #end
+							#if($!prepaymentOperationRecord.moneyType == 'sterilisedPlatServiceFee')   本次冲销平台接入渠道服务费   #end
+							##贷款
+							#if($!prepaymentOperationRecord.moneyType == 'serviceFee')   贷款服务费   #end
+						</td>
+						<td>
+							$!prepaymentOperationRecord.businessNo
+						</td>
+						##<td>
+						##	$!prepaymentOperationRecord.loanNo
+						##</td>
+						<td>
+							$!prepaymentOperationRecord.planNo
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{prepaymentOperationRecord.modAmount})
+						</td>
+						<td>
+							$!date.format("yyyy-MM-dd HH:mm:ss",$prepaymentOperationRecord.createTime)
+						</td>
+					</tr>
+				#end
+				</tbody>
+			</table>
+			
+			<div class="progress-bar" style="width:10%">还款详情</div>
+			<table cellpadding="0" cellspacing="0" border="0" class="table table-hover table-striped table-bordered  table-condensed">
+				<thead>
+					<tr>
+						<th class="col-xs-fluid">序号</th>
+						<th class="col-xs-fluid">资金类型</th>
+						<th class="col-xs-fluid">业务单号</th>
+						##<th class="col-xs-fluid">贷款单号</th>
+						<th class="col-xs-fluid">分期单号</th>
+						##<th class="col-xs-fluid">变化前</th>
+						<th class="col-xs-fluid">操作金额</th>
+						##<th class="col-xs-fluid">变化后</th>
+						<th class="col-xs-fluid">操作时间</th>
+					</tr>
+				</thead>
+				<tbody>
+				#foreach($payOperationRecord in $payOperationRecordList)
+					<tr>
+						<td>
+							$!velocityCount
+						</td>
+						<td>
+							##本金
+							#if($!payOperationRecord.moneyType == 'payAmount')   本次还款本金  #end
+                            #if($!payOperationRecord.moneyType == 'sterilisedShouldPayAmount')   本次冲销待还本金  #end
+							#if($!payOperationRecord.moneyType == 'sterilisedAlreadyPayAmount')   本次冲销已还本金   #end
+							##支付预付款
+                            #if($!payOperationRecord.moneyType == 'depositAmount')   预付款金额   #end
+							##贷款取消冲销预付款
+							#if($!payOperationRecord.moneyType == 'cancelDepositAmount')   取消已付预付款本金   #end
+							##发生退款时冲销预付款
+                            #if($!payOperationRecord.moneyType == 'sterilisedDepositAmount')   本次冲销预付款   #end
+							##总退款金额
+							#if($!payOperationRecord.moneyType == 'refundedAmount')   总退款金额   #end
+							##用户分期手续费（总额）
+                            #if($!payOperationRecord.moneyType == 'sterilisedPlanFee')   冲销手续费   #end
+							##还分期手续费
+							#if($!payOperationRecord.moneyType == 'merPlanFee')   本次还手续费-商家   #end
+							#if($!payOperationRecord.moneyType == 'platPlanFee')   本次还手续费-平台   #end
+							#if($!payOperationRecord.moneyType == 'invPlanFee')   本次还手续费-出资方   #end
+							##冲销分期手续费
+							#if($!payOperationRecord.moneyType == 'sterilisedMerPlanFee')   本次冲销待还手续费-商家   #end
+							#if($!payOperationRecord.moneyType == 'sterilisedPlatPlanFee')   本次冲销待还手续费-平台   #end
+							#if($!payOperationRecord.moneyType == 'sterilisedInvPlanFee')   本次冲销待还手续费-出资方   #end
+							##用户逾期资金
+							#if($!payOperationRecord.moneyType == 'overAmount')   分期产生逾期资金   #end
+							#if($!payOperationRecord.moneyType == 'overPayAmount')   支付逾期还款   #end
+							#if($!payOperationRecord.moneyType == 'sterilisedOverAmount')   退款冲销逾期   #end
+							##商家接入渠道服务费
+							#if($!payOperationRecord.moneyType == 'platServiceFee')   生成贷款成功平台收入服务费   #end
+							#if($!payOperationRecord.moneyType == 'invServiceFee')   生成贷款成功出次方服务费   #end
+							#if($!payOperationRecord.moneyType == 'sterilisedInvServiceFee')   本次冲销商家接入渠道服务费   #end
+							#if($!payOperationRecord.moneyType == 'sterilisedPlatServiceFee')   本次冲销平台接入渠道服务费   #end
+							##贷款
+							#if($!payOperationRecord.moneyType == 'serviceFee')   贷款服务费   #end
+						</td>
+						<td>
+							$!payOperationRecord.businessNo
+						</td>
+						##<td>
+						##	$!payOperationRecord.loanNo
+						##</td>
+						<td>
+							$!payOperationRecord.planNo
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{payOperationRecord.modAmount})
+						</td>
+						<td>
+							$!date.format("yyyy-MM-dd HH:mm:ss",$payOperationRecord.createTime)
+						</td>
+					</tr>
+				#end
+				</tbody>
+			</table>
+			
+			<div class="progress-bar" style="width:10%">逾期详情</div>
+			<table cellpadding="0" cellspacing="0" border="0" class="table table-hover table-striped table-bordered  table-condensed">
+				<thead>
+					<tr>
+						<th class="col-xs-fluid">序号</th>
+						<th class="col-xs-fluid">资金类型</th>
+						<th class="col-xs-fluid">业务单号</th>
+						##<th class="col-xs-fluid">贷款单号</th>
+						<th class="col-xs-fluid">分期单号</th>
+						##<th class="col-xs-fluid">变化前</th>
+						<th class="col-xs-fluid">操作金额</th>
+						##<th class="col-xs-fluid">变化后</th>
+						<th class="col-xs-fluid">操作时间</th>
+					</tr>
+				</thead>
+				<tbody>
+				#foreach($overOperationRecord in $overOperationRecordList)
+					<tr>
+						<td>
+							$!velocityCount
+						</td>
+						<td>
+							##本金
+							#if($!overOperationRecord.moneyType == 'payAmount')   本次还款本金  #end
+                            #if($!overOperationRecord.moneyType == 'sterilisedShouldPayAmount')   本次冲销待还本金  #end
+							#if($!overOperationRecord.moneyType == 'sterilisedAlreadyPayAmount')   本次冲销已还本金   #end
+							##支付预付款
+                            #if($!overOperationRecord.moneyType == 'depositAmount')   预付款金额   #end
+							##贷款取消冲销预付款
+							#if($!overOperationRecord.moneyType == 'cancelDepositAmount')   取消已付预付款本金   #end
+							##发生退款时冲销预付款
+                            #if($!overOperationRecord.moneyType == 'sterilisedDepositAmount')   本次冲销预付款   #end
+							##总退款金额
+							#if($!overOperationRecord.moneyType == 'refundedAmount')   总退款金额   #end
+							##用户分期手续费（总额）
+                            #if($!overOperationRecord.moneyType == 'sterilisedPlanFee')   冲销手续费   #end
+							##还分期手续费
+							#if($!overOperationRecord.moneyType == 'merPlanFee')   本次还手续费-商家   #end
+							#if($!overOperationRecord.moneyType == 'platPlanFee')   本次还手续费-平台   #end
+							#if($!overOperationRecord.moneyType == 'invPlanFee')   本次还手续费-出资方   #end
+							##冲销分期手续费
+							#if($!overOperationRecord.moneyType == 'sterilisedMerPlanFee')   本次冲销待还手续费-商家   #end
+							#if($!overOperationRecord.moneyType == 'sterilisedPlatPlanFee')   本次冲销待还手续费-平台   #end
+							#if($!overOperationRecord.moneyType == 'sterilisedInvPlanFee')   本次冲销待还手续费-出资方   #end
+							##用户逾期资金
+							#if($!overOperationRecord.moneyType == 'overAmount')   分期产生逾期资金   #end
+							#if($!overOperationRecord.moneyType == 'overPayAmount')   支付逾期还款   #end
+							#if($!overOperationRecord.moneyType == 'sterilisedOverAmount')   退款冲销逾期   #end
+							##商家接入渠道服务费
+							#if($!overOperationRecord.moneyType == 'platServiceFee')   生成贷款成功平台收入服务费   #end
+							#if($!overOperationRecord.moneyType == 'invServiceFee')   生成贷款成功出次方服务费   #end
+							#if($!overOperationRecord.moneyType == 'sterilisedInvServiceFee')   本次冲销商家接入渠道服务费   #end
+							#if($!overOperationRecord.moneyType == 'sterilisedPlatServiceFee')   本次冲销平台接入渠道服务费   #end
+							##贷款
+							#if($!overOperationRecord.moneyType == 'serviceFee')   贷款服务费   #end
+						</td>
+						<td>
+							$!overOperationRecord.businessNo
+						</td>
+						##<td>
+						##	$!overOperationRecord.loanNo
+						##</td>
+						<td>
+							$!overOperationRecord.planNo
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{overOperationRecord.modAmount})
+						</td>
+						<td>
+							$!date.format("yyyy-MM-dd HH:mm:ss",$overOperationRecord.createTime)
+						</td>
+					</tr>
+				#end
+				</tbody>
+			</table>
+			
+			<div class="progress-bar" style="width:10%">退款单</div>
+			<table cellpadding="0" cellspacing="0" border="0" class="table table-hover table-striped table-bordered  table-condensed">
+				<thead>
+					<tr>
+						<th class="col-xs-fluid">序号</th>
+						<th class="col-xs-fluid">商家订单号</th>
+						<th class="col-xs-fluid">平台退款单号</th>
+						<th class="col-xs-fluid">商家退款单号</th>
+						<th class="col-xs-fluid">商家退款时间</th>
+						<th class="col-xs-fluid">退款金额</th>
+					</tr>
+				</thead>
+				<tbody>
+				#foreach($refund in $refundList)
+					<tr>
+						<td>
+							$!velocityCount
+						</td>
+						<td>
+							$!refund.merchantOrderId
+						</td>
+						<td>
+							$!refund.platRefunId
+						</td>
+						<td>
+							$!refund.refundId
+						</td>
+						<td>
+							$!date.format("yyyy-MM-dd HH:mm:ss",$refund.createDate)
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{refund.amount})
+						</td>
+					</tr>
+				#end
+				</tbody>
+			</table>
+			
+			<div class="progress-bar" style="width:10%">退款详情</div>
+			<table cellpadding="0" cellspacing="0" border="0" class="table table-hover table-striped table-bordered  table-condensed">
+				<thead>
+					<tr>
+						<th class="col-xs-fluid">序号</th>
+						<th class="col-xs-fluid">资金类型</th>
+						<th class="col-xs-fluid">业务单号</th>
+						##<th class="col-xs-fluid">贷款单号</th>
+						<th class="col-xs-fluid">分期单号</th>
+						##<th class="col-xs-fluid">变化前</th>
+						<th class="col-xs-fluid">操作金额</th>
+						##<th class="col-xs-fluid">变化后</th>
+						<th class="col-xs-fluid">操作时间</th>
+					</tr>
+				</thead>
+				<tbody>
+				#foreach($refundOperationRecord in $refundOperationRecordList)
+					<tr>
+						<td>
+							$!velocityCount
+						</td>
+						<td>
+							##本金
+							#if($!refundOperationRecord.moneyType == 'payAmount')   本次还款本金  #end
+                            #if($!refundOperationRecord.moneyType == 'sterilisedShouldPayAmount')   本次冲销待还本金  #end
+							#if($!refundOperationRecord.moneyType == 'sterilisedAlreadyPayAmount')   本次冲销已还本金   #end
+							##支付预付款
+                            #if($!refundOperationRecord.moneyType == 'depositAmount')   预付款金额   #end
+							##贷款取消冲销预付款
+							#if($!refundOperationRecord.moneyType == 'cancelDepositAmount')   取消已付预付款本金   #end
+							##发生退款时冲销预付款
+                            #if($!refundOperationRecord.moneyType == 'sterilisedDepositAmount')   本次冲销预付款   #end
+							##总退款金额
+							#if($!refundOperationRecord.moneyType == 'refundedAmount')   总退款金额   #end
+							##用户分期手续费（总额）
+                            #if($!refundOperationRecord.moneyType == 'sterilisedPlanFee')   冲销手续费   #end
+							##还分期手续费
+							#if($!refundOperationRecord.moneyType == 'merPlanFee')   本次还手续费-商家   #end
+							#if($!refundOperationRecord.moneyType == 'platPlanFee')   本次还手续费-平台   #end
+							#if($!refundOperationRecord.moneyType == 'invPlanFee')   本次还手续费-出资方   #end
+							##冲销分期手续费
+							#if($!refundOperationRecord.moneyType == 'sterilisedMerPlanFee')   本次冲销待还手续费-商家   #end
+							#if($!refundOperationRecord.moneyType == 'sterilisedPlatPlanFee')   本次冲销待还手续费-平台   #end
+							#if($!refundOperationRecord.moneyType == 'sterilisedInvPlanFee')   本次冲销待还手续费-出资方   #end
+							##用户逾期资金
+							#if($!refundOperationRecord.moneyType == 'overAmount')   分期产生逾期资金   #end
+							#if($!refundOperationRecord.moneyType == 'overPayAmount')   支付逾期还款   #end
+							#if($!refundOperationRecord.moneyType == 'sterilisedOverAmount')   退款冲销逾期   #end
+							##商家接入渠道服务费
+							#if($!refundOperationRecord.moneyType == 'platServiceFee')   生成贷款成功平台收入服务费   #end
+							#if($!refundOperationRecord.moneyType == 'invServiceFee')   生成贷款成功出次方服务费   #end
+							#if($!refundOperationRecord.moneyType == 'sterilisedInvServiceFee')   本次冲销商家接入渠道服务费   #end
+							#if($!refundOperationRecord.moneyType == 'sterilisedPlatServiceFee')   本次冲销平台接入渠道服务费   #end
+							##贷款
+							#if($!refundOperationRecord.moneyType == 'serviceFee')   贷款服务费   #end
+						</td>
+						<td>
+							$!refundOperationRecord.businessNo
+						</td>
+						##<td>
+						##	$!refundOperationRecord.loanNo
+						##</td>
+						<td>
+							$!refundOperationRecord.planNo
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{refundOperationRecord.modAmount})
+						</td>
+						<td>
+							$!date.format("yyyy-MM-dd HH:mm:ss",$refundOperationRecord.createTime)
+						</td>
+					</tr>
+				#end
+				</tbody>
+			</table>
+			
+		</div>
+	</div>
+</div>

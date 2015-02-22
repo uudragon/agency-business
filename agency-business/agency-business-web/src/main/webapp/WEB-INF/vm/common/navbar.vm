@@ -1,0 +1,16 @@
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <ul class="nav nav-pills">
+                <li>
+                    ##<a href="#"><li><img src="${request.contextPath}/images/logo-2013-c.png" class="img-rounded" height="50"></li></a>
+                </li>
+								<!--
+                <li #if($request.getRequestURI().contains("/refund/refundDataQuery")) class="active" #end><a href="/refund/refundDataQuery.do">閫�娆炬暟鎹煡璇�</a></li>
+                <li #if($request.getRequestURI().contains("/refundCount/refundCountInfo")) class="active" #end><a href="/refundCount/refundCountInfoDefault.do">閫�娆炬湇鍔＄洃鎺у拰缁存姢</a></li>
+                <li #if($request.getRequestURI().contains("/refundCount/refundMonitor")) class="active" #end><a href="/refundCount/refundMonitor.do">閫�娆炬湇鍔＄洃鎺у拰缁存姢</a></li>
+                -->
+            </ul>
+        </div>
+    </div>
+</div>

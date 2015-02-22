@@ -1,0 +1,168 @@
+##<link rel="shortcut icon" href="/favicon.ico">
+<link href="${request.contextPath}/new/css/flyingsolo.base.css" rel="stylesheet"/>
+<link href="${request.contextPath}/new/css/bootstrap-responsive.css" rel="stylesheet" />
+<link href="${request.contextPath}/new/css/bootstrap.css" rel="stylesheet" />
+<link href="${request.contextPath}/new/css/bootstrap-theme.css" rel="stylesheet" />
+<link href="${request.contextPath}/new/css/jquery-ui.min.css" rel="stylesheet">
+<link href="${request.contextPath}/new/css/jquery-ui-timepicker-addon.css" rel="stylesheet">
+<link href="${request.contextPath}/new/css/jd/jd-widget.css" rel="stylesheet" "/>
+<link href="${request.contextPath}/new/css/pay.css" rel="stylesheet" type="text/css"/>
+
+
+<script src="${request.contextPath}/new/js/jquery.1.10.2.js"></script>
+<script src="${request.contextPath}/new/js/bootstrap.js"></script>
+<script src="${request.contextPath}/new/js/bootstrap.min.js"></script>
+<script src="${request.contextPath}/new/js/My97DatePicker/WdatePicker.js"></script>
+<script src="${request.contextPath}/new/js/highcharts.js"></script>
+<script src="${request.contextPath}/new/js/bootstrap-bootbox.js"></script>
+<script src="${request.contextPath}/new/js/exporting.js"></script>
+<script src="${request.contextPath}/new/js/jquery-ui.min.js"></script>
+<script src="${request.contextPath}/new/js/jquery-ui-timepicker-addon.js"></script>
+<script src="${request.contextPath}/new/js/jd/jdcore.js"></script>
+
+<!-- Bootstrap Core CSS -->
+<link href="/startbootstrap/css/bootstrap.min.css" rel="stylesheet">
+<!-- MetisMenu CSS -->
+<link href="/startbootstrap/css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
+<!-- Custom CSS -->
+<link href="/startbootstrap/css/sb-admin-2.css" rel="stylesheet">
+<!-- Custom Fonts -->
+<link href="/startbootstrap/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+<!-- jQuery -->
+<script src="/startbootstrap/js/jquery.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/startbootstrap/js/bootstrap.min.js"></script>
+
+<!-- Metis Menu Plugin JavaScript -->
+<script src="/startbootstrap/js/plugins/metisMenu/metisMenu.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/startbootstrap/js/sb-admin-2.js"></script>
+
+
+<script type="text/javascript">
+    function content(url) {
+        jQuery("#contentFrame").attr("src", "/erp" + url);
+    }
+
+    //一键生效功能（点击该按钮，使得运营人员配置的数据被应用到业务系统中）
+    function makeDataValid() {
+        jQuery.post('/erp/sys/makeDataValid', function (result) {
+            if (result.success) {
+                alert("数据生效成功");
+            } else {
+                alert("数据生效失败");
+            }
+        });
+    }
+</script>
+
+<style type="text/css">
+    /* div层（隐藏/显示左侧导航栏） */
+    .navHSOper {
+        width:6px;
+        height:31px;
+        position:absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        margin:auto auto auto 250px;
+    }
+</style>
+
+<script type="text/javascript">
+        function goToPage(url){
+            var toPage = document.getElementsByName("toPage")[0].value;
+            var totalPage = document.getElementsByName("totalPage")[0].value;
+            if(toPage!=''){
+                var r = /^\+?[1-9][0-9]*$/;
+                if(!r.test(toPage)){
+                    alert("请输入大于0的整数！");
+                    document.getElementsByName("toPage")[0].value='';
+                    return;
+                }
+                else if(toPage*1>totalPage*1){
+                    alert("您输入的页数已超过范围！");
+                    document.getElementsByName("toPage")[0].value='';
+                    return;
+                }
+                var targetUrl = url.replace('-page-',toPage);
+                window.location=targetUrl;
+            }
+            else{
+                alert("请输入页数！");
+            }
+        }
+
+		function goToPageByForm(formId){
+            var toPage = document.getElementsByName("toPage")[0].value;
+            var totalPage = document.getElementsByName("totalPage")[0].value;
+            if(toPage!=''){
+                var r = /^\+?[1-9][0-9]*$/;
+                if(!r.test(toPage)){
+                    alert("请输入大于0的整数！");
+                    document.getElementsByName("toPage")[0].value='';
+                    return;
+                }
+                else if(toPage*1>totalPage*1){
+                    alert("您输入的页数已超过范围！");
+                    document.getElementsByName("toPage")[0].value='';
+                    return;
+                }
+				document.getElementById(formId).submit();
+            }
+            else{
+                alert("请输入页数！");
+            }
+        }
+</script>
+
+
+
+<script type="text/javascript">
+    //隐藏左侧导航
+    function hide() {
+        //隐藏左侧导航
+        jQuery("#navigation").css("display","none");
+        //设置frame的窗口左边距为0像素
+        var pageWrapper_iframe = jQuery("#contentFrame").contents().find("#page-wrapper");
+        pageWrapper_iframe.css('margin-left','0px');
+
+        //设置层的左边距为0像素（隐藏/显示左侧导航栏）
+        jQuery("#changeNavShowMode").css('margin-left','0px');
+
+        //更新操作左侧导航显示或隐藏的图片及click时间触发函数
+        jQuery("#hsOper").attr("src","/images/switch_right.gif");
+        jQuery("#hsOper").attr("onclick","show()");
+
+        //更新左侧导航隐藏标识位leftNavOpened
+        jQuery("#leftNavOpened").val('no');
+    }
+
+    //显示左侧导航
+    function show() {
+        //显示左侧导航
+        jQuery("#navigation").css("display","block");
+        //设置frame的窗口左边距为250像素
+        var pageWrapper_iframe = jQuery("#contentFrame").contents().find("#page-wrapper");
+        pageWrapper_iframe.css('margin-left','250px');
+
+        //设置层的左边距为250像素（隐藏/显示左侧导航栏）
+        jQuery("#changeNavShowMode").css('margin-left','250px');
+
+
+        //更新操作左侧导航显示或隐藏的图片及click时间触发函数
+        jQuery("#hsOper").attr("src","/images/switch_left.gif");
+        jQuery("#hsOper").attr("onclick","hide()");
+
+        //更新左侧导航隐藏标识位leftNavOpened
+        jQuery("#leftNavOpened").val('yes');
+    }
+</script>
+
+
+
+

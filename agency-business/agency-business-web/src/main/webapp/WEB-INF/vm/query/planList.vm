@@ -1,0 +1,305 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+<meta http-equiv="pragma" content="no-cache"> 
+<meta http-equiv="cache-control" content="no-cache"> 
+<meta http-equiv="expires" content="0">   
+<title>分期单查询</title>
+<link href="${request.contextPath}/new/css/pay.css" rel="stylesheet" type="text/css"/>
+
+#parse("/macro.vm")
+
+<style type="text/css" >
+.a{
+float:left;
+clear:left;
+height:347}
+
+.d1{
+float:right;
+clear:right;
+color:#FF0000;
+width:200;
+height:100}
+</style>
+
+<script type="text/javascript" src="${request.contextPath}/new/js/jquery-1.2.6.pack.js"></script>
+<script type="text/javascript" src="${request.contextPath}/new/js/json2.js"></script>
+<script type="text/javascript" src="${request.contextPath}/new/js/map.js"></script>
+<script type="text/javascript" src="${request.contextPath}/new/js/My97DatePicker/WdatePicker.js"></script>
+
+<script type="text/javascript">  
+
+	$(function() {
+		//$('#startCreateDate').datetimepicker({showSecond: true,timeFormat: 'HH:mm:ss', dateFormat: 'yy-mm-dd'});
+		//$('#endCreateDate').datetimepicker({showSecond: true,timeFormat: 'HH:mm:ss', dateFormat: 'yy-mm-dd'});
+	});
+	
+	function getPageData(page, type) {
+		if (type == 1) {
+			page--;
+		} else if (type == 2) {
+			page++;
+		}
+		
+		//总页数
+		var pageCount = $("#showPageCount").attr("value");
+		
+		//如果将要跳转的页号大于总页数，则页号为总页数；
+		//如果小于0，则为首页
+		if (page > pageCount)
+			page = pageCount;
+		if (page < 1)
+			page = 1;
+			
+		$("#page").val(page);
+		
+		jQuery("#searchForm").attr("method", "post");
+        jQuery("#searchForm").attr("action", "/erp/plan/newPlanList");
+		$("#searchForm").submit();
+	}
+
+	$(document).ready(function(){  
+//        $("tr:even").addClass("info");//奇数行
+      //  $("tr:odd").addClass("success");//偶数行
+    });
+    
+    function sendquery() {
+    	$("#currentPage").val(1);
+		jQuery("#searchForm").attr("method", "post");
+        jQuery("#searchForm").attr("action", "/erp/plan/newPlanList");
+        jQuery("#searchForm").submit();
+    }
+	
+	function sendExport() {
+		var loanNo = jQuery("#loanNo").val();
+		var orderId = jQuery("#orderId").val();
+		var planNo = jQuery("#planNo").val();
+		var platPin = jQuery("#platPin").val();
+		
+		var overFlag = jQuery("#overFlag").val();
+		
+		var rows = jQuery("#rows").val();
+		var page = jQuery("#page").val();
+		
+		jQuery.ajax({
+                url: '${request.contextPath}/erp/plan/exportCSV',
+                data: {
+						"loanNo" : loanNo,
+						"orderId" : orderId,
+						"planNo" : planNo,
+						"platPin" : platPin,
+						"overFlag" : overFlag,
+						"rows" : rows,
+						"page" : page
+				},
+                type: 'post',
+                success: function(result) {
+                	result = jQuery.parseJSON(result);
+                	
+                    if (result && (result.code == 'success')) {
+                        window.location.href="${request.contextPath}/erp/plan/downCsv?filePath=" + result.msg;
+                    } else {
+                        jQuery.messager.alert('提示信息', result.msg, 'error');
+                    }
+                }
+        });
+    }
+	
+	
+	
+    $(document).keyup(function(event){
+    
+	  var queryFrom = document.getElementById("searchForm");
+		queryFrom.action = "/erp/plan/newPlanList";
+    
+	  if(event.keyCode ==13){
+        $("#rows").val($("#rowsShow").val());
+	    $("#querybutton").trigger("click");
+	  }
+	});
+</script>
+<div class="row-fluid">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">分期单查询</h3>
+        </div>
+    	<div class="panel-body">
+			<form class="form-horizontal" role="form" action="/erp/plan/newPlanList" method="post" id="searchForm">
+				<div class="form-group">
+	                <label class="col-xs-1 control-label">贷款单号：</label>
+		        	<div class="col-xs-2">
+			        	<input type="text" class="form-control" value="$!queryPlanVo.loanNo" id="loanNo" name="loanNo" />
+		        	</div>
+					
+	                <label class="col-xs-1 control-label">收单号：</label>
+		        	<div class="col-xs-2">
+			        	<input type="text" class="form-control" value="$!queryPlanVo.orderId" id="orderId" name="orderId" />
+		        	</div>
+					
+	                <label class="col-xs-1 control-label">分期单号：</label>
+		        	<div class="col-xs-2">
+						<input type="text" class="form-control" value="$!queryPlanVo.planNo" id="planNo" name="planNo" />
+		        	</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-1 control-label">平台pin：</label>
+		        	<div class="col-xs-2">
+		        		<input type="text" class="form-control" value="$!queryPlanVo.platPin" id="platPin" name="platPin" />
+		        	</div>
+					
+					<label class="col-xs-1 control-label">是否逾期：</label>
+		        	<div class="col-xs-2">
+						<select id="overFlag" name="overFlag" class="form-control">
+							<option value="" #if($queryPlanVo.overFlag == "")selected="selected" #end>全部</option>
+							<option value="1" #if($queryPlanVo.overFlag == 1)selected="selected" #end>已逾期</option>
+							<option value="2" #if($queryPlanVo.overFlag == 2)selected="selected" #end>未逾期</option>
+                        </select>
+					</div>
+				</div>
+				<div class="form-group">
+					<div align="center">
+						<button id="querybutton" class="btn btn-info" type="button" onclick="sendquery()">查询</button>
+						&nbsp;
+						<button id="exportbutton" class="btn btn-info" type="button" onclick="sendExport();">导出EXCEL</button>
+					</div>
+				</div>
+				
+				##当前页
+				<input type="hidden" id="page"  name="page" value="$!queryPlanVo.page"/>
+				##每页显示的大小
+				<input type="hidden" id="rows"  name="rows" value="$!queryPlanVo.rows"/>
+	        </form>
+
+			<table cellpadding="0" cellspacing="0" border="0" class="table table-hover table-striped table-bordered  table-condensed">
+				<thead>
+					<tr>
+						<th class="col-xs-fluid">序号</th>
+						<th class="col-xs-fluid">平台pin</th>
+						<th class="col-xs-fluid">贷款用户pin</th>
+						<th class="col-xs-fluid">贷款单号</th>
+						<th class="col-xs-fluid">分期单号</th>
+						<th class="col-xs-fluid">收单号</th>
+						
+						<th class="col-xs-fluid">当前分期数</th>
+						<th class="col-xs-fluid">最后还款期限</th>
+						<th class="col-xs-fluid">还款完成时间</th>
+						
+						<th class="col-xs-fluid">还款本金</th>
+						<th class="col-xs-fluid">已还本金</th>
+						<th class="col-xs-fluid">逾期金额</th>
+						<th class="col-xs-fluid">已还逾期</th>
+						<th class="col-xs-fluid">分期手续费</th>
+						<th class="col-xs-fluid">已还手续费</th>
+						<th class="col-xs-fluid">任务状态</th>
+						
+						<th class="col-xs-fluid">待还本金</th>
+						<th class="col-xs-fluid">退款冲销已还本金</th>
+						<th class="col-xs-fluid">退款冲销应还本金</th>
+						<th class="col-xs-fluid">已冲销用户手续费</th>
+						<th class="col-xs-fluid">退款冲销已逾期</th>
+					</tr>
+				</thead>
+				<tbody>
+				#foreach($plan in $plans)
+					<tr>
+						<td>
+							$!velocityCount
+						</td>
+						<td>
+							$!plan.platPin
+						</td>
+						<td>
+							$!plan.jdPin
+						</td>
+						<td>
+							$!plan.loanNo
+						</td>
+						<td>
+							$!plan.planNo
+						</td>
+						<td>
+							$!plan.orderId
+						</td>
+						
+						<td>
+							$!plan.curPlanNum
+						</td>
+						<td>
+							$!date.format("yyyy-MM-dd HH:mm:ss",$plan.limitPayDate)
+						</td>
+						<td>
+							$!date.format("yyyy-MM-dd HH:mm:ss",$plan.finishPayDate)
+						</td>
+						
+						<td>
+							$!plan.amount
+						</td>
+						<td>
+							$!plan.payAmount
+						</td>
+						<td>
+							$!plan.overAmount
+						</td>
+						<td>
+							$!plan.overPayAmount
+						</td>
+						<td>
+							$!plan.planFee
+						</td>
+						<td>
+							$!plan.payedPlanFee
+						</td>
+						<td>
+							$!plan.taskStatus
+						</td>
+						
+						<td>
+							$!plan.shouldPayAmount
+						</td>
+						<td>
+							$!plan.sterilisedAlreadyPayAmount
+						</td>
+						<td>
+							$!plan.sterilisedShouldPayAmount
+						</td>
+						<td>
+							$!plan.sterilisedPlanFee
+						</td>
+						<td>
+							$!plan.sterilisedOverAmount
+						</td>
+					</tr>
+				#end
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+<div class="container" id="pageCountDiv" align="center">
+    <div class="pagination  pagination-right"  id="showPageNum">
+        <li  id="prePage">
+            <a href="#" onclick="getPageData('$!queryPlanVo.page' ,1 )">上一页</a>
+        </li>
+        <li  id="nextPage">
+            <a href="#" onclick="getPageData('$!queryPlanVo.page' ,2 )">下一页</a>
+        </li>
+        <li class="disabled">
+            <a >当前第$!queryPlanVo.page 页</a>
+        </li>
+        <li  class="disabled">
+            <a id="showPageCount" value="$!queryPlanVo.pageCount">共$!queryPlanVo.pageCount页</a>
+        </li>
+        <li  class="disabled">
+            <a id="showRecordNum" value="$!queryPlanVo.recordNum">共$!queryPlanVo.recordNum条</a>
+        </li>
+        <li>
+        <a><div style="padding: 0px; margin:0px; line-height:100%;">每页<input id="rowsShow" size="3" maxlength="3" type="text" name="rowsShow" autocomplete="off" value="$!queryPlanVo.rows"
+                style="width: 35px; height:20px;">条</div></a>
+        </li>
+    </div>
+</div>
+</body>
+</html>

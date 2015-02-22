@@ -1,0 +1,182 @@
+<script type="text/javascript" src="${request.contextPath}/new/js/jquery-1.2.6.pack.js"></script>
+<script type="text/javascript" src="${request.contextPath}/new/js/json2.js"></script>
+<script type="text/javascript" src="${request.contextPath}/new/js/map.js"></script>
+<script type="text/javascript" src="${request.contextPath}/new/js/My97DatePicker/WdatePicker.js"></script>
+
+<script type="text/javascript">  
+    function sendquery() {
+		jQuery("#searchForm").attr("method", "post");
+        jQuery("#searchForm").attr("action", "/erp/loan/loanUserDetail");
+        jQuery("#searchForm").submit();
+    }
+</script>
+
+<div class="row-fluid">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">贷款人信息</h3>
+        </div>
+    	<div class="panel-body">
+			<div class="progress-bar" style="width:10%">基本信息</div>
+			<table cellpadding="0" cellspacing="0" border="0" class="table table-hover table-striped table-bordered  table-condensed">
+				<thead>
+					<tr>
+						<th class="col-xs-fluid">平台用户Pin</th>
+						<th class="col-xs-fluid">京东用户Pin</th>
+						<th class="col-xs-fluid">信用状态</th>
+						<th class="col-xs-fluid">姓名</th>
+						<th class="col-xs-fluid">别名</th>
+						<th class="col-xs-fluid">证件类型</th>
+						<th class="col-xs-fluid">证件号码</th>
+						<th class="col-xs-fluid">手机号</th>
+						<th class="col-xs-fluid">邮箱</th>
+						<th class="col-xs-fluid">备注</th>
+					</tr>
+				</thead>
+				<tbody>
+					#if($baseUserVo)
+					<tr>
+						<td>
+							$!baseUserVo.platPin
+						</td>
+						<td>
+							$!baseUserVo.jdPin
+						</td>
+						<td>
+							#if($!baseUserVo.status == 0)   止付  #end
+							#if($!baseUserVo.status == 1)   正常  #end
+                            #if($!baseUserVo.status == 2)   失效  #end
+						</td>
+						<td>
+							$!baseUserVo.realName
+						</td>
+						<td>
+							$!baseUserVo.nickName
+						</td>
+						<td>
+							#if($!baseUserVo.idType == 0)   其它  #end
+							#if($!baseUserVo.idType == 1)   身份证  #end
+						</td>
+						<td>
+							$!baseUserVo.idNo
+						</td>
+						<td>
+							$!baseUserVo.mobile
+						</td>
+						<td>
+							$!baseUserVo.email
+						</td>
+						<td>
+							$!baseUserVo.remark
+						</td>
+					</tr>
+					#end
+				</tbody>
+			</table>
+			
+			<div class="progress-bar" style="width:10%">授信信息</div>
+			<table cellpadding="0" cellspacing="0" border="0" class="table table-hover table-striped table-bordered  table-condensed">
+				<thead>
+					<tr>
+						<th class="col-xs-fluid">序号</th>
+						<th class="col-xs-fluid">授信额度</th>
+						<th class="col-xs-fluid">剩余额度</th>
+						<th class="col-xs-fluid">授信类型</th>
+						<th class="col-xs-fluid">信用失效时间</th>
+						<th class="col-xs-fluid">币种</th>
+						<th class="col-xs-fluid">授信时间</th>
+						<th class="col-xs-fluid">信用状态</th>
+						<th class="col-xs-fluid">备注</th>
+					</tr>
+				</thead>
+				<tbody>
+				#foreach($userBalanceVo in $userBalanceVoList)
+					<tr>
+						<td>
+							$!velocityCount
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{userBalanceVo.creditBalance})
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{userBalanceVo.limitBalance})
+						</td>
+						<td>
+							#if($!userBalanceVo.creditType == 1)   大额低频  #end
+                            #if($!userBalanceVo.creditType == 2)   小额高频  #end
+							#if($!userBalanceVo.creditType == 3)   其它  #end
+						</td>
+						<td>
+							$!userBalanceVo.expiryDate
+						</td>
+						<td>
+							#if($!userBalanceVo.currency != 1)   其它  #end
+                            #if($!userBalanceVo.currency == 1)   人民币  #end
+						</td>
+						<td>
+							$!date.format("yyyy-MM-dd HH:mm:ss",$userBalanceVo.creditTime)
+						</td>
+						<td>
+							#if($!userBalanceVo.status == 0)   不可用  #end
+                            #if($!userBalanceVo.status == 1)   可用  #end
+						</td>
+						<td>
+							$!userBalanceVo.remark
+						</td>
+					</tr>
+				#end
+				</tbody>
+			</table>
+			
+			<div class="progress-bar" style="width:10%">归属商家用户--个人账户</div>
+			<table cellpadding="0" cellspacing="0" border="0" class="table table-hover table-striped table-bordered  table-condensed">
+				<thead>
+					<tr>
+						<th class="col-xs-fluid">序号</th>
+						<th class="col-xs-fluid">商家用户pin</th>
+						<th class="col-xs-fluid">商家名称</th>
+						<th class="col-xs-fluid">商家商户号</th>
+						<th class="col-xs-fluid">出资方商户号</th>
+						<th class="col-xs-fluid">手机号</th>
+						<th class="col-xs-fluid">贷款金额</th>
+						<th class="col-xs-fluid">服务费金额</th>
+						<th class="col-xs-fluid">罚款金额</th>
+					</tr>
+				</thead>
+				<tbody>
+				#foreach($creditUserAccountEntity in $creditUserAccountEntityList)
+					<tr>
+						<td>
+							$!velocityCount
+						</td>
+						<td>
+							$!creditUserAccountEntity.refpin
+						</td>
+						<td>
+							$!creditUserAccountEntity.merchantName
+						</td>
+						<td>
+							$!creditUserAccountEntity.merchantCode
+						</td>
+						<td>
+							$!creditUserAccountEntity.investor
+						</td>
+						<td>
+							$!creditUserAccountEntity.mobile
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{creditUserAccountEntity.loanAmount})
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{creditUserAccountEntity.serviceAmount})
+						</td>
+						<td>
+							$!numberTool.format("0.00", $!{creditUserAccountEntity.overAmount})
+						</td>
+					</tr>
+				#end
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

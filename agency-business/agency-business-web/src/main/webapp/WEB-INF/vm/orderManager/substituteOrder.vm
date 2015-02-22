@@ -1,0 +1,597 @@
+#set($layout =  "/layout/orderLayout.vm" )
+<div id="wrapper">
+
+        <div id="page-wrapper">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">代客户下单</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <form class="form-horizontal" role="form" action="/erp/order/newOrderList" method="post" id="searchForm">
+                        <div class="form-group" nowrap>
+                            <label class="col-xs-1 control-label" >客户姓名</label>
+                            <div class="col-xs-2">
+                                <input type="text" class="form-control" value="$!queryOrderVo.orderId" id="orderId" name="orderId" />
+                            </div>
+
+                            <label class="col-xs-1 control-label">订单编号</label>
+                            <div class="col-xs-2">
+                                <input type="text" class="form-control" value="$!queryOrderVo.merchantOrderId" id="merchantOrderId" name="merchantOrderId" />
+                            </div>
+
+                            <label class="col-xs-1 control-label">下单时间</label>
+                            <div class="col-xs-4">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <input type="text" class="form-control" value="" id="merchantOrderDateStart" name="merchantOrderDateStart"  />
+                                        </td>
+                                        <td>
+                                            <label class="control-label">至</label>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" value=""  id="merchantOrderDateEnd" name="merchantOrderDateEnd" />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="form-group" nowrap>
+                            <label class="col-xs-1 control-label">订单来源：</label>
+                            <div class="col-xs-2">
+                                <select id="status" name="status" class="form-control">
+                                    <option value="">全部</option>
+                                    <option value="1">本地录入</option>
+                                    <option value="2">网站广告</option>
+
+                                </select>
+                            </div>
+
+                            <label class="col-xs-1 control-label">订单类型：</label>
+                            <div class="col-xs-2">
+                                <select id="status" name="status" class="form-control">
+                                    <option value="">全部</option>
+                                    <option value="1">Ａ套餐全部</option>
+                                    <option value="2">Ｂ套餐全部</option>
+                                    <option value="2">Ａ套餐部分</option>
+                                    <option value="2">Ｂ套餐部分</option>
+                                    <option value="2">网站套餐</option>
+
+                                </select>
+                            </div>
+
+                            <label class="col-xs-1 control-label">订单状态：</label>
+                            <div class="col-xs-2">
+                                <select id="status" name="status" class="form-control">
+                                    <option value="">全部</option>
+                                    <option value="1">已支付</option>
+                                    <option value="2">未支付</option>
+                                    <option value="3">待审核</option>
+                                    <option value="4">审核中</option>
+                                    <option value="5">审核通过</option>
+                                </select>
+                            </div>
+
+
+                            <label class="col-xs-1 control-label">收货状态：</label>
+                            <div class="col-xs-2">
+                                <select id="status" name="status" class="form-control">
+                                    <option value="">全部</option>
+                                    <option value="1">待发货</option>
+                                    <option value="2">部分发货</option>
+                                    <option value="3">已完成</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div align="center">
+                                <button id="querybutton" class="btn btn-info" type="button" onclick="sendquery()">查询</button>
+                                &nbsp;
+                                <button id="exportbutton" class="btn btn-info" type="button" onclick="document.location.href='/erp/orderManager/createOrder'">新建</button>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="table-responsive">
+
+                                <table class="table table-striped table-bordered table-hover" id="orderTables">
+                                    <thead>
+                                    <tr>
+                                        <th nowrap>订单编号</th>
+                                        <th nowrap>客户姓名</th>
+                                        <th nowrap>客户电话</th>
+                                        <th nowrap>详细地址</th>
+                                        <th nowrap>订单金额</th>
+                                        <th nowrap>订单类型</th>
+                                        <th nowrap>订单状态</th>
+                                        <th nowrap>下单时间</th>
+                                        <th nowrap>订单来源</th>
+                                        <th nowrap>收货状态</th>
+                                        <th nowrap>操作</th>
+                                        <th nowrap>收单状态</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="gradeU">
+                                        <td nowrap>
+                                            1
+                                        </td>
+                                        <td nowrap>
+                                            <a href="/erp/orderManager/queryOrder?orderId=1015022010002074"  target="contentFrameName">1015022010002074</a>
+                                        </td>
+                                        <td nowrap>
+                                            2074.00
+                                        </td>
+                                        <td nowrap>
+                                            爱旅行
+                                        </td>
+                                        <td nowrap>
+                                            3000000001
+                                        </td>
+                                        <td nowrap>
+                                            <a href="/erp/orderManager/queryOrder?merchantOrderId=2015022017552491621&merchantCode=3000000001"  target="contentFrameName">2015022017552491621</a>
+                                        </td>
+
+                                        <td nowrap>
+                                            情人节专享价 | 直飞台北往返8天机票（含多节假日）买机票送入台证*美亚“乐悠游”境外旅行保障计划一
+                                        </td>
+
+                                        <td nowrap>
+                                            2015-02-20 17:56:33
+                                        </td>
+                                        <td nowrap>
+                                            2015-02-20 17:55:01
+                                        </td>
+                                        <td nowrap>
+                                            2015-02-20 19:55:24
+                                        </td>
+
+                                        <td nowrap>
+                                            412721199512261917
+                                        </td>
+                                        <td nowrap>
+                                            申请贷款审核中                          							                        							                        							                        						</td>
+                                    </tr>
+                                    <tr class="gradeU">
+                                        <td nowrap>
+                                            2
+                                        </td>
+                                        <td nowrap>
+                                            <a href="/erp/orderManager/queryOrder?orderId=1015022010005072"  target="contentFrameName">1015022010005072</a>
+                                        </td>
+                                        <td nowrap>
+                                            6108.00
+                                        </td>
+                                        <td nowrap>
+                                            爱旅行
+                                        </td>
+                                        <td nowrap>
+                                            3000000001
+                                        </td>
+                                        <td nowrap>
+                                            <a href="/erp/orderManager/queryOrder?merchantOrderId=2015022017023069561&merchantCode=3000000001"  target="contentFrameName">2015022017023069561</a>
+                                        </td>
+
+                                        <td nowrap>
+                                            情人节专享价 | 随心所欲 巴厘岛4晚6天自由行*美亚“乐悠游”境外旅行保障计划一
+                                        </td>
+
+                                        <td nowrap>
+                                            2015-02-20 17:03:29
+                                        </td>
+                                        <td nowrap>
+                                            2015-02-20 17:01:56
+                                        </td>
+                                        <td nowrap>
+                                            2015-02-20 19:02:30
+                                        </td>
+
+                                        <td nowrap>
+                                            510181199208220040
+                                        </td>
+                                        <td nowrap>
+                                            收单完成                                                                              							                        							                        							                        						</td>
+                                    </tr>
+                                    <tr class="gradeU">
+                                        <td nowrap>
+                                            3
+                                        </td>
+                                        <td nowrap>
+                                            <a href="/erp/orderManager/queryOrder?orderId=1015021910013032"  target="contentFrameName">1015021910013032</a>
+                                        </td>
+                                        <td nowrap>
+                                            5108.00
+                                        </td>
+                                        <td nowrap>
+                                            爱旅行
+                                        </td>
+                                        <td nowrap>
+                                            3000000001
+                                        </td>
+                                        <td nowrap>
+                                            <a href="/erp/orderManager/queryOrder?merchantOrderId=2015021921161635671&merchantCode=3000000001"  target="contentFrameName">2015021921161635671</a>
+                                        </td>
+
+                                        <td nowrap>
+                                            蓝梦之旅 | 泰国普吉岛5晚6天品质跟团游*美亚“乐悠游”境外旅行保障计划一
+                                        </td>
+
+                                        <td nowrap>
+                                            2015-02-19 21:17:57
+                                        </td>
+                                        <td nowrap>
+                                            2015-02-19 21:16:25
+                                        </td>
+                                        <td nowrap>
+                                            2015-02-20 10:00:00
+                                        </td>
+
+                                        <td nowrap>
+                                            510824199209133791
+                                        </td>
+                                        <td nowrap>
+                                            收单完成                                                                              							                        							                        							                        						</td>
+                                    </tr>
+                                    <tr class="gradeU">
+                                        <td nowrap>
+                                            4
+                                        </td>
+                                        <td nowrap>
+                                            <a href="/erp/orderManager/queryOrder?orderId=1015021910003072"  target="contentFrameName">1015021910003072</a>
+                                        </td>
+                                        <td nowrap>
+                                            4484.00
+                                        </td>
+                                        <td nowrap>
+                                            爱旅行
+                                        </td>
+                                        <td nowrap>
+                                            3000000001
+                                        </td>
+                                        <td nowrap>
+                                            <a href="/erp/orderManager/queryOrder?merchantOrderId=2015021900302311661&merchantCode=3000000001"  target="contentFrameName">2015021900302311661</a>
+                                        </td>
+
+                                        <td nowrap>
+                                            情人节专享价 | 直飞台北往返8天机票（含多节假日）买机票送入台证*美亚“乐悠游”境外旅行保障计划一
+                                        </td>
+
+                                        <td nowrap>
+                                            2015-02-19 00:31:25
+                                        </td>
+                                        <td nowrap>
+                                            2015-02-19 00:29:53
+                                        </td>
+                                        <td nowrap>
+                                            2015-02-19 10:00:00
+                                        </td>
+
+                                        <td nowrap>
+                                            441781198711055231
+                                        </td>
+                                        <td nowrap>
+                                            收单完成                                                                              							                        							                        							                        						</td>
+                                    </tr>
+                                    <tr class="gradeU">
+                                        <td nowrap>
+                                            5
+                                        </td>
+                                        <td nowrap>
+                                            <a href="/erp/orderManager/queryOrder?orderId=1015021810008073"  target="contentFrameName">1015021810008073</a>
+                                        </td>
+                                        <td nowrap>
+                                            4888.00
+                                        </td>
+                                        <td nowrap>
+                                            爱旅行
+                                        </td>
+                                        <td nowrap>
+                                            3000000001
+                                        </td>
+                                        <td nowrap>
+                                            <a href="/erp/orderManager/queryOrder?merchantOrderId=2015021821053430201&merchantCode=3000000001"  target="contentFrameName">2015021821053430201</a>
+                                        </td>
+
+                                        <td nowrap>
+                                            购物季 | 香港四天往返自由行，四星丽东酒店*美亚“乐悠游”境外旅行保障计划一
+                                        </td>
+
+                                        <td nowrap>
+                                            2015-02-18 21:06:38
+                                        </td>
+                                        <td nowrap>
+                                            2015-02-18 21:05:06
+                                        </td>
+                                        <td nowrap>
+                                            2015-02-19 10:00:00
+                                        </td>
+
+                                        <td nowrap>
+                                            230302199203214731
+                                        </td>
+                                        <td nowrap>
+                                            申请贷款审核中                          							                        							                        							                        						</td>
+                                    </tr>
+                                    <tr class="gradeU">
+                                        <td nowrap>
+                                            6
+                                        </td>
+                                        <td nowrap>
+                                            <a href="/erp/orderManager/queryOrder?orderId=1015021810008072"  target="contentFrameName">1015021810008072</a>
+                                        </td>
+                                        <td nowrap>
+                                            8156.00
+                                        </td>
+                                        <td nowrap>
+                                            爱旅行
+                                        </td>
+                                        <td nowrap>
+                                            3000000001
+                                        </td>
+                                        <td nowrap>
+                                            <a href="/erp/orderManager/queryOrder?merchantOrderId=2015021821043715291&merchantCode=3000000001"  target="contentFrameName">2015021821043715291</a>
+                                        </td>
+
+                                        <td nowrap>
+                                            情人节专享价|佛都小城 泰国清迈4晚5天/5晚6天自由行*美亚“乐悠游”境外旅行保障计划一*清迈拜县
+                                        </td>
+
+                                        <td nowrap>
+                                            2015-02-18 21:05:01
+                                        </td>
+                                        <td nowrap>
+                                            2015-02-18 21:03:29
+                                        </td>
+                                        <td nowrap>
+                                            2015-02-19 10:00:00
+                                        </td>
+
+                                        <td nowrap>
+                                            440982199406180010
+                                        </td>
+                                        <td nowrap>
+                                            收单完成                                                                              							                        							                        							                        						</td>
+                                    </tr>
+                                    <tr class="gradeU">
+                                        <td nowrap>
+                                            7
+                                        </td>
+                                        <td nowrap>
+                                            <a href="/erp/orderManager/queryOrder?orderId=1015021810016067"  target="contentFrameName">1015021810016067</a>
+                                        </td>
+                                        <td nowrap>
+                                            4586.00
+                                        </td>
+                                        <td nowrap>
+                                            爱旅行
+                                        </td>
+                                        <td nowrap>
+                                            3000000001
+                                        </td>
+                                        <td nowrap>
+                                            <a href="/erp/orderManager/queryOrder?merchantOrderId=2015021821001880861&merchantCode=3000000001"  target="contentFrameName">2015021821001880861</a>
+                                        </td>
+
+                                        <td nowrap>
+                                            微信春节甩单 | （原价6499）沙巴四晚六天超级自由行*美亚“乐悠游”境外旅行保障计划一*马来西亚
+                                        </td>
+
+                                        <td nowrap>
+                                            2015-02-18 21:00:41
+                                        </td>
+                                        <td nowrap>
+                                            2015-02-18 20:59:09
+                                        </td>
+                                        <td nowrap>
+                                            2015-02-19 10:00:00
+                                        </td>
+
+                                        <td nowrap>
+                                            440982199406180010
+                                        </td>
+                                        <td nowrap>
+                                            收单完成                                                                              							                        							                        							                        						</td>
+                                    </tr>
+                                    <tr class="gradeU">
+                                        <td nowrap>
+                                            8
+                                        </td>
+                                        <td nowrap>
+                                            <a href="/erp/orderManager/queryOrder?orderId=1015021810008071"  target="contentFrameName">1015021810008071</a>
+                                        </td>
+                                        <td nowrap>
+                                            6688.00
+                                        </td>
+                                        <td nowrap>
+                                            爱旅行
+                                        </td>
+                                        <td nowrap>
+                                            3000000001
+                                        </td>
+                                        <td nowrap>
+                                            <a href="/erp/orderManager/queryOrder?merchantOrderId=2015021817403057911&merchantCode=3000000001"  target="contentFrameName">2015021817403057911</a>
+                                        </td>
+
+                                        <td nowrap>
+                                            韩亚航空 | 韩国首尔3晚4天/4晚5天自由行*美亚“乐悠游”境外旅行保障计划一
+                                        </td>
+
+                                        <td nowrap>
+                                            2015-02-18 17:41:08
+                                        </td>
+                                        <td nowrap>
+                                            2015-02-18 17:39:36
+                                        </td>
+                                        <td nowrap>
+                                            2015-02-18 19:40:30
+                                        </td>
+
+                                        <td nowrap>
+                                            50010919850123791X
+                                        </td>
+                                        <td nowrap>
+                                            收单完成                                                                              							                        							                        							                        						</td>
+                                    </tr>
+                                    <tr class="gradeU">
+                                        <td nowrap>
+                                            9
+                                        </td>
+                                        <td nowrap>
+                                            <a href="/erp/orderManager/queryOrder?orderId=1015021810001025"  target="contentFrameName">1015021810001025</a>
+                                        </td>
+                                        <td nowrap>
+                                            3688.00
+                                        </td>
+                                        <td nowrap>
+                                            爱旅行
+                                        </td>
+                                        <td nowrap>
+                                            3000000001
+                                        </td>
+                                        <td nowrap>
+                                            <a href="/erp/orderManager/queryOrder?merchantOrderId=2015021805043692561&merchantCode=3000000001"  target="contentFrameName">2015021805043692561</a>
+                                        </td>
+
+                                        <td nowrap>
+                                            完美之旅 | 国行直飞济州一地双飞5日跟团游*美亚“乐悠游”境外旅行保障计划一
+                                        </td>
+
+                                        <td nowrap>
+                                            2015-02-18 05:05:08
+                                        </td>
+                                        <td nowrap>
+                                            2015-02-18 05:03:36
+                                        </td>
+                                        <td nowrap>
+                                            2015-02-18 10:00:00
+                                        </td>
+
+                                        <td nowrap>
+                                            500101198408155118
+                                        </td>
+                                        <td nowrap>
+                                            收单完成                                                                              							                        							                        							                        						</td>
+                                    </tr>
+                                    <tr class="gradeU">
+                                        <td nowrap>
+                                            10
+                                        </td>
+                                        <td nowrap>
+                                            <a href="/erp/orderManager/queryOrder?orderId=1015021810003071"  target="contentFrameName">1015021810003071</a>
+                                        </td>
+                                        <td nowrap>
+                                            2074.00
+                                        </td>
+                                        <td nowrap>
+                                            爱旅行
+                                        </td>
+                                        <td nowrap>
+                                            3000000001
+                                        </td>
+                                        <td nowrap>
+                                            <a href="/erp/orderManager/queryOrder?merchantOrderId=2015021800352297351&merchantCode=3000000001"  target="contentFrameName">2015021800352297351</a>
+                                        </td>
+
+                                        <td nowrap>
+                                            情人节专享价 | 直飞台北往返8天机票（含多节假日）买机票送入台证*美亚“乐悠游”境外旅行保障计划一
+                                        </td>
+
+                                        <td nowrap>
+                                            2015-02-18 00:36:05
+                                        </td>
+                                        <td nowrap>
+                                            2015-02-18 00:34:34
+                                        </td>
+                                        <td nowrap>
+                                            2015-02-18 10:00:00
+                                        </td>
+
+                                        <td nowrap>
+                                            440181198803183616
+                                        </td>
+                                        <td nowrap>
+                                            收单完成                                                                              							                        							                        							                        						</td>
+                                    </tr>
+                                    <tr class="gradeU">
+                                        <td nowrap>
+                                        </td>
+                                        <td nowrap>
+                                            当前页小计：
+                                        </td>
+                                        <td nowrap>
+                                            47854.00
+                                        </td>
+                                        <td nowrap>
+                                        </td>
+                                        <td nowrap>
+                                        </td>
+                                        <td nowrap>
+                                        </td>
+
+                                        <td nowrap>
+                                        </td>
+
+                                        <td nowrap>
+                                        </td>
+                                        <td nowrap>
+                                        </td>
+                                        <td nowrap>
+                                        </td>
+
+                                        <td nowrap>
+                                        </td>
+                                        <td nowrap>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="container" id="pageCountDiv" align="center">
+                                    <div class="pagination  pagination-right"  id="showPageNum">
+                                        <li  id="prePage">
+                                            <a href="#" onclick="getPageData('1' ,1 )">上一页</a>
+                                        </li>
+                                        <li  id="nextPage">
+                                            <a href="#" onclick="getPageData('1' ,2 )">下一页</a>
+                                        </li>
+                                        <li class="disabled">
+                                            <a >当前第1 页</a>
+                                        </li>
+                                        <li  class="disabled">
+                                            <a id="showPageCount" value="35">共35页</a>
+                                        </li>
+                                        <li  class="disabled">
+                                            <a id="showRecordNum" value="348">共348条</a>
+                                        </li>
+                                        <li>
+                                            <a><div style="padding: 0px; margin:0px; line-height:100%;">每页<input id="rowsShow" size="3" maxlength="3" type="text" name="rowsShow" autocomplete="off" value="10"
+                                                                                                                 style="width: 35px; height:20px;">条</div></a>
+                                        </li>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+
+
