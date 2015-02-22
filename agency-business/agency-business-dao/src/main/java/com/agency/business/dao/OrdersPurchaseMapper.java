@@ -8,6 +8,8 @@ import java.util.List;
  */
 public interface OrdersPurchaseMapper {
     /**
+     *
+     *
      * 采购首期
      *
      * @param initOrderApplyInfo
@@ -22,5 +24,6 @@ public interface OrdersPurchaseMapper {
     long countInitOrderApplyInfo(InitOrderApplyInfo initOrderApplyInfo);
 
     List<InitOrderApplyInfo> queryInitOrderApplyInfo(InitOrderApplyInfo initOrderApplyInfo);
-
+//  查询代理商金额
+    InitOrderApplyInfo queryOrderApplyInfo(InitOrderApplyInfo initOrderApplyInfo);
 }

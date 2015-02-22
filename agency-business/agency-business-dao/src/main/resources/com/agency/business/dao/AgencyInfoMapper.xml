@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.agency.business.dao.AgencyInfoMapper">
+    <resultMap id="AgencyInfoMapper" type="com.agency.business.domain.bean.AgencyInfo">
+        <result column="loginId" property="loginId" jdbcType="VARCHAR"/>
+        <result column="agentNo" property="agentNo" jdbcType="VARCHAR"/>
+        <result column="companyName" property="companyName" jdbcType="VARCHAR"/>
+        <result column="contactName" property="contactName" jdbcType="VARCHAR"/>
+        <result column="contactMobile" property="contactMobile" jdbcType="VARCHAR"/>
+        <result column="fixMobile" property="fixMobile" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="fax" property="fax" jdbcType="VARCHAR"/>
+        <result column="province" property="province" jdbcType="VARCHAR"/>
+        <result column="city" property="city" jdbcType="VARCHAR"/>
+        <result column="district" property="district" jdbcType="VARCHAR"/>
+        <result column="street" property="street" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="post" property="post" jdbcType="VARCHAR"/>
+        <result column="isDefault" property="isDefault" jdbcType="VARCHAR"/>
+        <result column="updateDate" property="updateDate" jdbcType="TIMESTAMP"/>
+        <result column="createDate" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="operator" property="operator" jdbcType="VARCHAR"/>
+        <result column="extParam" property="extParam" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="saveAgencyInfo" parameterType="com.agency.business.domain.bean.AgencyInfo">
+		INSERT INTO agencyInfo (loginId,agentNo,companyName,contactName,contactMobile,fixMobile,email,fax,province,city,district,
+		street,address,post,isDefault,operator,extParam,remark,updateDate,createDate)
+		   values (#{loginId,jdbcType=VARCHAR}, #{agentNo,jdbcType=VARCHAR},#{companyName,jdbcType=VARCHAR},#{contactName,jdbcType=VARCHAR},#{contactMobile,jdbcType=VARCHAR},
+      #{fixMobile,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{fax,jdbcType=VARCHAR}, #{province,jdbcType=DECIMAL}, #{city,jdbcType=DECIMAL},#{district,jdbcType=VARCHAR},
+      #{street,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR},#{post,jdbcType=VARCHAR}, #{isDefault,jdbcType=TIMESTAMP},#{operator,jdbcType=VARCHAR},#{extParam,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR},now(),now())
+	</insert>
+
+    <update id="updateAgencyInfo" parameterType="com.agency.business.domain.bean.AgencyInfo">
+        update agencyInfo
+        set
+        <if test="rebateStatus != null and rebateStatus != ''">
+            rebateStatus = #{rebateStatus,jdbcType=VARCHAR},
+        </if>
+        <if test="deliveryStatus != null and deliveryStatus != ''">
+            deliveryStatus = #{deliveryStatus,jdbcType=VARCHAR},
+        </if>
+        updateDate = NOW()
+        where loginId = #{loginId,jdbcType=VARCHAR}
+    </update>
+
+    <!---->
+    <select id="queryAgencyInfo" parameterType="com.agency.business.domain.bean.AgencyInfo"
+            resultType="com.agency.business.domain.bean.AgencyInfo">
+        select *
+        from agencyInfo where 1=1
+        <if test="loginId != null and loginId != ''">
+            and loginId = #{loginId,jdbcType=VARCHAR}
+        </if>
+        <if test="startRow != null and startRow >= 0 and endRow != null and endRow > 0">
+            limit #{startRow,jdbcType=BIGINT}, #{endRow,jdbcType=BIGINT}
+        </if>
+    </select>
+
+    <select id="countAgencyInfo" resultType="java.lang.Long"
+            parameterType="com.agency.business.domain.bean.AgencyInfo">
+        select count(1) from goodsrebate where 1=1
+        <if test="loginId != null and loginId != ''">
+            loginId = #{loginId,jdbcType=VARCHAR}
+        </if>
+    </select>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      </mapper>

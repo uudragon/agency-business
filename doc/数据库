@@ -164,14 +164,15 @@ CREATE TABLE `rebateType` (
 -----发票管理（需要从订单那边拿到代客户下单的数据）
 CREATE TABLE `invoiceApply` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT,
+  `agentNo` varchar(32) NOT NULL COMMENT '代理商编码',
   `applyNo` varchar(32) NOT NULL COMMENT '申请编号',
   `beginTime` datetime NOT NULL COMMENT '开始时间',
   `endTime` datetime NOT NULL COMMENT '结束时间',
   `amount` decimal(15,4) NOT NULL COMMENT '发票金额',
   `invoicehead` varchar(128) NOT NULL COMMENT '发票抬头',
   `applyMan` varchar(128) NOT NULL COMMENT '申请人',
-  `applydate` varchar(64) NOT NULL COMMENT '申请日期',
-  `applystatus` varchar(64) NOT NULL COMMENT '申请状态',
+  `applydate` datetime NOT NULL COMMENT '申请日期',
+  `applystatus` varchar(64) NOT NULL COMMENT '申请状态(已申请,审核中,已送达)',
   `updateDate` datetime DEFAULT NULL,
   `createDate` datetime DEFAULT NULL,
   `operator` varchar(64) DEFAULT NULL COMMENT '操作者',

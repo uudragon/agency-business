@@ -7,6 +7,8 @@ import java.util.Date;
 /**
  */
 public class InitOrderApplyInfo implements Serializable {
+// 登陆id
+    private String loginId;
     /**
      * 采购单编号
      */
@@ -30,7 +32,8 @@ public class InitOrderApplyInfo implements Serializable {
     private int startRow;
     //   结束条数
     private int endRow;
-
+    private Date startDate;
+    private Date endDate;
     public String getPurchaseNo() {
         return purchaseNo;
     }
@@ -149,5 +152,29 @@ public class InitOrderApplyInfo implements Serializable {
 
     public void setEndRow(int endRow) {
         this.endRow = endRow;
+    }
+
+    public String getLoginId() {
+        return loginId;
+    }
+
+    public void setLoginId(String loginId) {
+        this.loginId = loginId;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 }
