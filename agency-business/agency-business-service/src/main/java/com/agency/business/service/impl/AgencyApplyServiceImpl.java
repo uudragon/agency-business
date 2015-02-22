@@ -29,30 +29,30 @@ import java.util.List;
 
 /**代理商管理
  */
-@Service("invoiceApplyService")
+@Service("agencyApplyService")
 public class AgencyApplyServiceImpl implements AgencyApplyService {
     private static final Logger logger = LoggerFactory.getLogger(AgencyApplyServiceImpl.class);
     @Autowired
     private AgencyInfoMapper gencyInfoMapper;
     @Autowired
-    @Qualifier("agencyTransactionManager")
-    private PlatformTransactionManager agencyTransactionManager;
+    @Qualifier("orderTransactionManager")
+    private PlatformTransactionManager orderTransactionManager;
     @Override
     public AgencyInfoResVo saveAgencyInfo(AgencyInfoReqVo agencyInfoReqVo) {
         AgencyInfoResVo agencyInfoResVo = new AgencyInfoResVo();
         DefaultTransactionDefinition defaultTransactionDefinition = new DefaultTransactionDefinition();
         defaultTransactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
         defaultTransactionDefinition.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
-        TransactionStatus transactionStatus = agencyTransactionManager.getTransaction(defaultTransactionDefinition);
+        TransactionStatus transactionStatus = orderTransactionManager.getTransaction(defaultTransactionDefinition);
         try {
             if(Constants.isDefault.equals(agencyInfoReqVo.getDefault())){
 
             }
             gencyInfoMapper.saveAgencyInfo(buildAgencyApplyInfo(agencyInfoReqVo));
-            agencyTransactionManager.commit(transactionStatus);
+            orderTransactionManager.commit(transactionStatus);
             agencyInfoResVo.setSuccess(true);
         } catch (Exception e) {
-            agencyTransactionManager.rollback(transactionStatus);
+            orderTransactionManager.rollback(transactionStatus);
             logger.error("插入发票请求异常", e);
             agencyInfoResVo.setSuccess(false);
         }

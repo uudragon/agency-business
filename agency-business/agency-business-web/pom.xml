@@ -63,11 +63,11 @@
         </dependency>
 
 
-        <dependency>
-            <groupId>jackson-mapper-asl</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
+        <!--<dependency>-->
+            <!--<groupId>jackson-mapper-asl</groupId>-->
+            <!--<artifactId>jackson-mapper-asl</artifactId>-->
 
-        </dependency>
+        <!--</dependency>-->
 
         <!--velocity-->
         <dependency>

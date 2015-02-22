@@ -35,8 +35,8 @@ public class GoodsRebateApplyServiceImpl implements GoodsRebateApplyService {
     @Autowired
     private GoodsRebateMapper goodsRebateMapper;
     @Autowired
-    @Qualifier("goodsRebateTransactionManager")
-    private PlatformTransactionManager goodsRebateTransactionManager;
+    @Qualifier("orderTransactionManager")
+    private PlatformTransactionManager orderTransactionManager;
 
     @Override
     public GoodsRebateApplyInfoResVo saveGoodsRebateApply(GoodsRebateApplyInfoReqVo goodsRebateApplyInfoReqVo) {

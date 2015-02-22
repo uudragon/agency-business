@@ -21,20 +21,20 @@
     -->
 
     <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
-    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
-        <property name="messageConverters">
-            <list>
-                <ref bean="jsonHttpMessageConverter"/>
-            </list>
-        </property>
-    </bean>
-    <mvc:default-servlet-handler />
+    <!--<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">-->
+        <!--<property name="messageConverters">-->
+            <!--<list>-->
+                <!--<ref bean="jsonHttpMessageConverter"/>-->
+            <!--</list>-->
+        <!--</property>-->
+    <!--</bean>-->
+    <!--<mvc:default-servlet-handler />-->
 
-    <bean id="jsonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
-        <property name="objectMapper">
-            <bean class="com.agency.business.web.support.CustomJacksonObjectMapper"/>
-        </property>
-    </bean>
+    <!--<bean id="jsonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">-->
+        <!--<property name="objectMapper">-->
+            <!--<bean class="com.agency.business.web.support.CustomJacksonObjectMapper"/>-->
+        <!--</property>-->
+    <!--</bean>-->
 
     <bean id="velocityConfigurer"
           class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">

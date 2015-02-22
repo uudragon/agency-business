@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.agency.business.dao.OrdersPurchaseMapper">
+<mapper namespace="com.agency.business.dao.InvoiceApplyMapper">
     <resultMap id="InvoiceApplyMapper" type="com.agency.business.domain.bean.InitInvoiceApplyInfo">
         <result column="agentNo" property="agentNo" jdbcType="VARCHAR"/>
         <result column="applyNo" property="applyNo" jdbcType="VARCHAR"/>
