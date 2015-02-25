@@ -1,5 +1,7 @@
 package com.agency.business.export;
 
+import com.agency.business.export.vo.InitInvoiceApplyInfoReqVo;
+import com.agency.business.export.vo.InitInvoiceApplyInfoResVo;
 import com.agency.business.export.vo.InitOrderApplyInfoReqVo;
 import com.agency.business.export.vo.InitOrderApplyInfoResVo;
 
@@ -22,7 +24,7 @@ public interface InvoiceApplyResource {
      */
     @POST
     @Path("/saveInvoiceApplyInfo")
-    public InitOrderApplyInfoResVo saveInvoiceApplyInfo(InitOrderApplyInfoReqVo userActiveApplyReqVo);
+    public InitInvoiceApplyInfoResVo saveInvoiceApplyInfo(InitInvoiceApplyInfoReqVo initInvoiceApplyInfoReqVo);
     /**
      * 更新发票信息
      *
@@ -31,7 +33,7 @@ public interface InvoiceApplyResource {
      */
     @POST
     @Path("updateInvoiceApplyInfo")
-    public InitOrderApplyInfoResVo updateInvoiceApplyInfo(InitOrderApplyInfoReqVo userActiveApplyReqVo);
+    public InitInvoiceApplyInfoResVo updateInvoiceApplyInfo(InitInvoiceApplyInfoReqVo initInvoiceApplyInfoReqVo);
 
     /**
      * 查询发票信息
@@ -41,6 +43,6 @@ public interface InvoiceApplyResource {
      */
     @POST
     @Path("queryInitInvoiceApplyInfo")
-    public InitOrderApplyInfoResVo queryInitInvoiceApplyInfo(InitOrderApplyInfoReqVo userActiveApplyReqVo);
+    public InitInvoiceApplyInfoResVo queryInvoiceApplyInfo(InitInvoiceApplyInfoReqVo initInvoiceApplyInfoReqVo);
 
 }

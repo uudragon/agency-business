@@ -2,8 +2,11 @@ package com.agency.business.web;
 
 import com.agency.business.export.InvoiceApplyResource;
 import com.agency.business.export.OrderApplyResource;
+import com.agency.business.export.vo.InitInvoiceApplyInfoReqVo;
+import com.agency.business.export.vo.InitInvoiceApplyInfoResVo;
 import com.agency.business.export.vo.InitOrderApplyInfoReqVo;
 import com.agency.business.export.vo.InitOrderApplyInfoResVo;
+import com.agency.business.service.InvoiceApplyService;
 import com.agency.business.service.OrderApplyService;
 import com.jd.payment.paycommon.utils.GsonUtils;
 import org.slf4j.Logger;
@@ -21,19 +24,19 @@ public class InvoiceApplyResourceImpl implements InvoiceApplyResource {
 
     private static final Logger logger = LoggerFactory.getLogger(InvoiceApplyResourceImpl.class);
     @Autowired
-    private OrderApplyService orderApplyService;
+    private InvoiceApplyService invoiceApplyService;
     @Override
-    public InitOrderApplyInfoResVo saveInvoiceApplyInfo(InitOrderApplyInfoReqVo userActiveApplyReqVo) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public InitInvoiceApplyInfoResVo saveInvoiceApplyInfo(InitInvoiceApplyInfoReqVo initInvoiceApplyInfoReqVo) {
+        return invoiceApplyService.saveInvoiceApplyInfo(initInvoiceApplyInfoReqVo);  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public InitOrderApplyInfoResVo updateInvoiceApplyInfo(InitOrderApplyInfoReqVo userActiveApplyReqVo) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public InitInvoiceApplyInfoResVo updateInvoiceApplyInfo(InitInvoiceApplyInfoReqVo initInvoiceApplyInfoReqVo) {
+        return invoiceApplyService.updateInvoiceApplyInfo(initInvoiceApplyInfoReqVo); //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public InitOrderApplyInfoResVo queryInitInvoiceApplyInfo(InitOrderApplyInfoReqVo userActiveApplyReqVo) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public InitInvoiceApplyInfoResVo queryInvoiceApplyInfo(InitInvoiceApplyInfoReqVo initInvoiceApplyInfoReqVo) {
+        return invoiceApplyService.queryInitInvoiceApplyInfo(initInvoiceApplyInfoReqVo);  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

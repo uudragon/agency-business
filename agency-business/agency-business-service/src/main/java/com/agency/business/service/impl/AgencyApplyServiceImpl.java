@@ -27,7 +27,8 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import java.math.BigDecimal;
 import java.util.List;
 
-/**代理商管理
+/**
+ * 代理商管理
  */
 @Service("agencyApplyService")
 public class AgencyApplyServiceImpl implements AgencyApplyService {
@@ -37,6 +38,7 @@ public class AgencyApplyServiceImpl implements AgencyApplyService {
     @Autowired
     @Qualifier("orderTransactionManager")
     private PlatformTransactionManager orderTransactionManager;
+
     @Override
     public AgencyInfoResVo saveAgencyInfo(AgencyInfoReqVo agencyInfoReqVo) {
         AgencyInfoResVo agencyInfoResVo = new AgencyInfoResVo();
@@ -45,8 +47,10 @@ public class AgencyApplyServiceImpl implements AgencyApplyService {
         defaultTransactionDefinition.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
         TransactionStatus transactionStatus = orderTransactionManager.getTransaction(defaultTransactionDefinition);
         try {
-            if(Constants.isDefault.equals(agencyInfoReqVo.getDefault())){
-
+//            如果是默认的话，更新以前默认的收货地址改为不默认的。。
+            if (Constants.isDefault.equals(agencyInfoReqVo.getDefault())) {
+//              更改默认状态
+                gencyInfoMapper.updateAgencyInfo(buildUpdateAgencyApplyInfo(agencyInfoReqVo));
             }
             gencyInfoMapper.saveAgencyInfo(buildAgencyApplyInfo(agencyInfoReqVo));
             orderTransactionManager.commit(transactionStatus);
@@ -56,22 +60,25 @@ public class AgencyApplyServiceImpl implements AgencyApplyService {
             logger.error("插入发票请求异常", e);
             agencyInfoResVo.setSuccess(false);
         }
-
-
-        return null;
+        return agencyInfoResVo;
     }
 
     @Override
     public AgencyInfoResVo updateAgencyInfo(AgencyInfoReqVo agencyInfoReqVo) {
+
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public AgencyInfoResVo queryAgencyInfo(AgencyInfoReqVo agencyInfoReqVo) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        AgencyInfoResVo agencyInfoResVo = new AgencyInfoResVo();
+        List<AgencyInfo> agencyInfoList = gencyInfoMapper.queryAgencyInfo(buildAgencyApplyInfo(agencyInfoReqVo));
+        agencyInfoResVo.setSuccess(true);
+        agencyInfoResVo.setInfoarrys(agencyInfoList);
+        return agencyInfoResVo;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public AgencyInfo buildAgencyApplyInfo(AgencyInfoReqVo agencyInfoReqVo){
+    public AgencyInfo buildAgencyApplyInfo(AgencyInfoReqVo agencyInfoReqVo) {
         AgencyInfo agencyInfo = new AgencyInfo();
         agencyInfo.setAddress(agencyInfoReqVo.getAddress());
         agencyInfo.setAgentNo(agencyInfoReqVo.getAgentNo());
@@ -93,6 +100,13 @@ public class AgencyApplyServiceImpl implements AgencyApplyService {
         agencyInfo.setProvince(agencyInfoReqVo.getProvince());
         agencyInfo.setPost(agencyInfoReqVo.getPost());
         logger.info("操作代理商信息,请求参数:" + GsonUtils.toJson(agencyInfo));
+        return agencyInfo;
+    }
+
+    public AgencyInfo buildUpdateAgencyApplyInfo(AgencyInfoReqVo agencyInfoReqVo) {
+        AgencyInfo agencyInfo = new AgencyInfo();
+        agencyInfo.setDefault("0");
+        agencyInfo.setLoginId(agencyInfoReqVo.getLoginId());
         return agencyInfo;
     }
 }

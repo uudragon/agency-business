@@ -23,7 +23,6 @@ public class AgencyInfo implements Serializable {
     private String operator;
     private String extParam;
     private String remark;
-
     //   起始条数
     private int startRow;
     //   结束条数

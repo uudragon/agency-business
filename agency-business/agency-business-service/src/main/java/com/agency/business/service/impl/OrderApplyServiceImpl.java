@@ -28,7 +28,6 @@ import java.util.List;
 @Service("orderApplyService")
 public class OrderApplyServiceImpl implements OrderApplyService {
     private static final Logger logger = LoggerFactory.getLogger(OrderApplyServiceImpl.class);
-
     @Autowired
     private OrdersPurchaseMapper ordersPurchaseMapper;
     @Autowired

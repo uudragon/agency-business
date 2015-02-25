@@ -13,7 +13,7 @@ public class GoodsRebateApplyInfo implements Serializable {
     private String loginId;
     private String goodsreBateNo;
     private String orderNo;
-    private String  deliveryNo;
+    private String deliveryNo;
     private String customerName;
     private String contact;
     private String customerAddress;
@@ -23,11 +23,10 @@ public class GoodsRebateApplyInfo implements Serializable {
     private String deliveryStatus;
     private String goodsNum;
     private String goodsType;
-    private String applytime;
+    private Date applytime;
     private String operator;
     private String extParam;
     private String remark;
-
     //   起始条数
     private int startRow;
     //   结束条数
@@ -121,11 +120,11 @@ public class GoodsRebateApplyInfo implements Serializable {
         this.goodsType = goodsType;
     }
 
-    public String getApplytime() {
+    public Date getApplytime() {
         return applytime;
     }
 
-    public void setApplytime(String applytime) {
+    public void setApplytime(Date applytime) {
         this.applytime = applytime;
     }
 
