@@ -13,7 +13,7 @@ import javax.ws.rs.Produces;
 /**
  * 订购首期产品和接口
  */
-@Path("/service/invoiceApply")
+@Path("/agency/service/invoiceApply")
 @Consumes({"application/json"})
 @Produces({"application/json"})
 public interface InvoiceApplyResource {

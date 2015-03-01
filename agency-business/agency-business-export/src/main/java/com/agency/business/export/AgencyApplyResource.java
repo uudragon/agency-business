@@ -13,7 +13,7 @@ import javax.ws.rs.Produces;
 /**
  *代理商信息管理
  */
-@Path("/service/agencyApply")
+@Path("/agency/service/agencyApply")
 @Consumes({"application/json"})
 @Produces({"application/json"})
 public interface AgencyApplyResource {

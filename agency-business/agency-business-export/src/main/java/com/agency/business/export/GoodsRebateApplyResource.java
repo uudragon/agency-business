@@ -10,7 +10,7 @@ import javax.ws.rs.Produces;
 /**
  *返利接口
  */
-@Path("/service/goodsrebateApply")
+@Path("/agency/service/goodsrebateApply")
 @Consumes({"application/json"})
 @Produces({"application/json"})
 public interface GoodsRebateApplyResource {

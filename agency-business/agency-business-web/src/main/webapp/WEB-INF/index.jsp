@@ -1,3 +1,3 @@
 <%
-	response.sendRedirect("/erp/sys/index");
+	response.sendRedirect("/agency/erp/sys/index");
 %>%>

@@ -12,7 +12,7 @@ import java.util.List;
 /**
  *订购首期产品和接口
  */
-@Path("/service/orderapply")
+@Path("/agency/service/orderapply")
 @Consumes({"application/json"})
 @Produces({"application/json"})
 public interface OrderApplyResource {
