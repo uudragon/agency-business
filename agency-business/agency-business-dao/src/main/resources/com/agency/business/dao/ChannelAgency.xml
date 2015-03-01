@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.agency.business.dao.ChannelAgency">
+    <resultMap id="ChannelAgencyMapper" type="com.agency.business.domain.bean.ChannelAgency">
+        <result column="channelloginId" property="channelloginId" jdbcType="VARCHAR"/>
+        <result column="agencyloginId" property="agencyloginId" jdbcType="VARCHAR"/>
+        <result column="agencyAreaNo" property="agencyAreaNo" jdbcType="VARCHAR"/>
+        <result column="province" property="province" jdbcType="VARCHAR"/>
+        <result column="city" property="city" jdbcType="VARCHAR"/>
+        <result column="district" property="district" jdbcType="VARCHAR"/>
+        <result column="taskstandards" property="taskstandards" jdbcType="VARCHAR"/>
+        <result column="taskstarttime" property="taskstarttime" jdbcType="TIMESTAMP"/>
+        <result column="taskendtime" property="taskendtime" jdbcType="TIMESTAMP"/>
+        <result column="contactsigntime" property="contactsigntime" jdbcType="TIMESTAMP"/>
+        <result column="contactendime" property="contactendime" jdbcType="TIMESTAMP"/>
+        <result column="contacttype" property="contacttype" jdbcType="VARCHAR"/>
+        <result column="agencyfees" property="agencyfees" jdbcType="DECIMAL"/>
+        <result column="agencystatus" property="agencystatus" jdbcType="VARCHAR"/>
+        <result column="abolishreason" property="abolishreason" jdbcType="VARCHAR"/>
+        <result column="iscontract" property="iscontract" jdbcType="VARCHAR"/>
+        <result column="updateDate" property="updateDate" jdbcType="TIMESTAMP"/>
+        <result column="createDate" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="operator" property="operator" jdbcType="VARCHAR"/>
+        <result column="extParam" property="extParam" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="saveChannelAgency" parameterType="com.agency.business.domain.bean.ChannelAgency">
+		INSERT INTO channel_agency (channelloginId,agencyloginId,agencyAreaNo,province,city,district,taskstandards,taskstarttime,taskendtime,contactsigntime,contactendime,contacttype,
+		agencyfees,agencystatus,abolishreason,iscontract,operator,extParam,remark,updateDate,createDate)
+		   values (#{channelloginId,jdbcType=VARCHAR}, #{agencyloginId,jdbcType=VARCHAR},#{agencyAreaNo,jdbcType=VARCHAR},#{province,jdbcType=VARCHAR},#{city,jdbcType=VARCHAR},#{district,jdbcType=VARCHAR},
+      #{taskstandards,jdbcType=VARCHAR}, #{taskstarttime,jdbcType=TIMESTAMP}, #{taskendtime,jdbcType=TIMESTAMP}, #{contactsigntime,jdbcType=TIMESTAMP}, #{contactendime,jdbcType=TIMESTAMP},#{contacttype,jdbcType=VARCHAR},
+      #{agencyfees,jdbcType=DECIMAL}, #{agencystatus,jdbcType=VARCHAR},#{abolishreason,jdbcType=VARCHAR}, #{iscontract,jdbcType=TIMESTAMP},#{operator,jdbcType=VARCHAR},#{extParam,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR},now(),now())
+	</insert>
+
+    <update id="updateChannelAgency" parameterType="com.agency.business.domain.bean.ChannelAgency">
+        update channel_agency
+        set
+        <if test="province != null and province != ''">
+            province = #{province,jdbcType=VARCHAR},
+        </if>
+        <if test="city != null and city != ''">
+            city = #{city,jdbcType=VARCHAR},
+        </if>
+        <if test="district != null and district != ''">
+            district = #{district,jdbcType=VARCHAR},
+        </if>
+        <if test="taskstandards != null and taskstandards != ''">
+            taskstandards = #{taskstandards,jdbcType=VARCHAR},
+        </if>
+        <if test="taskstarttime != null and taskstarttime != ''">
+            taskstarttime = #{taskstarttime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="taskendtime != null and taskendtime != ''">
+            taskendtime = #{taskendtime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="contactsigntime != null and contactsigntime != ''">
+            contactsigntime = #{contactsigntime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="contactendime != null and contactendime != ''">
+            contactendime = #{contactendime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="contacttype != null and contacttype != ''">
+            contacttype = #{contacttype,jdbcType=VARCHAR},
+        </if>
+        <if test="agencyfees != null and agencyfees != '' and agencyfees > 0">
+            agencystatus = #{agencystatus,jdbcType=DECIMAL},
+        </if>
+        <if test="agencystatus != null and agencystatus != ''">
+            agencystatus = #{agencystatus,jdbcType=VARCHAR},
+        </if>
+        <if test="abolishreason != null and abolishreason != ''">
+            abolishreason = #{abolishreason,jdbcType=VARCHAR},
+        </if>
+        <if test="iscontract != null and iscontract != ''">
+            iscontract = #{iscontract,jdbcType=VARCHAR},
+        </if>
+        updateDate = NOW()
+        where channelloginId = #{channelloginId,jdbcType=VARCHAR} and
+        agencyloginId  = #{channelloginId,jdbcType=VARCHAR} and
+        agencyAreaNo = #{agencyAreaNo,jdbcType=VARCHAR}
+    </update>
+
+    <select id="queryChannelAgency" parameterType="com.agency.business.domain.bean.ChannelAgency"
+            resultType="com.agency.business.domain.bean.ChannelAgency">
+        select *
+        from channel_agency where 1=1
+        <if test="channelloginId != null and channelloginId != ''">
+            and channelloginId = #{channelloginId,jdbcType=VARCHAR}
+        </if>
+        <if test="agencyloginId != null and agencyloginId != ''">
+            and channelloginId = #{channelloginId,jdbcType=VARCHAR}
+        </if>
+        <if test="agencyAreaNo != null and agencyAreaNo != ''">
+            and agencyAreaNo = #{agencyAreaNo,jdbcType=VARCHAR}
+        </if>
+        <if test="startRow != null and startRow >= 0 and endRow != null and endRow > 0">
+            limit #{startRow,jdbcType=BIGINT}, #{endRow,jdbcType=BIGINT}
+        </if>
+    </select>
+
+    <select id="countGoodsRebateApplyInfo" resultType="java.lang.Long"
+            parameterType="com.agency.business.domain.bean.ChannelAgency">
+        select count(1) from channel_agency where 1=1
+        <if test="channelloginId != null and channelloginId != ''">
+            and channelloginId = #{channelloginId,jdbcType=VARCHAR}
+        </if>
+        <if test="agencyloginId != null and agencyloginId != ''">
+            and channelloginId = #{channelloginId,jdbcType=VARCHAR}
+        </if>
+        <if test="agencyAreaNo != null and agencyAreaNo != ''">
+            and agencyAreaNo = #{agencyAreaNo,jdbcType=VARCHAR}
+        </if>
+    </select>
+</mapper>

@@ -180,8 +180,7 @@ CREATE TABLE `invoiceApply` (
   `remark` varchar(128) DEFAULT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8;
 
-
---管理代理商信息
+---管理代理商信息---
 drop table agencyManage;
 CREATE TABLE `agencyManage` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT,
@@ -199,6 +198,20 @@ CREATE TABLE `agencyManage` (
   `address` varchar(200) DEFAULT NULL COMMENT '详细地址',
   `post` varchar(100) DEFAULT NULL COMMENT '邮编',
   `isDefault` varchar(8) DEFAULT NULL COMMENT '是否为默认发货地址0:是,1:否',
+  `updateDate` datetime DEFAULT NULL,
+  `createDate` datetime DEFAULT NULL,
+  `operator` varchar(64) DEFAULT NULL COMMENT '操作者',
+  `extParam` varchar(1024) DEFAULT NULL,
+  `remark` varchar(128) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8;
+
+---管理代理商管理代理区域关系信息---
+drop table agencyManage;
+CREATE TABLE `agencyAreaManage` (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT,
+  `agentNo` varchar(32) NOT NULL COMMENT '代理商编码',
+	`agencyAreaNo` varchar(32) NOT NULL COMMENT '代理区域编码',
   `updateDate` datetime DEFAULT NULL,
   `createDate` datetime DEFAULT NULL,
   `operator` varchar(64) DEFAULT NULL COMMENT '操作者',
@@ -235,25 +248,33 @@ CREATE TABLE `channelManager` (
 ) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8;
 
 
----
-drop table channelManager;
+---渠道经理管理代理商表
+drop table channelagency;
 CREATE TABLE `channelManager` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT,
   `ManagerNo` varchar(32) NOT NULL COMMENT '渠道经理编码',
-  `companyName` varchar(32) NULL COMMENT '公司名称',
-  `contactName` varchar(32) NULL COMMENT '联系人姓名',
-  `LoginIid` varchar(32) NULL COMMENT '登陆id',
-  `password` varchar(32) NULL COMMENT '登陆密码',
-  `contactMobile` varchar(32) DEFAULT NULL COMMENT '联系手机',
-  `fixMobile` varchar(32) DEFAULT NULL COMMENT '固定电话',
-  `email` varchar(64) DEFAULT NULL COMMENT '邮箱',
-  `fax` varchar(16) DEFAULT NULL COMMENT '传真',
+    `ManagerNo` varchar(32) NOT NULL COMMENT '渠道经理编码',
+  `updateDate` datetime DEFAULT NULL,
+  `createDate` datetime DEFAULT NULL,
+  `operator` varchar(64) DEFAULT NULL COMMENT '操作者',
+  `extParam` varchar(1024) DEFAULT NULL,
+  `remark` varchar(128) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8;
+
+----代理地区管理表
+drop table areaManage;
+CREATE TABLE `areaManage` (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT,
+  `agencyAreaNo` varchar(100) DEFAULT NULL COMMENT '代理区域编码',
   `province` varchar(100) DEFAULT NULL COMMENT '省',
+  `provinceCode` varchar(16) DEFAULT NULL COMMENT '省编码',
   `city` varchar(100) DEFAULT NULL COMMENT '市',
+  `cityCode` varchar(16) DEFAULT NULL COMMENT '市编码',
   `district` varchar(100) DEFAULT NULL COMMENT '区',
+  `districtCode` varchar(100) DEFAULT NULL COMMENT '区编码',
   `street` varchar(200) DEFAULT NULL COMMENT '街道',
-  `address` varchar(200) DEFAULT NULL COMMENT '详细地址',
-  `post` varchar(100) DEFAULT NULL COMMENT '邮编',
+  `isEffect` varchar(100) DEFAULT NULL COMMENT '代理区域是否有效:0,有效,1,无效(用于存废除代理商)',
   `updateDate` datetime DEFAULT NULL,
   `createDate` datetime DEFAULT NULL,
   `operator` varchar(64) DEFAULT NULL COMMENT '操作者',

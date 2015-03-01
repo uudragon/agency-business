@@ -16,7 +16,7 @@ public interface AgencyInfoMapper {
 
     int deleteAgencyInfo(AgencyInfo agencyInfo);
 
-    long countGoodsRebateApplyInfo(AgencyInfo agencyInfo);
+    long countAgencyInfo(AgencyInfo agencyInfo);
 
     List<AgencyInfo> queryAgencyInfo(AgencyInfo agencyInfo);
 }
