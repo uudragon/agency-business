@@ -55,7 +55,6 @@ public class ChannelAgencyServiceImpl implements ChannelAgencyService {
         }
         return channelAgencyResVo;
     }
-
     @Override
     public ChannelAgencyResVo updateChannelAgency(ChannelAgencyReqVo channelAgencyReqVo) {
         ChannelAgencyResVo channelAgencyResVo = new ChannelAgencyResVo();
@@ -76,6 +75,7 @@ public class ChannelAgencyServiceImpl implements ChannelAgencyService {
     }
     @Override
     public ChannelAgencyResVo queryChannelAgency(ChannelAgencyReqVo channelAgencyReqVo) {
+
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
     public ChannelAgency buildChannelAgency(ChannelAgencyReqVo channelAgencyReqVo) {
@@ -92,6 +92,10 @@ public class ChannelAgencyServiceImpl implements ChannelAgencyService {
         if (channelAgencyReqVo.getTaskendtime() != null && channelAgencyReqVo.getTaskendtime().length() != 0) {
             channelAgency.setTaskendtime(FormatUtil.parseDate(channelAgencyReqVo.getTaskendtime(), Constants.DATE_FORMAT_1));
         }
+        channelAgency.setAddress(channelAgencyReqVo.getAddress());
+        channelAgency.setAgencyPhone(channelAgencyReqVo.getAgencyPhone());
+        channelAgency.setAgencyName(channelAgencyReqVo.getAgencyName());
+        channelAgency.setChannelLoginName(channelAgencyReqVo.getChannelLoginName());
         channelAgency.setAbolishreason(channelAgencyReqVo.getAbolishreason());
         channelAgency.setAgencyAreaNo(channelAgencyReqVo.getAgencyAreaNo());
         channelAgency.setAgencystatus(channelAgencyReqVo.getAgencystatus());

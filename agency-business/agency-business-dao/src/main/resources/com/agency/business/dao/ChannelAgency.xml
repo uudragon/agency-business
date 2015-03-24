@@ -3,11 +3,15 @@
 <mapper namespace="com.agency.business.dao.ChannelAgency">
     <resultMap id="ChannelAgencyMapper" type="com.agency.business.domain.bean.ChannelAgency">
         <result column="channelloginId" property="channelloginId" jdbcType="VARCHAR"/>
+        <result column="channelloginName" property="channelloginName" jdbcType="VARCHAR"/>
         <result column="agencyloginId" property="agencyloginId" jdbcType="VARCHAR"/>
         <result column="agencyAreaNo" property="agencyAreaNo" jdbcType="VARCHAR"/>
+        <result column="agencyName" property="agencyName" jdbcType="VARCHAR"/>
+        <result column="agencyPhone" property="agencyPhone" jdbcType="VARCHAR"/>
         <result column="province" property="province" jdbcType="VARCHAR"/>
         <result column="city" property="city" jdbcType="VARCHAR"/>
         <result column="district" property="district" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
         <result column="taskstandards" property="taskstandards" jdbcType="VARCHAR"/>
         <result column="taskstarttime" property="taskstarttime" jdbcType="TIMESTAMP"/>
         <result column="taskendtime" property="taskendtime" jdbcType="TIMESTAMP"/>
@@ -26,9 +30,9 @@
     </resultMap>
 
     <insert id="saveChannelAgency" parameterType="com.agency.business.domain.bean.ChannelAgency">
-		INSERT INTO channel_agency (channelloginId,agencyloginId,agencyAreaNo,province,city,district,taskstandards,taskstarttime,taskendtime,contactsigntime,contactendime,contacttype,
+		INSERT INTO channel_agency (channelloginId,channelloginName,agencyloginId,agencyAreaNo,agencyName,agencyPhone,province,city,district,address,taskstandards,taskstarttime,taskendtime,contactsigntime,contactendime,contacttype,
 		agencyfees,agencystatus,abolishreason,iscontract,operator,extParam,remark,updateDate,createDate)
-		   values (#{channelloginId,jdbcType=VARCHAR}, #{agencyloginId,jdbcType=VARCHAR},#{agencyAreaNo,jdbcType=VARCHAR},#{province,jdbcType=VARCHAR},#{city,jdbcType=VARCHAR},#{district,jdbcType=VARCHAR},
+		   values (#{channelloginId,jdbcType=VARCHAR},#{channelloginName,jdbcType=VARCHAR}, #{agencyloginId,jdbcType=VARCHAR},#{agencyAreaNo,jdbcType=VARCHAR},#{agencyName,jdbcType=VARCHAR},#{agencyPhone,jdbcType=VARCHAR},#{province,jdbcType=VARCHAR},#{city,jdbcType=VARCHAR},#{district,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR},
       #{taskstandards,jdbcType=VARCHAR}, #{taskstarttime,jdbcType=TIMESTAMP}, #{taskendtime,jdbcType=TIMESTAMP}, #{contactsigntime,jdbcType=TIMESTAMP}, #{contactendime,jdbcType=TIMESTAMP},#{contacttype,jdbcType=VARCHAR},
       #{agencyfees,jdbcType=DECIMAL}, #{agencystatus,jdbcType=VARCHAR},#{abolishreason,jdbcType=VARCHAR}, #{iscontract,jdbcType=TIMESTAMP},#{operator,jdbcType=VARCHAR},#{extParam,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR},now(),now())
 	</insert>
@@ -94,12 +98,13 @@
         <if test="agencyAreaNo != null and agencyAreaNo != ''">
             and agencyAreaNo = #{agencyAreaNo,jdbcType=VARCHAR}
         </if>
+
         <if test="startRow != null and startRow >= 0 and endRow != null and endRow > 0">
             limit #{startRow,jdbcType=BIGINT}, #{endRow,jdbcType=BIGINT}
         </if>
     </select>
 
-    <select id="countGoodsRebateApplyInfo" resultType="java.lang.Long"
+    <select id="countChannelAgency" resultType="java.lang.Long"
             parameterType="com.agency.business.domain.bean.ChannelAgency">
         select count(1) from channel_agency where 1=1
         <if test="channelloginId != null and channelloginId != ''">
@@ -110,6 +115,9 @@
         </if>
         <if test="agencyAreaNo != null and agencyAreaNo != ''">
             and agencyAreaNo = #{agencyAreaNo,jdbcType=VARCHAR}
+        </if>
+        <if test="channelLoginName != null and channelLoginName != ''">
+            and channelLoginName = #{channelLoginName,jdbcType=VARCHAR}
         </if>
     </select>
 </mapper>

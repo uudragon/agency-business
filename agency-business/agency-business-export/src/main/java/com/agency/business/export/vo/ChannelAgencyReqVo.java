@@ -8,11 +8,15 @@ import java.util.Date;
  */
 public class ChannelAgencyReqVo implements Serializable {
     private String channelloginId;
+    private String channelLoginName;
     private String agencyloginId;
     private String agencyAreaNo;
     private String province;
     private String city;
     private String district;
+    private String address;
+    private String agencyName;
+    private String agencyPhone;
     private String taskstandards;
     private String taskstarttime;
     private String taskendtime;
@@ -196,5 +200,37 @@ public class ChannelAgencyReqVo implements Serializable {
 
     public void setEndRow(int endRow) {
         this.endRow = endRow;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getChannelLoginName() {
+        return channelLoginName;
+    }
+
+    public void setChannelLoginName(String channelLoginName) {
+        this.channelLoginName = channelLoginName;
+    }
+
+    public String getAgencyName() {
+        return agencyName;
+    }
+
+    public void setAgencyName(String agencyName) {
+        this.agencyName = agencyName;
+    }
+
+    public String getAgencyPhone() {
+        return agencyPhone;
+    }
+
+    public void setAgencyPhone(String agencyPhone) {
+        this.agencyPhone = agencyPhone;
     }
 }

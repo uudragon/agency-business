@@ -8,11 +8,15 @@ import java.util.Date;
  */
 public class ChannelAgency implements Serializable {
     private String channelloginId;
+    private String channelLoginName;
     private String agencyloginId;
     private String agencyAreaNo;
     private String province;
     private String city;
     private String district;
+    private String address;
+    private String agencyName;
+    private String agencyPhone;
     private String taskstandards;
     private Date taskstarttime;
     private Date taskendtime;
@@ -197,5 +201,37 @@ public class ChannelAgency implements Serializable {
 
     public void setAgencyAreaNo(String agencyAreaNo) {
         this.agencyAreaNo = agencyAreaNo;
+    }
+
+    public String getChannelLoginName() {
+        return channelLoginName;
+    }
+
+    public void setChannelLoginName(String channelLoginName) {
+        this.channelLoginName = channelLoginName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getAgencyName() {
+        return agencyName;
+    }
+
+    public void setAgencyName(String agencyName) {
+        this.agencyName = agencyName;
+    }
+
+    public String getAgencyPhone() {
+        return agencyPhone;
+    }
+
+    public void setAgencyPhone(String agencyPhone) {
+        this.agencyPhone = agencyPhone;
     }
 }
