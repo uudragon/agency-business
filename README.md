@@ -34,37 +34,36 @@ agencyfees|String|Y|缴纳代理费
 
 样例报文：
 
-	{'orders_no':'001010101',
-	'order_type':0,
-	'customer_name':'yonghu1',
-	'customer_addr':'北京市天安门',
-	'customer_tel':'18600000000',
-	'has_invoice':0,
-	'amount':10.00,
-	'payment':2,
-	'creator':'admin',
-	'updater':'admin'
-	'details':[
-		{
-			'code':'101010',
-			'name':'首期1',
-			'qty':10,
-			'amount':1.00
-		}
-	]}
+{
+	"channelloginId":"admin",
+	"channelLoginName":"姜作辉",
+	"agencyloginId":"13693358014",
+	"agencyPassword":"111111",
+	"province":"山东省",
+	"city":"济南",
+	"district":"历城区",
+	"address":"koerfkrf",
+	"agencyName":"代理商姓名",
+	"agencyPhone":"13693358014",
+	"taskstandards":"10000",
+	"contactsigntime":"2015-03-16",
+	"contactendime":"2016-03-16",
+	"contacttype":"1",
+	"agencyfees":"100.123",
+	"taskstandards":"300"
+}
 
 ######1.4 响应报文
 成功响应：
 
-	HTTP_STATUS_CODE:200
+	"isSuccess":true
 
 响应报文说明：
 无
 
 异常响应：
 
-	a．	HTTP_STATUS_CODE:400 Bad request；
-	b．	HTTP_STATUS_CODE:500 Server Error
+	1．	"isSuccess":false
 
 异常报文：
 
@@ -74,6 +73,6 @@ error| String  | 错误信息
 
 样例报文：
 
-	{'error':'Orders saved error.'}
+	{"isSuccess":false,"returnCode":"建立保存代理商接口失败"}
 	
 ----
