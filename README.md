@@ -1,13 +1,13 @@
 #####目录
 - [建立保存代理商接口](#11-url)
+- [验证代理用户登录用户和密码](#21-url)
 
 #####1.建立保存代理商接口
 接收客服系统渠道商经理建立代理商账户，包括代理商登陆账户，默认的登陆密码
 ######1.1 url
 	method: POST
+	http://agency.business.com/agencybusiness/saveChannelAgency
 	
-	/agencybusiness/saveChannelAgency
-	注意：结尾的’/’不能省略
 ######1.2 header
 	Content_Type:application/json;charset=utf-8
 	Accept:application/json
@@ -74,5 +74,52 @@ error| String  | 错误信息
 样例报文：
 
 	{"isSuccess":false,"returnCode":"建立保存代理商接口失败"}
+	
+----
+
+#####2. 验证代理用户登录用户和密码
+此接口用于验证用户登录代理商系统
+######2.1 url
+	method: POST
+	http://agency.business.com/agencybusiness/checkLoginAgency
+	
+######2.2 header
+	Content_Type:application/json;charset=utf-8
+	Accept:application/json
+######2.3 请求参数
+
+名称|类型|是否必填|说明
+---|---|---|---
+agencyloginId|String|Y|代理商登陆id(手机号)
+agencyPassword|String|Y|代理商登陆密码
+
+样例报文：
+
+{
+	"agencyloginId":"13693358014",
+	"agencyPassword":"111111"
+}
+
+######2.4 响应报文
+成功响应：
+
+	"isSuccess":true
+
+响应报文说明：
+无
+
+异常响应：
+
+	1．	"isSuccess":false
+
+异常报文：
+
+名称 | 类型 | 说明
+------------ | ------------- | ------------
+error| String  | 错误信息
+
+样例报文：
+
+	{"isSuccess":false,"returnCode":"用户不存在或者密码错误"}
 	
 ----
