@@ -3,6 +3,10 @@
 - [验证代理用户登录用户和密码](#21-url)
 - [查询用户基本信息接口](#31-url)
 - [保存渠道信息接口](#41-url)
+- [修改渠道信息接口](#51-url)
+- [单个查询渠道信息接口](#61-url)
+- [批量查询渠道信息接口](#71-url)
+
 #####1.建立保存代理商接口
 接收客服系统渠道商经理建立代理商账户，包括代理商登陆账户，默认的登陆密码
 ######1.1 url
@@ -209,6 +213,160 @@ operator|String|Y|操作者
 成功响应：
 
 	"isSuccess":true
+
+响应报文说明：
+无
+
+异常响应：
+
+	1．	"isSuccess":false
+
+异常报文：
+
+名称 | 类型 | 说明
+------------ | ------------- | ------------
+error| String  | 错误信息
+
+样例报文：
+
+	{"isSuccess":false,"returnCode":"保存失败"}
+	
+----
+
+#####5. 修改渠道信息接口
+此接口修改渠道信息接口
+######5.1 url
+	method: POST
+	http://agency.business.com/agencybusiness/updateChannelInfo
+	
+######5.2 header
+	Content_Type:application/json;charset=utf-8
+	Accept:application/json
+######5.3 请求参数
+
+名称|类型|是否必填|说明
+---|---|---|---
+channelNo|String|Y|渠道商编号
+channelLoginId|String|N|渠道商登陆id
+password|String|Y|渠道商登陆密码
+channelName|String|N|渠道商姓名
+channelPhone|String|N|渠道商手机
+company|String|N|渠道商公司
+operator|String|Y|操作者
+样例报文：
+
+{
+{"channelLoginId":"jiang",
+"channelNo":"123456",
+"password":"111111",
+"channelName":"姜作辉",
+"channelPhone":"123123213",
+"company":"京东",
+"operator":"admin"
+}
+}
+
+######5.4 响应报文
+成功响应：
+
+	"isSuccess":true
+
+响应报文说明：
+无
+
+异常响应：
+
+	1．	"isSuccess":false
+
+异常报文：
+
+名称 | 类型 | 说明
+------------ | ------------- | ------------
+error| String  | 错误信息
+
+样例报文：
+
+	{"isSuccess":false,"returnCode":"保存失败"}
+	
+----
+
+#####6. 单个查询渠道信息接口
+此接口保存渠道信息接口
+######6.1 url
+	method: POST
+	http://agency.business.com/agencybusiness/queryChannelInfo
+	
+######6.2 header
+	Content_Type:application/json;charset=utf-8
+	Accept:application/json
+######6.3 请求参数
+
+名称|类型|是否必填|说明
+---|---|---|---
+channelNo|String|Y|渠道商编号
+channelName|String|Y|渠道商姓名
+样例报文：
+
+{
+{"channelNo":"123456",
+"channelName":"姜作辉"
+}
+}
+
+######6.4 响应报文
+成功响应：
+{"channelLoginId":"jiang","channelNo":"123456","channelName":"姜作辉","channelPhone":"123123213","company":"京东","isSuccess":true,"pageSize":0,"pageNo":0,"recordsCount":0,"pageNumber":0}
+
+	"isSuccess":true
+
+响应报文说明：
+无
+
+异常响应：
+
+	1．	"isSuccess":false
+
+异常报文：
+
+名称 | 类型 | 说明
+------------ | ------------- | ------------
+error| String  | 错误信息
+
+样例报文：
+
+	{"isSuccess":false,"returnCode":"保存失败"}
+	
+----
+
+#####7. 批量查询渠道信息接口
+此接口批量查询渠道信息接口
+######7.1 url
+	method: POST
+	http://agency.business.com/agencybusiness/queryChannelInfoList
+	
+######7.2 header
+	Content_Type:application/json;charset=utf-8
+	Accept:application/json
+######7.3 请求参数
+
+名称|类型|是否必填|说明
+---|---|---|---
+channelNo|String|N|渠道商编号
+channelName|String|N|渠道商姓名
+样例报文：
+
+{
+{"channelNo":"123456",
+"channelName":"姜作辉",
+ "pageNo":1,
+ "pageSize":1
+}
+}
+
+######7.4 响应报文
+成功响应：
+
+{"records":[{"channelLoginId":"jiang","channelNo":"123456","password":"9cdegZgAfdg%3D","channelName":"姜作辉","channelPhone":"123123213","company":"京东","status":"1","startRow":0,"endRow":0}],"isSuccess":true,"pageSize":1,"pageNo":1,"recordsCount":1,"pageNumber":1}
 
 响应报文说明：
 无
